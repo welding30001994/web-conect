@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Connect | Perfil</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://picsum.photos">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #800020;
+            --secondary: #5a0018;
+            --accent: #ff4081;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* BARRA DE LOGIN */
+        .login-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(128, 0, 32, 0.9);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .login-bar span {
+            font-size: 0.9rem;
+        }
+        
+        .btn-login {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-login:hover, .btn-login:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 64, 129, 0.4);
+            outline: none;
+        }
+
+        /* HEADER */
+        .profile-header {
+            background: var(--primary);
+            height: 250px;
+            position: relative;
+            border-radius: 0 0 20px 20px;
+            overflow: visible;
+            z-index: 1;
+            margin-top: 50px;
+        }
+        
+        .cover-photo {
+            width: 100%;
+            height: calc(100% - 30px);
+            background: 
+                linear-gradient(135deg, rgba(128, 0, 32, 0.85), rgba(90, 0, 24, 0.9)),
+                url('https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+        }
+        
+        .profile-circle {
+            position: absolute;
+            bottom: -50px;
+            left: 30px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            overflow: hidden;
+            background: var(--dark);
+            z-index: 3;
+            box-shadow: 
+                0 0 0 4px var(--primary),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .profile-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* CONTENEDOR PRINCIPAL */
+        .content-container {
+            padding: 70px 20px 100px;
+            position: relative;
+            z-index: 2;
+            min-height: calc(100vh - 250px - 60px);
+        }
+        
+        /* INFORMACIÓN DEL PERFIL */
+        .profile-info {
+            margin-top: 10px;
+            padding: 0 15px;
+        }
+        
+        .profile-name {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .verified-badge {
+            color: var(--accent);
+            margin-left: 8px;
+            font-size: 1rem;
+        }
+        
+        .profile-description {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        
+        /* PESTAÑAS */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin: 15px 0 10px;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--accent);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+            animation: tabUnderline 0.3s ease-out;
+        }
+
+        @keyframes tabUnderline {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        
+        /* GRID DE VIDEOS */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0 40px;
+        }
+        
+        .video-card {
+            background: rgba(102, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 180px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        .video-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: filter 0.3s;
+        }
+        
+        .video-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 10px;
+            transition: opacity 0.3s;
+        }
+        
+        .video-title {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        
+        .video-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            color: #ccc;
+        }
+        
+        /* ICONOS DE BLOQUEO */
+        .locked-content {
+            position: relative;
+        }
+        
+        .locked-content::after {
+            content: "\f023";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(0,0,0,0.7);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+        
+        .locked-content .video-thumbnail {
+            filter: brightness(0.5);
+        }
+        
+        .locked-content .video-info {
+            opacity: 0.7;
+        }
+        
+        /* CONTENIDO GRATIS */
+        .free-content {
+            border: 2px solid var(--accent);
+        }
+        
+        .free-content::after {
+            display: none;
+        }
+        
+        .free-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 3;
+        }
+
+        /* REPRODUCTOR DE VIDEO MODAL */
+        .video-player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .video-player-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .video-container {
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .video-container video {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: var(--accent);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* EFECTOS DE CARGA */
+        @keyframes shimmer {
+            0% { background-position: -468px 0 }
+            100% { background-position: 468px 0 }
+        }
+
+        .loading-card {
+            animation: shimmer 1.5s infinite linear;
+            background: linear-gradient(to right, #2a2a3a 8%, #3a3a4a 18%, #2a2a3a 33%);
+            background-size: 800px 104px;
+        }
+
+        /* BOTÓN DE CHAT */
+        .chat-button {
+            position: fixed;
+            bottom: 110px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+            z-index: 100;
+            transition: all 0.3s;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .chat-button:hover, .chat-button:focus {
+            transform: scale(1.1) translateY(-3px);
+            outline: none;
+        }
+        
+        /* FOOTER */
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background: var(--secondary);
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 10;
+            height: 60px;
+            box-sizing: border-box;
+        }
+        
+        .footer-icon {
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            position: relative;
+        }
+        
+        .footer-icon.active {
+            color: var(--accent);
+        }
+        
+        .footer-icon:hover, .footer-icon:focus {
+            color: var(--accent);
+            transform: translateY(-3px);
+            outline: none;
+        }
+
+        .footer-badge {
+            position: absolute;
+            top: -5px;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* TOOLTIPS */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* RATING VISUAL */
+        .rating-stars {
+            display: inline-flex;
+            margin-left: 5px;
+        }
+
+        .rating-stars i {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-right: 2px;
+        }
+
+        .rating-stars i.filled {
+            color: gold;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .profile-circle {
+                width: 100px;
+                height: 100px;
+                left: 20px;
+                bottom: -40px;
+            }
+            
+            .content-container {
+                padding: 60px 15px 90px;
+            }
+
+            .video-player-modal .video-container {
+                width: 95%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                height: 220px;
+            }
+            
+            .content-container {
+                padding: 50px 10px 80px;
+            }
+            
+            .profile-circle {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .login-bar {
+                flex-direction: column;
+                padding: 8px;
+            }
+            
+            .login-bar span {
+                margin-bottom: 5px;
+                font-size: 0.8rem;
+            }
+            
+            .chat-button {
+                bottom: 100px;
+                width: 55px;
+                height: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- BARRA DE LOGIN -->
+    <div class="login-bar">
+        <span>💎 Contenido exclusivo para miembros</span>
+        <button class="btn-login" aria-label="Iniciar sesión para contenido exclusivo">Iniciar sesión</button>
+    </div>
+    
+    <!-- HEADER -->
+    <div class="profile-header">
+        <div class="cover-photo"></div>
+        <div class="profile-circle">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Perfil de Sofia Martinez" loading="lazy">
+        </div>
+    </div>
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="content-container">
+        <div class="profile-info">
+            <h2 class="profile-name">
+                Sofia Martinez
+                <i class="fas fa-check-circle verified-badge" aria-hidden="true"></i>
+            </h2>
+            <p class="profile-description">
+                Modelo fitness profesional. Contenido exclusivo de entrenamiento, nutrición y lifestyle.
+            </p>
+            
+            <div class="profile-stats">
+                <div>
+                    <div class="stat-value">24.5K</div>
+                    <div class="stat-label">Seguidores</div>
+                </div>
+                <div>
+                    <div class="stat-value">356</div>
+                    <div class="stat-label">Videos</div>
+                </div>
+                <div>
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">
+                        Rating
+                        <div class="rating-stars" aria-label="4.5 estrellas de 5">
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star filled"></i>
+                            <i class="fas fa-star-half-alt filled"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="videos">Videos</div>
+            <div class="tab" data-tab="photos">Fotos</div>
+            <div class="tab" data-tab="favorites">Favoritos</div>
+        </div>
+        
+        <div class="video-grid" id="videoGrid">
+            <!-- Los videos se cargarán dinámicamente via JavaScript -->
+        </div>
+    </div>
+    
+    <!-- REPRODUCTOR DE VIDEO MODAL -->
+    <div class="video-player-modal" id="videoModal">
+        <div class="video-container">
+            <video controls autoplay id="modalVideoPlayer">
+                <source src="" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+            <button class="close-btn" id="closeModal" aria-label="Cerrar reproductor">&times;</button>
+        </div>
+    </div>
+    
+    <!-- BOTÓN DE CHAT -->
+    <button class="chat-button" id="chatButton" aria-label="Abrir chat">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+    
+    <!-- FOOTER CON LOS ICONOS ACTUALIZADOS -->
+    <div class="footer">
+        <button class="footer-icon tooltip active" aria-label="Perfil">
+            <i class="fas fa-user"></i>
+            <span class="tooltip-text">Perfil</span>
+        </button>
+        <button class="footer-icon tooltip" aria-label="Perfiles">
+            <i class="fas fa-users"></i>
+            <span class="tooltip-text">Perfiles</span>
+        </button>
+        <button class="footer-icon tooltip" aria-label="Videocámara">
+            <i class="fas fa-video"></i>
+            <span class="tooltip-text">Videocámara</span>
+        </button>
+        <button class="footer-icon tooltip" aria-label="Mensajes">
+            <i class="fas fa-comments"></i>
+            <span class="tooltip-text">Mensajes</span>
+            <span class="footer-badge">3</span>
+        </button>
+        <button class="footer-icon tooltip" aria-label="Cerrar sesión">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="tooltip-text">Salir</span>
+        </button>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        const appState = {
+            auth: {
+                isAuthenticated: false,
+                userType: 'guest', // 'guest', 'free', 'premium'
+                token: null
+            },
+            currentTab: 'videos',
+            favorites: new Set(),
+            videoData: [
+                {
+                    id: 1,
+                    title: "Sesión Nocturna Exclusiva",
+                    thumbnail: "https://picsum.photos/400/300?random=1",
+                    access: "premium",
+                    views: "1.2K",
+                    likes: 356,
+                    videoUrl: "https://example.com/videos/1.mp4"
+                },
+                {
+                    id: 2,
+                    title: "Rutina de Mañana",
+                    thumbnail: "https://picsum.photos/400/300?random=2",
+                    access: "free",
+                    views: "856",
+                    likes: 210,
+                    videoUrl: "https://example.com/videos/2.mp4"
+                },
+                {
+                    id: 3,
+                    title: "Entrenamiento con Pesas",
+                    thumbnail: "https://picsum.photos/400/300?random=3",
+                    access: "premium",
+                    views: "2.4K",
+                    likes: 589,
+                    videoUrl: "https://example.com/videos/3.mp4"
+                },
+                {
+                    id: 4,
+                    title: "Yoga Relax",
+                    thumbnail: "https://picsum.photos/400/300?random=4",
+                    access: "premium",
+                    views: "1.8K",
+                    likes: 432,
+                    videoUrl: "https://example.com/videos/4.mp4"
+                },
+                {
+                    id: 5,
+                    title: "Q&A Especial",
+                    thumbnail: "https://picsum.photos/400/300?random=5",
+                    access: "premium",
+                    views: "1.5K",
+                    likes: 387,
+                    videoUrl: "https://example.com/videos/5.mp4"
+                },
+                {
+                    id: 6,
+                    title: "Reto 30 Días",
+                    thumbnail: "https://picsum.photos/400/300?random=6",
+                    access: "premium",
+                    views: "3.1K",
+                    likes: 721,
+                    videoUrl: "https://example.com/videos/6.mp4"
+                }
+            ]
+        };
+
+        // Elementos del DOM
+        const DOM = {
+            videoGrid: document.getElementById('videoGrid'),
+            videoModal: document.getElementById('videoModal'),
+            modalVideoPlayer: document.getElementById('modalVideoPlayer'),
+            closeModal: document.getElementById('closeModal'),
+            chatButton: document.getElementById('chatButton'),
+            tabs: document.querySelectorAll('.tab'),
+            loginButton: document.querySelector('.btn-login'),
+            loginBar: document.querySelector('.login-bar')
+        };
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            renderVideos();
+            setupEventListeners();
+            checkAuth();
+        });
+
+        // Renderizado de videos
+        function renderVideos() {
+            DOM.videoGrid.innerHTML = '';
+            
+            appState.videoData.forEach(video => {
+                const isFavorite = appState.favorites.has(video.id);
+                const isLocked = video.access === 'premium' && !appState.auth.isAuthenticated;
+                
+                const videoCard = document.createElement('div');
+                videoCard.className = `video-card ${isLocked ? 'locked-content' : ''} ${video.access === 'free' ? 'free-content' : ''}`;
+                videoCard.dataset.id = video.id;
+                
+                videoCard.innerHTML = `
+                    ${video.access === 'free' ? '<div class="free-badge">GRATIS</div>' : ''}
+                    <img src="${video.thumbnail}" class="video-thumbnail" loading="lazy" alt="Miniatura: ${video.title}">
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <div class="video-stats">
+                            <span><i class="fas fa-eye"></i> ${video.views}</span>
+                            <span>
+                                <i class="fas fa-heart ${isFavorite ? 'filled' : ''}" data-action="toggle-favorite"></i> ${video.likes}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                DOM.videoGrid.appendChild(videoCard);
+            });
+        }
+
+        // Configuración de event listeners
+        function setupEventListeners() {
+            // Clic en videos
+            DOM.videoGrid.addEventListener('click', (e) => {
+                const videoCard = e.target.closest('.video-card');
+                if (!videoCard) return;
+                
+                const videoId = parseInt(videoCard.dataset.id);
+                const videoData = appState.videoData.find(v => v.id === videoId);
+                
+                if (videoCard.classList.contains('locked-content')) {
+                    showAuthRequired();
+                    return;
+                }
+                
+                playVideo(videoData);
+            });
+
+            // Clic en favoritos
+            DOM.videoGrid.addEventListener('click', (e) => {
+                if (e.target.dataset.action === 'toggle-favorite') {
+                    e.stopPropagation();
+                    const videoId = parseInt(e.target.closest('.video-card').dataset.id);
+                    toggleFavorite(videoId);
+                }
+            });
+
+            // Cerrar modal
+            DOM.closeModal.addEventListener('click', closeVideoModal);
+            
+            // Cambio de pestañas
+            DOM.tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    DOM.tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    appState.currentTab = tab.dataset.tab;
+                    // Aquí iría la lógica para cargar contenido diferente por pestaña
+                });
+            });
+
+            // Botón de chat
+            DOM.chatButton.addEventListener('click', handleChatClick);
+            
+            // Botón de login
+            DOM.loginButton.addEventListener('click', handleLogin);
+        }
+
+        // Funciones de autenticación
+        function checkAuth() {
+            // Simular verificación de token en localStorage
+            const fakeToken = localStorage.getItem('premiumConnectToken');
+            if (fakeToken) {
+                appState.auth = {
+                    isAuthenticated: true,
+                    userType: 'premium',
+                    token: fakeToken
+                };
+                DOM.loginBar.style.display = 'none';
+                renderVideos();
+            }
+        }
+
+        function handleLogin() {
+            const wantLogin = confirm('¿Quieres simular inicio de sesión premium? (Demo)');
+            if (wantLogin) {
+                // Simular token JWT
+                const fakeToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0IiwidXNlclR5cGUiOiJwcmVtaXVtIn0.8QJj6b8T3JYKVZ7vX7X7X7X7X7X7X7X7X7X7X7X7X7X';
+                
+                localStorage.setItem('premiumConnectToken', fakeToken);
+                appState.auth = {
+                    isAuthenticated: true,
+                    userType: 'premium',
+                    token: fakeToken
+                };
+                
+                DOM.loginBar.style.display = 'none';
+                renderVideos();
+                alert('✅ Ahora tienes acceso premium a todo el contenido');
+            }
+        }
+
+        function showAuthRequired() {
+            alert('💎 Inicia sesión para acceder a este contenido exclusivo');
+        }
+
+        // Funciones de video
+        function playVideo(videoData) {
+            DOM.modalVideoPlayer.src = videoData.videoUrl;
+            DOM.videoModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeVideoModal() {
+            DOM.videoModal.classList.remove('active');
+            DOM.modalVideoPlayer.pause();
+            DOM.modalVideoPlayer.src = '';
+            document.body.style.overflow = '';
+        }
+
+        // Funciones de favoritos
+        function toggleFavorite(videoId) {
+            if (appState.favorites.has(videoId)) {
+                appState.favorites.delete(videoId);
+            } else {
+                appState.favorites.add(videoId);
+            }
+            renderVideos();
+        }
+
+        // Funciones de chat
+        function handleChatClick() {
+            if (appState.auth.isAuthenticated) {
+                alert('💬 Chat premium activado. ¡Hola Sofia!');
+            } else {
+                const wantChat = confirm('Para chatear con Sofia necesitas una suscripción premium. ¿Quieres iniciar sesión ahora?');
+                if (wantChat) {
+                    handleLogin();
+                }
+            }
+        }
+
+        // Manejo de errores
+        window.addEventListener('error', (e) => {
+            console.error('Error:', e.message);
+            // Aquí podríamos mostrar un mensaje amigable al usuario
+        });
+    </script>
+</body>
+</html>

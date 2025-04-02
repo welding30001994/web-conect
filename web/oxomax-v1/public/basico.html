@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Futurista - Domina los Mercados</title>
+    <style>
+        :root {
+            --primary: #00f7ff;
+            --secondary: #0066ff;
+            --dark: #0a0a1a;
+            --light: #f0f0f0;
+            --accent: #ff00aa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(0, 247, 255, 0.2);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: radial-gradient(circle at center, rgba(0, 103, 255, 0.1), transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 247, 255, 0.6);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        section {
+            margin-bottom: 5rem;
+        }
+        
+        h2.section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 247, 255, 0.2);
+            border: 1px solid rgba(0, 247, 255, 0.3);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .download-section {
+            text-align: center;
+            background: rgba(0, 103, 255, 0.1);
+            padding: 4rem 2rem;
+            border-radius: 15px;
+            margin-top: 3rem;
+        }
+        
+        .download-steps {
+            text-align: left;
+            max-width: 800px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        
+        .download-steps ol {
+            padding-left: 1.5rem;
+        }
+        
+        .download-steps li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .platform-comparison {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+        
+        .platform-comparison th, .platform-comparison td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+        }
+        
+        .platform-comparison th {
+            background-color: rgba(0, 103, 255, 0.2);
+            color: var(--primary);
+        }
+        
+        .platform-comparison tr:hover {
+            background-color: rgba(0, 247, 255, 0.05);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Efectos futuristas */
+        .glow {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 247, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 247, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 247, 255, 0);
+            }
+        }
+        
+        /* Secciones ocultas (para las páginas) */
+        .page {
+            display: none;
+        }
+        
+        .active-page {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                gap: 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            h2.section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>OXOMAX TRADING </h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-page="basics">Conceptos Básicos</a></li>
+                <li><a href="#" class="nav-link" data-page="fbs">Descargar FBS</a></li>
+                <li><a href="#" class="nav-link" data-page="mt4">Descargar MT4</a></li>
+                <li><a href="#" class="nav-link" data-page="strategies">Estrategias</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Página de Inicio -->
+    <section id="home" class="page active-page">
+        <div class="hero">
+            <h2 class="glow">Domina el Trading en la Era Digital</h2>
+            <p>Descubre las herramientas y conocimientos necesarios para navegar en los mercados financieros con confianza. Aprende desde cero o perfecciona tus habilidades con nuestro contenido futurista y de vanguardia.</p>
+            <a href="#" class="btn pulse nav-link" data-page="basics">Comenzar Aprendizaje</a>
+        </div>
+
+        <div class="container">
+            <section>
+                <h2 class="section-title">¿Por qué elegir Quantum Trading?</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h3>Análisis de Mercado</h3>
+                        <p>Aprende a interpretar los movimientos del mercado con nuestras técnicas avanzadas de análisis técnico y fundamental.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🤖</div>
+                        <h3>Trading Automatizado</h3>
+                        <p>Descubre cómo implementar robots de trading y algoritmos para operar las 24 horas del día.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔒</div>
+                        <h3>Gestión de Riesgo</h3>
+                        <p>Protege tu capital con nuestras estrategias probadas de gestión de riesgo y money management.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Plataformas Recomendadas</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">📱</div>
+                        <h3>MetaTrader 4 (MT4)</h3>
+                        <p>La plataforma más popular para trading de Forex, CFDs y futuros. Ofrece herramientas avanzadas de análisis y trading automatizado.</p>
+                        <a href="#" class="btn nav-link" data-page="mt4">Cómo Descargar</a>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💻</div>
+                        <h3>FBS Trader</h3>
+                        <p>Plataforma móvil intuitiva con todas las funciones necesarias para operar desde cualquier lugar.</p>
+                        <a href="#" class="btn nav-link" data-page="fbs">Cómo Descargar</a>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📈</div>
+                        <h3>TradingView</h3>
+                        <p>Potentes gráficos y herramientas de análisis técnico para complementar tu estrategia de trading.</p>
+                        <a href="https://www.tradingview.com/" target="_blank" class="btn">Visitar Sitio</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Página de Conceptos Básicos -->
+    <section id="basics" class="page">
+        <div class="container">
+            <h2 class="section-title">Conceptos Básicos de Trading</h2>
+            
+            <div class="card">
+                <h3>¿Qué es el Trading?</h3>
+                <p>El trading consiste en la compra y venta de activos financieros (acciones, divisas, materias primas, criptomonedas, etc.) con el objetivo de obtener beneficios aprovechando las fluctuaciones de precios en los mercados.</p>
+            </div>
+            
+            <div class="grid" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3>Tipos de Mercados</h3>
+                    <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                        <li><strong>Forex:</strong> Mercado de divisas (EUR/USD, GBP/JPY, etc.)</li>
+                        <li><strong>Acciones:</strong> Compra/venta de participaciones en empresas</li>
+                        <li><strong>Índices:</strong> S&P500, NASDAQ, DAX, etc.</li>
+                        <li><strong>Materias Primas:</strong> Oro, petróleo, plata, etc.</li>
+                        <li><strong>Criptomonedas:</strong> Bitcoin, Ethereum, etc.</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>Análisis Técnico vs. Fundamental</h3>
+                    <p><strong>Análisis Técnico:</strong> Estudio de gráficos y patrones de precios para predecir movimientos futuros.</p>
+                    <p><strong>Análisis Fundamental:</strong> Evaluación de factores económicos, políticos y financieros que afectan a los activos.</p>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Términos Clave</h3>
+                <div class="grid">
+                    <div>
+                        <p><strong>Spread:</strong> Diferencia entre precio de compra y venta.</p>
+                        <p><strong>Lote:</strong> Unidad estándar de operación.</p>
+                        <p><strong>Apalancamiento:</strong> Multiplicador de exposición al mercado.</p>
+                    </div>
+                    <div>
+                        <p><strong>Stop Loss:</strong> Orden para limitar pérdidas.</p>
+                        <p><strong>Take Profit:</strong> Orden para asegurar ganancias.</p>
+                        <p><strong>Margen:</strong> Capital requerido para abrir una posición.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Psicología del Trading</h3>
+                <p>El éxito en trading depende en gran medida del control emocional. Algunos principios clave:</p>
+                <ul style="padding-left: 1.5rem; margin-top: 1rem; line-height: 1.6;">
+                    <li>Disciplina para seguir tu plan de trading</li>
+                    <li>Paciencia para esperar las oportunidades adecuadas</li>
+                    <li>Control del miedo y la codicia</li>
+                    <li>Aceptación de pérdidas como parte del proceso</li>
+                    <li>Consistencia en la aplicación de estrategias</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página para Descargar FBS -->
+    <section id="fbs" class="page">
+        <div class="container">
+            <h2 class="section-title">Cómo Descargar e Instalar FBS Trader</h2>
+            
+            <div class="download-section">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">FBS Trader - Plataforma Móvil de Trading</h3>
+                <p style="max-width: 800px; margin: 0 auto 2rem;">FBS Trader es una aplicación móvil intuitiva que te permite operar en los mercados financieros desde cualquier lugar. Compatible con Android e iOS.</p>
+                <a href="https://fbs.com/trader" target="_blank" class="btn pulse">Descargar FBS Trader</a>
+            </div>
+            
+            <div class="download-steps">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Pasos para Instalar FBS Trader:</h3>
+                <ol>
+                    <li><strong>Para Android:</strong>
+                        <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Abre Google Play Store en tu dispositivo</li>
+                            <li>Busca "FBS Trader"</li>
+                            <li>Selecciona la aplicación oficial de FBS</li>
+                            <li>Haz clic en "Instalar"</li>
+                        </ul>
+                    </li>
+                    <li><strong>Para iOS (iPhone/iPad):</strong>
+                        <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Abre App Store en tu dispositivo</li>
+                            <li>Busca "FBS Trader"</li>
+                            <li>Selecciona la aplicación oficial de FBS</li>
+                            <li>Haz clic en "Obtener" para instalar</li>
+                        </ul>
+                    </li>
+                    <li>Una vez instalada, abre la aplicación</li>
+                    <li>Crea una cuenta nueva o inicia sesión si ya tienes una</li>
+                    <li>Verifica tu cuenta siguiendo los pasos indicados</li>
+                    <li>Deposita fondos en tu cuenta para comenzar a operar</li>
+                </ol>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Características Principales de FBS Trader</h3>
+                <ul style="padding-left: 1.5rem; line-height: 1.6;">
+                    <li>Interfaz intuitiva y fácil de usar</li>
+                    <li>Gráficos en tiempo real con múltiples timeframes</li>
+                    <li>Más de 40 indicadores técnicos</li>
+                    <li>Órdenes de trading con un solo clic</li>
+                    <li>Noticias económicas y calendario financiero</li>
+                    <li>Soporte para múltiples tipos de órdenes</li>
+                    <li>Acceso a todos los instrumentos de FBS</li>
+                </ul>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Ventajas de Usar FBS Trader</h3>
+                <div class="grid">
+                    <div>
+                        <p><strong>Movilidad:</strong> Opera desde cualquier lugar con tu móvil.</p>
+                        <p><strong>Rapidez:</strong> Ejecución instantánea de operaciones.</p>
+                    </div>
+                    <div>
+                        <p><strong>Seguridad:</strong> Protección de datos y fondos.</p>
+                        <p><strong>Versatilidad:</strong> Acceso a múltiples mercados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página para Descargar MT4 -->
+    <section id="mt4" class="page">
+        <div class="container">
+            <h2 class="section-title">Cómo Descargar e Instalar MetaTrader 4 (MT4)</h2>
+            
+            <div class="download-section">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">MetaTrader 4 - La Plataforma de Trading Más Popular</h3>
+                <p style="max-width: 800px; margin: 0 auto 2rem;">MT4 es la plataforma líder para trading de Forex y CFDs, utilizada por millones de traders en todo el mundo. Disponible para Windows, Mac, Android e iOS.</p>
+                <a href="https://www.metatrader4.com/es" target="_blank" class="btn pulse">Descargar MetaTrader 4</a>
+            </div>
+            
+            <div class="download-steps">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem;">Guía de Instalación Completa:</h3>
+                
+                <h4 style="margin: 1.5rem 0 1rem; color: var(--primary);">Para Windows:</h4>
+                <ol>
+                    <li>Visita el sitio web oficial de MetaTrader 4</li>
+                    <li>Haz clic en "Descargar para Windows"</li>
+                    <li>Ejecuta el archivo .exe descargado</li>
+                    <li>Sigue las instrucciones del instalador</li>
+                    <li>Una vez instalado, abre MT4</li>
+                    <li>Selecciona "Abrir una cuenta" o "Iniciar sesión" si ya tienes una</li>
+                    <li>Configura tu conexión con tu bróker</li>
+                </ol>
+                
+                <h4 style="margin: 1.5rem 0 1rem; color: var(--primary);">Para Mac:</h4>
+                <ol>
+                    <li>Descarga Wine o CrossOver para poder ejecutar aplicaciones Windows</li>
+                    <li>Descarga el instalador de MT4 para Windows</li>
+                    <li>Ejecuta el instalador usando Wine/CrossOver</li>
+                    <li>Sigue los mismos pasos que para Windows</li>
+                    <li>Alternativamente, puedes usar la versión web de MT4</li>
+                </ol>
+                
+                <h4 style="margin: 1.5rem 0 1rem; color: var(--primary);">Para Móvil (Android/iOS):</h4>
+                <ol>
+                    <li>Abre Google Play Store o App Store</li>
+                    <li>Busca "MetaTrader 4"</li>
+                    <li>Descarga la aplicación oficial</li>
+                    <li>Abre la aplicación y configura tu cuenta</li>
+                </ol>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Características Clave de MT4</h3>
+                <div class="grid">
+                    <div>
+                        <p><strong>Gráficos Avanzados:</strong> 9 timeframes, múltiples tipos de gráficos.</p>
+                        <p><strong>Indicadores Técnicos:</strong> Más de 30 indicadores incorporados.</p>
+                        <p><strong>Expert Advisors:</strong> Soporte para trading algorítmico.</p>
+                    </div>
+                    <div>
+                        <p><strong>Backtesting:</strong> Prueba estrategias con datos históricos.</p>
+                        <p><strong>Alertas:</strong> Notificaciones personalizadas.</p>
+                        <p><strong>Seguridad:</strong> Cifrado de datos y transacciones.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; color: var(--primary); margin-bottom: 1.5rem;">Comparación entre MT4 y FBS Trader</h3>
+                <table class="platform-comparison">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>MetaTrader 4</th>
+                            <th>FBS Trader</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Tipo de Plataforma</td>
+                            <td>Escritorio y móvil</td>
+                            <td>Principalmente móvil</td>
+                        </tr>
+                        <tr>
+                            <td>Trading Automatizado</td>
+                            <td>Sí (Expert Advisors)</td>
+                            <td>Limitado</td>
+                        </tr>
+                        <tr>
+                            <td>Indicadores Técnicos</td>
+                            <td>30+ incorporados</td>
+                            <td>40+</td>
+                        </tr>
+                        <tr>
+                            <td>Gráficos</td>
+                            <td>Altamente personalizables</td>
+                            <td>Buenos pero menos opciones</td>
+                        </tr>
+                        <tr>
+                            <td>Facilidad de Uso</td>
+                            <td>Curva de aprendizaje</td>
+                            <td>Más intuitivo</td>
+                        </tr>
+                        <tr>
+                            <td>Disponibilidad</td>
+                            <td>Windows, Mac, móvil</td>
+                            <td>Android, iOS</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card" style="margin-top: 3rem; text-align: center;">
+                <h3>¿Necesitas Ayuda con MT4?</h3>
+                <p style="margin-bottom: 1.5rem;">Consulta nuestros tutoriales avanzados o contacta con nuestro equipo de soporte.</p>
+                <a href="#" class="btn nav-link" data-page="strategies">Ver Tutoriales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Estrategias -->
+    <section id="strategies" class="page">
+        <div class="container">
+            <h2 class="section-title">Estrategias de Trading</h2>
+            
+            <div class="card">
+                <h3>Introducción a las Estrategias de Trading</h3>
+                <p>Una estrategia de trading es un plan sistemático diseñado para lograr rentabilidad en los mercados financieros. Las buenas estrategias incluyen reglas claras para entrar, salir y gestionar operaciones.</p>
+            </div>
+            
+            <div class="grid" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3>Trading de Tendencia</h3>
+                    <p>Operar en la dirección de la tendencia predominante usando:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+                        <li>Medias móviles</li>
+                        <li>ADX (Average Directional Index)</li>
+                        <li>Líneas de tendencia</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Ventaja:</strong> Alto potencial en mercados con tendencia fuerte.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Trading por Rango</h3>
+                    <p>Operar en mercados laterales identificando:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+                        <li>Niveles de soporte y resistencia</li>
+                        <li>Osciladores como RSI o Stochastic</li>
+                        <li>Patrones de precio</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Ventaja:</strong> Efectivo en mercados sin tendencia clara.</p>
+                </div>
+            </div>
+            
+            <div class="grid" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3>Breakout Trading</h3>
+                    <p>Operar cuando el precio rompe niveles clave:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+                        <li>Soportes/resistencias</li>
+                        <li>Figuras chartistas</li>
+                        <li>Máximos/mínimos recientes</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Ventaja:</strong> Captura movimientos fuertes tras consolidación.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Scalping</h3>
+                    <p>Operaciones de muy corta duración (segundos/minutos):</p>
+                    <ul style="padding-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+                        <li>Enfoque en ticks y volumen</li>
+                        <li>Órdenes rápidas</li>
+                        <li>Beneficios pequeños pero frecuentes</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Ventaja:</strong> Menor exposición al riesgo de mercado.</p>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Cómo Crear Tu Propia Estrategia</h3>
+                <ol style="padding-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Define tu estilo:</strong> ¿Day trading, swing trading, inversión?</li>
+                    <li><strong>Selecciona indicadores:</strong> Combina 2-3 indicadores complementarios</li>
+                    <li><strong>Establece reglas claras:</strong> Entrada, salida, gestión de riesgo</li>
+                    <li><strong>Prueba en demo:</strong> Backtesting y forward testing</li>
+                    <li><strong>Optimiza:</strong> Ajusta parámetros sin sobreoptimizar</li>
+                    <li><strong>Implementa:</strong> Comienza con capital pequeño</li>
+                    <li><strong>Evalúa:</strong> Mantén un diario de trading</li>
+                </ol>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para Aplicar Estas Estrategias?</h3>
+                <p style="margin-bottom: 1.5rem;">Descarga ahora la plataforma que mejor se adapte a tu estilo de trading.</p>
+                <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="#" class="btn nav-link" data-page="fbs">Descargar FBS</a>
+                    <a href="#" class="btn nav-link" data-page="mt4">Descargar MT4</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="nav-link" data-page="home">Inicio</a>
+            <a href="#" class="nav-link" data-page="basics">Conceptos Básicos</a>
+            <a href="#" class="nav-link" data-page="fbs">FBS</a>
+            <a href="#" class="nav-link" data-page="mt4">MT4</a>
+            <a href="#" class="nav-link" data-page="strategies">Estrategias</a>
+            <a href="#">Política de Privacidad</a>
+            <a href="#">Términos de Uso</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#"><span>📱</span></a>
+            <a href="#"><span>📧</span></a>
+            <a href="#"><span>💬</span></a>
+            <a href="#"><span>🐦</span></a>
+            <a href="#"><span>📹</span></a>
+        </div>
+        
+        <p class="copyright">© 2023 Quantum Trading. Todos los derechos reservados. El trading de instrumentos financieros conlleva riesgos.</p>
+    </footer>
+
+    <script>
+        // Navegación entre páginas
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                
+                // Oculta todas las páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active-page');
+                });
+                
+                // Muestra la página seleccionada
+                document.getElementById(pageId).classList.add('active-page');
+                
+                // Desplaza hacia arriba
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Efectos especiales
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const randomColor = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
+                card.style.borderColor = randomColor;
+                card.style.boxShadow = `0 10px 30px ${randomColor}40`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(0, 247, 255, 0.1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+        
+        // Simulación de precios en tiempo real
+        function updatePriceTickers() {
+            const currencies = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USD', 'Gold'];
+            const priceElements = document.querySelectorAll('.price-ticker');
+            
+            priceElements.forEach(el => {
+                const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
+                const randomPrice = (Math.random() * 1.5 + 0.5).toFixed(4);
+                const randomChange = (Math.random() * 0.02 - 0.01).toFixed(4);
+                
+                el.innerHTML = `
+                    <span>${randomCurrency}</span>
+                    <span>${randomPrice}</span>
+                    <span style="color: ${randomChange >= 0 ? 'var(--primary)' : 'var(--accent)'}">
+                        ${randomChange >= 0 ? '+' : ''}${randomChange}%
+                    </span>
+                `;
+            });
+        }
+        
+        // Crear elementos de ticker si no existen
+        if (!document.querySelector('.price-ticker')) {
+            const tickerContainer = document.createElement('div');
+            tickerContainer.className = 'price-ticker';
+            tickerContainer.style.position = 'fixed';
+            tickerContainer.style.bottom = '0';
+            tickerContainer.style.left = '0';
+            tickerContainer.style.right = '0';
+            tickerContainer.style.background = 'rgba(0, 0, 0, 0.7)';
+            tickerContainer.style.padding = '0.5rem';
+            tickerContainer.style.display = 'flex';
+            tickerContainer.style.justifyContent = 'space-around';
+            tickerContainer.style.zIndex = '1000';
+            document.body.appendChild(tickerContainer);
+            
+            for (let i = 0; i < 5; i++) {
+                const ticker = document.createElement('div');
+                ticker.className = 'price-ticker-item';
+                ticker.style.display = 'flex';
+                ticker.style.gap = '1rem';
+                tickerContainer.appendChild(ticker);
+            }
+        }
+        
+        // Actualizar precios cada 3 segundos
+        setInterval(updatePriceTickers, 3000);
+        updatePriceTickers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <img src="assets/default-profile.jpg" alt="Profile" id="profilePic">
+            <h3 id="userName">Usuario</h3>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="home.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li class="active"><a href="profile.html"><i class="fas fa-user"></i> Perfil</a></li>
+                <li><a href="gallery.html"><i class="fas fa-images"></i> Galería</a></li>
+                <li><a href="chat.html"><i class="fas fa-comments"></i> Chat</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Configuración</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Mi Perfil</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </header>
+
+        <section class="profile-section">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="assets/default-profile.jpg" alt="Profile" id="largeProfilePic">
+                        <div class="upload-btn">
+                            <input type="file" id="profileUpload" accept="image/*">
+                            <label for="profileUpload"><i class="fas fa-camera"></i> Cambiar foto</label>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profileName">Nombre del Usuario</h2>
+                        <p><i class="fas fa-envelope"></i> <span id="profileEmail">usuario@example.com</span></p>
+                        <p><i class="fas fa-calendar-alt"></i> Miembro desde <span id="joinDate">Enero 2023</span></p>
+                    </div>
+                </div>
+
+                <div class="profile-form">
+                    <h3>Editar Perfil</h3>
+                    <form id="updateProfileForm">
+                        <div class="form-group">
+                            <label for="name">Nombre</label>
+                            <input type="text" id="name" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="bio">Biografía</label>
+                            <textarea id="bio" placeholder="Cuéntanos sobre ti"></textarea>
+                        </div>
+                        <button type="submit" class="save-btn">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="photos-section">
+                <h3>Mis Fotos</h3>
+                <div class="upload-area">
+                    <input type="file" id="photoUpload" accept="image/*" multiple>
+                    <label for="photoUpload" class="upload-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arrastra tus fotos aquí o haz clic para seleccionar</p>
+                    </label>
+                </div>
+                <div class="photos-grid" id="photosGrid">
+                    <!-- Las fotos se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

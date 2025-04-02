@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subida de Imágenes a Cloudinary</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .upload-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        #fileInput {
+            display: none;
+        }
+        .file-upload-label {
+            display: block;
+            padding: 15px;
+            background: #3498db;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 15px;
+        }
+        .file-upload-label:hover {
+            background: #2980b9;
+        }
+        #preview {
+            max-width: 100%;
+            max-height: 300px;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+            display: none;
+        }
+        #uploadBtn {
+            width: 100%;
+            padding: 15px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #uploadBtn:hover {
+            background: #27ae60;
+        }
+        #uploadBtn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .progress-container {
+            width: 100%;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 15px 0;
+            display: none;
+        }
+        #progressBar {
+            width: 0%;
+            height: 20px;
+            background: #3498db;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        .url-container {
+            word-break: break-all;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>Subir Imágenes a Cloudinary</h1>
+        
+        <label for="fileInput" class="file-upload-label">
+            📁 Seleccionar Imagen
+        </label>
+        <input type="file" id="fileInput" accept="image/*">
+        
+        <img id="preview" alt="Vista previa">
+        
+        <div class="progress-container" id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
+        
+        <button id="uploadBtn" disabled>Subir Imagen</button>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+   // Configuración CORREGIDA de Cloudinary
+        const cloudName = 'dba9d8';
+        const apiKey = '528757166221984'; // Añade tu API key aquí
+        const unsignedUploadPreset = 'web_upload';
+        
+        // Elementos del DOM
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const preview = document.getElementById('preview');
+        const resultDiv = document.getElementById('result');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Mostrar vista previa
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validar tamaño (máximo 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('La imagen es demasiado grande. Máximo 5MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                    uploadBtn.disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Subir imagen
+        uploadBtn.addEventListener('click', function() {
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Por favor selecciona una imagen primero');
+                return;
+            }
+            
+            // Configurar la UI durante la subida
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Subiendo...';
+            progressContainer.style.display = 'block';
+            resultDiv.style.display = 'none';
+            
+            // Crear FormData
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', unsignedUploadPreset);
+            formData.append('cloud_name', cloudName);
+             formData.append('api_key', apiKey); // Añade esta línea crítica
+
+            // Configurar AJAX
+            const xhr = new XMLHttpRequest();
+            
+            // Barra de progreso
+            xhr.upload.addEventListener('progress', function(e) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                progressBar.style.width = percent + '%';
+            });
+            
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        showResult(response);
+                    } else {
+                        try {
+                            const errorResponse = JSON.parse(xhr.responseText);
+                            showError(errorResponse.error.message);
+                        } catch {
+                            showError('Error al subir la imagen. Intenta nuevamente.');
+                        }
+                    }
+                    
+                    // Resetear UI
+                    uploadBtn.disabled = false;
+                    uploadBtn.textContent = 'Subir Imagen';
+                }
+            };
+            
+            xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, true);
+            xhr.send(formData);
+        });
+        
+        function showResult(data) {
+            resultDiv.innerHTML = `
+                <h2>✅ Imagen subida con éxito!</h2>
+                <p><strong>URL pública:</strong></p>
+                <div class="url-container">
+                    <a href="${data.secure_url}" target="_blank">${data.secure_url}</a>
+                </div>
+                <p><strong>Tamaño:</strong> ${(data.bytes/1024).toFixed(2)} KB</p>
+                <p><strong>Dimensiones:</strong> ${data.width} × ${data.height} px</p>
+                <img src="${data.secure_url}" style="max-width: 100%; margin-top: 15px; border-radius: 5px;">
+            `;
+            resultDiv.style.display = 'block';
+        }
+        
+        function showError(message) {
+            resultDiv.innerHTML = `
+                <h2 style="color: #e74c3c;">❌ Error al subir la imagen</h2>
+                <p>${message}</p>
+                <p>Intenta con otra imagen o revisa la configuración.</p>
+            `;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

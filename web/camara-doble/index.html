@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Llamada con Firebase</title>
+    <style>
+        :root {
+            --primary-color: #4285F4;
+            --secondary-color: #34A853;
+            --danger-color: #EA4335;
+            --dark-color: #202124;
+            --light-color: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-color);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 20px;
+        }
+        
+        .video-box {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            background: #000;
+            aspect-ratio: 16/9;
+        }
+        
+        .video-box h3 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        #localVideo {
+            transform: scaleX(-1); /* Efecto espejo */
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #startButton {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        #callButton {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        #hangupButton {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:disabled {
+            background-color: #5f6368;
+            color: #9aa0a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .user-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        input {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 640px;
+            text-align: center;
+        }
+        
+        .icon {
+            font-size: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .video-container {
+                flex-direction: column;
+            }
+            
+            .video-box {
+                max-width: 100%;
+            }
+            
+            button {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📹 Video Llamada con Firebase</h1>
+        <p>Conéctate con otro usuario mediante video llamada</p>
+    </header>
+    
+    <div class="video-container">
+        <div class="video-box">
+            <h3>Tú</h3>
+            <video id="localVideo" autoplay muted></video>
+        </div>
+        <div class="video-box">
+            <h3>Remoto</h3>
+            <video id="remoteVideo" autoplay></video>
+        </div>
+    </div>
+    
+    <div class="user-controls">
+        <div class="form-group">
+            <label for="userId">Tu ID de usuario:</label>
+            <input type="text" id="userId" readonly>
+        </div>
+        
+        <div class="form-group">
+            <label for="remoteUserId">ID del usuario a llamar:</label>
+            <input type="text" id="remoteUserId" placeholder="Ingresa el ID del otro usuario">
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button id="startButton">
+            <span class="icon">🎥</span> Iniciar Cámara
+        </button>
+        <button id="callButton" disabled>
+            <span class="icon">📞</span> Llamar
+        </button>
+        <button id="hangupButton" disabled>
+            <span class="icon">🚫</span> Colgar
+        </button>
+    </div>
+    
+    <div class="status" id="status">
+        Presiona "Iniciar Cámara" para comenzar
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
+    
+    <script>
+        // Configuración de Firebase con tus datos
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3MI1klgBSHs1h6QT4VPNoScCfCwMV_Ck",
+            authDomain: "usuario-b0384.firebaseapp.com",
+            databaseURL: "https://usuario-b0384-default-rtdb.firebaseio.com",
+            projectId: "usuario-b0384",
+            storageBucket: "usuario-b0384.firebasestorage.app",
+            messagingSenderId: "196266170863",
+            appId: "1:196266170863:web:4ea57f489df94aba94fe1a"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Variables globales
+        let localStream = null;
+        let remoteStream = null;
+        let peerConnection = null;
+        let currentUserId = null;
+        let remoteUserId = null;
+        let isCaller = false;
+
+        // Elementos del DOM
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const userIdInput = document.getElementById('userId');
+        const remoteUserIdInput = document.getElementById('remoteUserId');
+        const startButton = document.getElementById('startButton');
+        const callButton = document.getElementById('callButton');
+        const hangupButton = document.getElementById('hangupButton');
+        const statusDiv = document.getElementById('status');
+
+        // Configuración de ICE Servers (STUN/TURN)
+        const configuration = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' }
+            ]
+        };
+
+        // Generar un ID de usuario aleatorio al cargar la página
+        window.onload = () => {
+            currentUserId = generateUserId();
+            userIdInput.value = currentUserId;
+            setupDatabaseListeners();
+        };
+
+        // Generar ID de usuario aleatorio
+        function generateUserId() {
+            return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        }
+
+        // Configurar listeners de Firebase
+        function setupDatabaseListeners() {
+            // Escuchar ofertas de llamada entrantes
+            database.ref(`users/${currentUserId}/offer`).on('value', async snapshot => {
+                if (!snapshot.exists() || !localStream) return;
+                
+                const data = snapshot.val();
+                if (!data) return;
+                
+                remoteUserId = data.callerId;
+                remoteUserIdInput.value = remoteUserId;
+                statusDiv.textContent = `Llamada entrante de ${remoteUserId}...`;
+                
+                // Crear conexión peer
+                await createPeerConnection(false);
+                
+                // Establecer la descripción remota
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+                
+                // Crear y enviar respuesta
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                
+                database.ref(`users/${remoteUserId}/answer`).set({
+                    answer: answer,
+                    calleeId: currentUserId
+                });
+                
+                statusDiv.textContent = `En llamada con ${remoteUserId}`;
+                callButton.disabled = true;
+                hangupButton.disabled = false;
+            });
+            
+            // Escuchar respuestas a nuestras ofertas
+            database.ref(`users/${currentUserId}/answer`).on('value', async snapshot => {
+                if (!snapshot.exists() || !peerConnection || isCaller === false) return;
+                
+                const data = snapshot.val();
+                if (!data) return;
+                
+                await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
+                statusDiv.textContent = `En llamada con ${remoteUserId}`;
+            });
+            
+            // Escuchar candidatos ICE
+            database.ref(`users/${currentUserId}/candidate`).on('value', async snapshot => {
+                if (!snapshot.exists() || !peerConnection) return;
+                
+                const data = snapshot.val();
+                if (!data) return;
+                
+                try {
+                    await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+                } catch (e) {
+                    console.error("Error adding ICE candidate:", e);
+                }
+            });
+        }
+
+        // Iniciar cámara
+        startButton.addEventListener('click', async () => {
+            try {
+                statusDiv.textContent = "Iniciando cámara y micrófono...";
+                
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    },
+                    audio: true
+                });
+                
+                localVideo.srcObject = localStream;
+                
+                startButton.disabled = true;
+                callButton.disabled = false;
+                statusDiv.textContent = "Cámara y micrófono listos. Ingresa el ID del usuario a llamar.";
+            } catch (err) {
+                console.error("Error al acceder a los dispositivos: ", err);
+                statusDiv.textContent = "Error al acceder a los dispositivos: " + err.message;
+            }
+        });
+
+        // Realizar llamada
+        callButton.addEventListener('click', async () => {
+            remoteUserId = remoteUserIdInput.value.trim();
+            
+            if (!remoteUserId) {
+                statusDiv.textContent = "Por favor ingresa el ID del usuario a llamar";
+                return;
+            }
+            
+            if (remoteUserId === currentUserId) {
+                statusDiv.textContent = "No puedes llamarte a ti mismo";
+                return;
+            }
+            
+            try {
+                statusDiv.textContent = `Llamando a ${remoteUserId}...`;
+                callButton.disabled = true;
+                isCaller = true;
+                
+                // Crear conexión peer
+                await createPeerConnection(true);
+                
+                // Crear oferta
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                
+                // Enviar oferta al usuario remoto
+                database.ref(`users/${remoteUserId}/offer`).set({
+                    offer: offer,
+                    callerId: currentUserId
+                });
+                
+                statusDiv.textContent = `Esperando respuesta de ${remoteUserId}...`;
+            } catch (err) {
+                console.error("Error al realizar la llamada: ", err);
+                statusDiv.textContent = "Error al realizar la llamada: " + err.message;
+                callButton.disabled = false;
+            }
+        });
+
+        // Colgar llamada
+        hangupButton.addEventListener('click', () => {
+            endCall();
+        });
+
+        // Crear conexión RTCPeerConnection
+        async function createPeerConnection(isCaller) {
+            peerConnection = new RTCPeerConnection(configuration);
+            
+            // Añadir stream local
+            localStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, localStream);
+            });
+            
+            // Escuchar stream remoto
+            peerConnection.ontrack = event => {
+                remoteStream = new MediaStream();
+                event.streams[0].getTracks().forEach(track => {
+                    remoteStream.addTrack(track);
+                });
+                remoteVideo.srcObject = remoteStream;
+            };
+            
+            // Manejar candidatos ICE
+            peerConnection.onicecandidate = event => {
+                if (event.candidate && remoteUserId) {
+                    database.ref(`users/${remoteUserId}/candidate`).set({
+                        candidate: event.candidate
+                    });
+                }
+            };
+            
+            // Manejar cambios en el estado de la conexión
+            peerConnection.onconnectionstatechange = () => {
+                switch (peerConnection.connectionState) {
+                    case "disconnected":
+                    case "failed":
+                        endCall();
+                        statusDiv.textContent = "Llamada finalizada";
+                        break;
+                    case "closed":
+                        endCall();
+                        break;
+                }
+            };
+        }
+
+        // Finalizar llamada
+        function endCall() {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            
+            if (remoteStream) {
+                remoteStream.getTracks().forEach(track => track.stop());
+                remoteStream = null;
+                remoteVideo.srcObject = null;
+            }
+            
+            // Limpiar datos de Firebase
+            if (isCaller && remoteUserId) {
+                database.ref(`users/${remoteUserId}/offer`).remove();
+                database.ref(`users/${remoteUserId}/candidate`).remove();
+            }
+            
+            // Limpiar datos locales
+            database.ref(`users/${currentUserId}/answer`).remove();
+            database.ref(`users/${currentUserId}/candidate`).remove();
+            
+            isCaller = false;
+            remoteUserId = null;
+            remoteUserIdInput.value = "";
+            
+            callButton.disabled = false;
+            hangupButton.disabled = true;
+            
+            if (localStream) {
+                statusDiv.textContent = "Cámara y micrófono listos. Ingresa el ID del usuario a llamar.";
+            } else {
+                statusDiv.textContent = "Presiona 'Iniciar Cámara' para comenzar";
+            }
+        }
+
+        // Detener los streams al salir
+        window.addEventListener('beforeunload', () => {
+            endCall();
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>

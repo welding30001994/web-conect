@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <img src="assets/default-profile.jpg" alt="Profile" id="profilePic">
+            <h3 id="userName">Usuario</h3>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="home.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Perfil</a></li>
+                <li><a href="gallery.html"><i class="fas fa-images"></i> Galería</a></li>
+                <li><a href="chat.html"><i class="fas fa-comments"></i> Chat</a></li>
+                <li class="active"><a href="settings.html"><i class="fas fa-cog"></i> Configuración</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Configuración</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar en configuración...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </header>
+
+        <section class="settings-section">
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="chat">Chat</button>
+                <button class="tab-btn" data-tab="privacy">Privacidad</button>
+                <button class="tab-btn" data-tab="account">Cuenta</button>
+            </div>
+
+            <div class="settings-content">
+                <div class="tab-content active" id="chat-settings">
+                    <h2>Configuración del Chat</h2>
+                    <form id="chatSettingsForm">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="notifications" checked>
+                                Recibir notificaciones de nuevos mensajes
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="sound" checked>
+                                Sonido de notificación
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="theme">Tema del chat:</label>
+                            <select id="theme">
+                                <option value="light">Claro</option>
+                                <option value="dark">Oscuro</option>
+                                <option value="system">Sistema</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="save-btn">Guardar Cambios</button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="privacy-settings">
+                    <h2>Configuración de Privacidad</h2>
+                    <form id="privacySettingsForm">
+                        <div class="form-group">
+                            <label for="profileVisibility">Visibilidad del perfil:</label>
+                            <select id="profileVisibility">
+                                <option value="public">Público</option>
+                                <option value="friends">Solo amigos</option>
+                                <option value="private">Privado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="photoVisibility">Visibilidad de fotos:</label>
+                            <select id="photoVisibility">
+                                <option value="public">Público</option>
+                                <option value="friends">Solo amigos</option>
+                                <option value="private">Privado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="searchable">
+                                Permitir que otros usuarios me encuentren por mi email
+                            </label>
+                        </div>
+                        <button type="submit" class="save-btn">Guardar Cambios</button>
+                    </form>
+                </div>
+
+                <div class="tab-content" id="account-settings">
+                    <h2>Configuración de la Cuenta</h2>
+                    <form id="accountSettingsForm">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Cambiar contraseña:</label>
+                            <input type="password" id="newPassword" placeholder="Nueva contraseña">
+                            <input type="password" id="confirmPassword" placeholder="Confirmar nueva contraseña">
+                        </div>
+                        <div class="form-group danger-zone">
+                            <h3>Zona de peligro</h3>
+                            <p>Estas acciones no se pueden deshacer</p>
+                            <button type="button" id="deleteAccountBtn" class="danger-btn">Eliminar Cuenta</button>
+                        </div>
+                        <button type="submit" class="save-btn">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+</html>

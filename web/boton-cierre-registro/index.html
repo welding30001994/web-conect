@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Incluir Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form id="registerForm">
+                <h1>Crear Cuenta</h1>
+                <input type="text" id="registerName" placeholder="Nombre" required />
+                <input type="email" id="registerEmail" placeholder="Email" required />
+                <input type="password" id="registerPassword" placeholder="Contraseña" required />
+                <button type="submit">Registrarse</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form id="loginForm">
+                <h1>Iniciar Sesión</h1>
+                <input type="email" id="loginEmail" placeholder="Email" required />
+                <input type="password" id="loginPassword" placeholder="Contraseña" required />
+                <a href="#" id="forgotPassword">¿Olvidaste tu contraseña?</a>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>¡Bienvenido de nuevo!</h1>
+                    <p>Para mantenerse conectado, inicie sesión con su información personal</p>
+                    <button class="ghost" id="signIn">Iniciar Sesión</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>¡Hola, Amigo!</h1>
+                    <p>Ingresa tus datos personales y comienza tu viaje con nosotros</p>
+                    <button class="ghost" id="signUp">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Verificar autenticación al cargar
+        checkAuth();
+        
+        // Manejar el formulario de login
+        document.getElementById("loginForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            signIn(email, password);
+        });
+    </script>
+</body>
+</html>

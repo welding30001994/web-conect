@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasias BBW - Experiencia Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e83e8c;
+            --secondary-color: #6c757d;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+            --accent-color: #ff6b9d;
+            --text-color: #212529;
+            --text-light: #f8f9fa;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+
+            background: url('https://raw.githubusercontent.com/welding30001994/IMAGENES-CC/refs/heads/main/10fef95f-f8d7-463e-855e-4d66ade7e0de.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(232, 62, 140, 0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Header y Navegación */
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-speed) ease;
+        }
+
+        header.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle i {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .menu-toggle.active i {
+            transform: rotate(90deg);
+            color: var(--primary-color);
+        }
+
+        /* Navegación */
+        .navegador ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .navegador ul li {
+            position: relative;
+            margin: 0 0.5rem;
+        }
+
+        .navegador ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .navegador ul li a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .navegador ul li a:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .navegador ul li a i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .navegador ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .navegador ul li.active a {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .navegador ul li.active a::before {
+            display: none;
+        }
+
+        /* Contenido Principal */
+        main {
+            padding-top: 100px;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(232, 62, 140, 0.6);
+            background: var(--accent-color);
+        }
+
+        /* Secciones */
+        .section {
+            padding: 5rem 2rem;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Galería */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all var(--transition-speed) ease;
+            aspect-ratio: 1/1;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 1.5rem;
+            color: white;
+            opacity: 0;
+            transition: all var(--transition-speed) ease;
+            transform: translateY(20px);
+        }
+
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .gallery-item-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Sección de Comentarios */
+        .comments-section {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 1000px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .comment-box {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .comment-box:focus-within {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .comment-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            padding: 1rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .comment-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .upload-icon {
+            cursor: pointer;
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .upload-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .upload-icon input {
+            display: none;
+        }
+
+        .comment-submit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comment-submit:hover {
+            background: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        .comments-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .comment {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            animation: fadeIn 0.5s ease-out;
+            backdrop-filter: blur(5px);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .comment-user {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .comment-time {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: auto;
+        }
+
+        .comment-content {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .comment-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .comment-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-action {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .comment-action:hover {
+            color: var(--primary-color);
+        }
+
+        .comment-action i {
+            margin-right: 0.3rem;
+        }
+
+        /* Sección de Contacto */
+        .contact-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4rem 2rem;
+            border-radius: 15px;
+            max-width: 1000px;
+            margin: 2rem auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .contact-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .contact-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .contact-details p, .contact-details a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .contact-details a:hover {
+            color: var(--primary-color);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label,
+        .form-textarea:focus + .form-label,
+        .form-textarea:not(:placeholder-shown) + .form-label {
+            top: -0.8rem;
+            left: 0.8rem;
+            font-size: 0.8rem;
+            background: var(--dark-color);
+            padding: 0 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            align-self: flex-start;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-submit:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(232, 62, 140, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--text-light);
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .footer-logo span {
+            color: var(--primary-color);
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--text-light);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3, .footer-contact h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-links h3::after, .footer-contact h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a i {
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-contact p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-contact i {
+            margin-right: 0.8rem;
+            color: var(--primary-color);
+            min-width: 20px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Efectos de desplazamiento */
+        [data-aos] {
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        [data-aos="fade-up"] {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        [data-aos="fade-up"].aos-animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-down"] {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+
+        [data-aos="fade-down"].aos-animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        [data-aos="fade-left"] {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        [data-aos="fade-left"].aos-animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        [data-aos="fade-right"] {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        [data-aos="fade-right"].aos-animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        [data-aos="zoom-in"] {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        [data-aos="zoom-in"].aos-animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .navegador {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: all 0.5s ease;
+                z-index: 1000;
+                padding: 2rem;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .navegador.active {
+                right: 0;
+            }
+
+            .navegador ul {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .navegador ul li {
+                margin: 1rem 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .navegador ul li a {
+                display: block;
+                width: 100%;
+                padding: 1rem;
+                border-radius: 5px;
+                font-size: 1.1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-links ul, .footer-contact {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-links h3::after, .footer-contact h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-crown"></i>OXOMAX<span>TRADING</span>
+            </a>
+            
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav class="navegador" id="navegador">
+                <ul>
+                    <li class="active"><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="#galeria"><i class="fas fa-images"></i> Galería</a></li>
+                    <li><a href="#comentarios"><i class="fas fa-comments"></i> Comunidad</a></li>
+                    <li><a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main>
+        <!-- Sección Hero -->
+        <section class="hero" id="inicio">
+            <div class="hero-content" data-aos="fade-up" data-aos-delay="300">
+                <h1>OXOMAX TRADING</h1>
+                <p>"El éxito en el trading no se mide por una sola operación, sino por la disciplina, la constancia y la mentalidad con la que enfrentas cada día. En OXOMAX TRADING, cada decisión es un paso hacia tus metas. ¡Confía en tu estrategia, aprende de cada movimiento y sigue conquistando los mercados! El camino al éxito está lleno de oportunidades… ¡Tómalas con determinación! 💪📈🔥"</p>
+                <a href="#galeria" class="cta-button">Explorar Galería</a>
+            </div>
+        </section>
+
+        <!-- Sección Galería -->
+        <section class="section" id="galeria">
+            <div class="section-title" data-aos="fade-up">
+                <h2> Galería </h2>
+                <p>En OXOMAX no solo te damos herramientas, te ayudamos a forjar la mentalidad del ganador. Porque el trading no es solo gráficos y números… es disciplina, resiliencia y la convicción de que cada operación es un paso hacia tu libertad financiera</p>
+            </div>
+            
+            <div class="gallery">
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
+                    <img src="https://play-lh.googleusercontent.com/ZaOHh28PaobryBtPT2dDvCmFLnc27TZ6lDO2C-HOEWG_Z_XEmzzP42w_YDtKs12G3Y8W" alt="Colección 1">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Colección Nocturna</h3>
+                        <p class="gallery-item-desc">Elegancia que trasciende la noche</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
+                    <img src="https://a.c-dn.net/c/content/dam/publicsites/igcom/uk/images/ContentImage/Meta-Trader-4/MT4-features-image.jpg/jcr:content/renditions/original-size.webp" alt="Colección 2">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Línea Diamante</h3>
+                        <p class="gallery-item-desc">Belleza que brilla con intensidad</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
+                    <img src="https://media.glamour.mx/photos/6528aebedaab1b14402e2b15/16:9/w_2560%2Cc_limit/IMG_9628.jpeg" alt="Colección 3">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Edición Esmeralda</h3>
+                        <p class="gallery-item-desc">Lujo y sofisticación en cada detalle</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="400">
+                    <img src="https://cdn6.aptoide.com/imgs/a/4/e/a4e2a414bf496b1ceedbf0343bd0c9eb_icon.png" alt="Colección 4">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Serie Rubí</h3>
+                        <p class="gallery-item-desc">Pasión y fuego en cada diseño</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="500">
+                    <img src="https://assets.fxcm.com/cdn-cgi/image/quality=100,format=webp/fxpress/fxcmcom/base/page/metatrader-4/carousel-image-1.jpg" alt="Colección 5">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Colección Zafiro</h3>
+                        <p class="gallery-item-desc">Profundidad y misterio en cada pieza</p>
+                    </div>
+                </div>
+                
+                <div class="gallery-item" data-aos="fade-up" data-aos-delay="600">
+                    <img src="https://img.freepik.com/vector-gratis/fondo-moneda-oro-bitcoin-criptomoneda_1017-31505.jpg" alt="Colección 6">
+                    <div class="gallery-item-overlay">
+                        <h3 class="gallery-item-title">Línea Perla</h3>
+                        <p class="gallery-item-desc">Pureza y elegancia atemporal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Comentarios -->
+        <section class="section" id="comentarios">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Nuestra Comunidad</h2>
+                <p>Únete a la conversación y comparte tus experiencias con otros amantes del estilo BBW.</p>
+            </div>
+            
+            <div class="comments-section" data-aos="fade-up">
+                <div class="comment-box">
+                    <input type="text" class="comment-input" id="commentInput" placeholder="Escribe tu comentario...">
+                    <label class="upload-icon">
+                        <i class="fas fa-camera"></i>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </label>
+                    <button class="comment-submit" id="commentSubmit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <div class="comments-container" id="commentsContainer">
+                    <!-- Los comentarios se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Contacto -->
+        <section class="section" id="contacto">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Contáctanos</h2>
+                <p>Estamos aquí para responder todas tus preguntas y escuchar tus sugerencias.</p>
+            </div>
+            
+            <div class="contact-section" data-aos="fade-up">
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <div class="contact-card" data-aos="fade-right" data-aos-delay="100">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Dirección</h3>
+                                <p>Calle Fantasía 123, Ciudad BBW</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-card" data-aos="fade-right" data-aos-delay="200">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Teléfono</h3>
+                                <a href="tel:+1234567890">+1 (234) 567-890</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-card" data-aos="fade-right" data-aos-delay="300">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <a href="mailto:info@fantasiasbbw.com">info@fantasiasbbw.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-card" data-aos="fade-right" data-aos-delay="400">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Horario</h3>
+                                <p>Lun-Vie: 9am - 8pm<br>Sab-Dom: 10am - 6pm</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form" data-aos="fade-left" data-aos-delay="500">
+                        <div class="form-group">
+                            <input type="text" class="form-input" id="nameInput" placeholder=" " required>
+                            <label class="form-label" for="nameInput">Nombre Completo</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="email" class="form-input" id="emailInput" placeholder=" " required>
+                            <label class="form-label" for="emailInput">Correo Electrónico</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="tel" class="form-input" id="phoneInput" placeholder=" ">
+                            <label class="form-label" for="phoneInput">Teléfono (Opcional)</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea class="form-textarea" id="messageInput" placeholder=" " required></textarea>
+                            <label class="form-label" for="messageInput">Tu Mensaje</label>
+                        </div>
+                        
+                        <button type="submit" class="form-submit">Enviar Mensaje</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">Fantasías<span>BBW</span></div>
+                <p>Somos una marca dedicada a celebrar la belleza en todas sus formas, ofreciendo productos y experiencias que realzan la confianza y el estilo único de cada persona.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-pinterest-p"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="#inicio"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                    <li><a href="#galeria"><i class="fas fa-chevron-right"></i> Galería</a></li>
+                    <li><a href="#comentarios"><i class="fas fa-chevron-right"></i> Comunidad</a></li>
+                    <li><a href="#contacto"><i class="fas fa-chevron-right"></i> Contacto</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Política de Privacidad</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h3>Contacto</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Calle Fantasía 123, Ciudad BBW</p>
+                <p><i class="fas fa-phone-alt"></i> +1 (234) 567-890</p>
+                <p><i class="fas fa-envelope"></i> info@fantasiasbbw.com</p>
+                <p><i class="fas fa-clock"></i> Lun-Vie: 9am - 8pm</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 Fantasías BBW. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Menú Hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const navegador = document.getElementById('navegador');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navegador.classList.toggle('active');
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.navegador a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navegador.classList.remove('active');
+            });
+        });
+        
+        // Efecto de scroll en el header
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Sistema de comentarios
+        document.addEventListener('DOMContentLoaded', () => {
+            const commentInput = document.getElementById('commentInput');
+            const imageInput = document.getElementById('imageInput');
+            const commentSubmit = document.getElementById('commentSubmit');
+            const commentsContainer = document.getElementById('commentsContainer');
+            
+            // Cargar comentarios existentes del localStorage
+            loadComments();
+            
+            // Manejar envío de comentarios
+            commentSubmit.addEventListener('click', postComment);
+            commentInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    postComment();
+                }
+            });
+            
+            // Función para publicar un comentario
+            function postComment() {
+                const commentText = commentInput.value.trim();
+                const file = imageInput.files[0];
+                
+                if (commentText || file) {
+                    let commentData = {
+                        text: commentText,
+                        image: null,
+                        likes: 0,
+                        timestamp: new Date().toISOString(),
+                        user: 'Usuario Anónimo'
+                    };
+                    
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            commentData.image = e.target.result;
+                            saveComment(commentData);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        saveComment(commentData);
+                    }
+                }
+            }
+            
+            // Guardar comentario en localStorage y mostrarlo
+            function saveComment(commentData) {
+                // Obtener comentarios existentes
+                let comments = JSON.parse(localStorage.getItem('bbw-comments')) || [];
+                
+                // Agregar nuevo comentario
+                comments.push(commentData);
+                
+                // Guardar en localStorage
+                localStorage.setItem('bbw-comments', JSON.stringify(comments));
+                
+                // Mostrar comentario
+                displayComment(commentData);
+                
+                // Limpiar inputs
+                commentInput.value = '';
+                imageInput.value = '';
+            }
+            
+            // Mostrar un comentario en el DOM
+            function displayComment(commentData) {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
+                
+                // Formatear fecha
+                const date = new Date(commentData.timestamp);
+                const formattedDate = date.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // Crear HTML del comentario
+                commentElement.innerHTML = `
+                    <div class="comment-header">
+                        <div class="comment-avatar">${commentData.user.charAt(0).toUpperCase()}</div>
+                        <div class="comment-user">${commentData.user}</div>
+                        <div class="comment-time">${formattedDate}</div>
+                    </div>
+                    <div class="comment-content">${commentData.text}</div>
+                    ${commentData.image ? `<img src="${commentData.image}" class="comment-image" alt="Imagen del comentario">` : ''}
+                    <div class="comment-actions">
+                        <div class="comment-action like-action">
+                            <i class="fas fa-heart"></i> <span class="like-count">${commentData.likes}</span> Me gusta
+                        </div>
+                        <div class="comment-action reply-action">
+                            <i class="fas fa-reply"></i> Responder
+                        </div>
+                    </div>
+                `;
+                
+                // Agregar al contenedor
+                commentsContainer.prepend(commentElement);
+                
+                // Animación de entrada
+                commentElement.style.opacity = '0';
+                setTimeout(() => {
+                    commentElement.style.opacity = '1';
+                }, 10);
+                
+                // Manejar like
+                const likeAction = commentElement.querySelector('.like-action');
+                likeAction.addEventListener('click', () => {
+                    const likeCount = likeAction.querySelector('.like-count');
+                    let currentLikes = parseInt(likeCount.textContent);
+                    likeCount.textContent = currentLikes + 1;
+                    
+                    // Actualizar en localStorage
+                    updateCommentLikes(commentData, currentLikes + 1);
+                });
+            }
+            
+            // Actualizar likes en localStorage
+            function updateCommentLikes(commentData, newLikes) {
+                let comments = JSON.parse(localStorage.getItem('bbw-comments')) || [];
+                
+                comments = comments.map(comment => {
+                    if (comment.timestamp === commentData.timestamp && comment.text === commentData.text) {
+                        return {...comment, likes: newLikes};
+                    }
+                    return comment;
+                });
+                
+                localStorage.setItem('bbw-comments', JSON.stringify(comments));
+            }
+            
+            // Cargar todos los comentarios
+            function loadComments() {
+                const comments = JSON.parse(localStorage.getItem('bbw-comments')) || [];
+                
+                // Ordenar por fecha (más recientes primero)
+                comments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                // Mostrar cada comentario
+                comments.forEach(comment => {
+                    displayComment(comment);
+                });
+            }
+        });
+        
+        // Animaciones al hacer scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('[data-aos]');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementPosition < windowHeight - 100) {
+                        element.classList.add('aos-animate');
+                    }
+                });
+            };
+            
+            // Ejecutar al cargar y al hacer scroll
+            animateOnScroll();
+            window.addEventListener('scroll', animateOnScroll);
+        });
+        
+        // Formulario de contacto
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactForm = document.querySelector('.contact-form');
+            
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    // Simular envío del formulario
+                    const submitButton = contactForm.querySelector('.form-submit');
+                    submitButton.textContent = 'Enviando...';
+                    submitButton.disabled = true;
+                    
+                    setTimeout(() => {
+                        submitButton.textContent = 'Mensaje Enviado!';
+                        submitButton.style.backgroundColor = '#4CAF50';
+                        
+                        // Resetear después de 2 segundos
+                        setTimeout(() => {
+                            contactForm.reset();
+                            submitButton.textContent = 'Enviar Mensaje';
+                            submitButton.style.backgroundColor = '';
+                            submitButton.disabled = false;
+                            
+                            // Mostrar mensaje de éxito
+                            alert('Gracias por tu mensaje. Nos pondremos en contacto contigo pronto.');
+                        }, 2000);
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

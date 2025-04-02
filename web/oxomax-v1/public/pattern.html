@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patrones de Venta en Trading</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #ff6b81;
+            --dark: #1a1a2e;
+            --light: #f1f2f6;
+            --accent: #ff9ff3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 71, 87, 0.2);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: radial-gradient(circle at center, rgba(255, 107, 129, 0.1), transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.6);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        section {
+            margin-bottom: 5rem;
+        }
+        
+        h2.section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 71, 87, 0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .pattern-image {
+            width: 100%;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pattern-details {
+            margin-top: 3rem;
+        }
+        
+        .pattern-details h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .pattern-details ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .pattern-details li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .pattern-steps {
+            background: rgba(255, 71, 87, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        
+        .pattern-steps h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .pattern-steps ol {
+            padding-left: 1.5rem;
+        }
+        
+        .pattern-steps li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 71, 87, 0.2);
+        }
+        
+        .comparison-table th {
+            background-color: rgba(255, 107, 129, 0.2);
+            color: var(--primary);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: rgba(255, 71, 87, 0.05);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Efectos futuristas */
+        .glow {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 71, 87, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+            }
+        }
+        
+        /* Secciones ocultas */
+        .page {
+            display: none;
+        }
+        
+        .active-page {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            h2.section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>OXOMAX TRADING</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-page="introduction">Introducción</a></li>
+                <li><a href="#" class="nav-link" data-page="patterns">Patrones de Venta</a></li>
+                <li><a href="#" class="nav-link" data-page="analysis">Análisis</a></li>
+                <li><a href="#" class="nav-link" data-page="strategies">Estrategias</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Página de Inicio -->
+    <section id="home" class="page active-page">
+        <div class="hero">
+            <h2 class="glow">Domina los Patrones de Venta en Trading</h2>
+            <p>Identifica las señales de reversión y continuación bajista con nuestros análisis detallados de los patrones gráficos más efectivos para operaciones de venta.</p>
+            <a href="#" class="btn pulse nav-link" data-page="introduction">Comenzar Aprendizaje</a>
+        </div>
+
+        <div class="container">
+            <section>
+                <h2 class="section-title">¿Qué son los Patrones de Venta?</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">📉</div>
+                        <h3>Reversión Bajista</h3>
+                        <p>Patrones que indican un posible cambio de tendencia alcista a bajista, señalando oportunidades para entrar en corto.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔻</div>
+                        <h3>Continuación Bajista</h3>
+                        <p>Formaciones que sugieren que la tendencia bajista actual continuará, ofreciendo puntos para añadir a posiciones cortas.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h3>Confirmación de Volumen</h3>
+                        <p>El volumen juega un papel clave en la validación de los patrones de venta, confirmando la fortaleza de la señal.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Patrones Principales</h2>
+                <div class="grid">
+                    <div class="card">
+                        <img src="https://www.investopedia.com/thmb/4PcwVxX5Q8e_5qJXzGX9W9Q9XjI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Head-and-Shoulders-Neckline-final-bcfb0e8a0a1c4eccb4a7a8e5d5b5f5a5.png" alt="Head and Shoulders" class="pattern-image">
+                        <h3>Cabeza y Hombros</h3>
+                        <p>Uno de los patrones de reversión más confiables, que marca el agotamiento de una tendencia alcista.</p>
+                        <a href="#" class="btn nav-link" data-page="patterns">Ver Detalles</a>
+                    </div>
+                    <div class="card">
+                        <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Double-Top-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Double Top" class="pattern-image">
+                        <h3>Doble Techo</h3>
+                        <p>Formación de dos picos similares que fallan en superar un nivel de resistencia, indicando debilidad.</p>
+                        <a href="#" class="btn nav-link" data-page="patterns">Ver Detalles</a>
+                    </div>
+                    <div class="card">
+                        <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Rising-Wedge-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Rising Wedge" class="pattern-image">
+                        <h3>Cuña Ascendente</h3>
+                        <p>Patrón de continuación bajista en tendencias descendentes o reversión en tendencias alcistas.</p>
+                        <a href="#" class="btn nav-link" data-page="patterns">Ver Detalles</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Página de Introducción -->
+    <section id="introduction" class="page">
+        <div class="container">
+            <h2 class="section-title">Introducción a los Patrones de Venta</h2>
+            
+            <div class="card">
+                <h3>¿Qué son los Patrones de Venta?</h3>
+                <p>Los patrones de venta en trading son formaciones específicas que aparecen en los gráficos de precios y que históricamente han precedido movimientos bajistas en el mercado. Estos patrones son herramientas esenciales para los traders técnicos que buscan identificar oportunidades para entrar en posiciones cortas o cerrar posiciones largas.</p>
+                <p>Estos patrones se dividen principalmente en dos categorías:</p>
+                <ul>
+                    <li><strong>Patrones de Reversión:</strong> Indican un posible cambio de tendencia de alcista a bajista</li>
+                    <li><strong>Patrones de Continuación:</strong> Sugieren que una tendencia bajista existente probablemente continuará</li>
+                </ul>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Importancia en el Análisis Técnico</h3>
+                <p>Los patrones de venta son fundamentales en el análisis técnico porque:</p>
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Proporcionan señales objetivas:</strong> Ofrecen puntos claros de entrada y salida basados en formaciones gráficas reconocibles.</p>
+                        <p><strong>Funcionan en múltiples timeframes:</strong> Son aplicables desde gráficos de 1 minuto hasta mensuales.</p>
+                    </div>
+                    <div>
+                        <p><strong>Tienen fundamento psicológico:</strong> Reflejan cambios en el sentimiento del mercado.</p>
+                        <p><strong>Permiten gestión de riesgo:</strong> Facilitan el cálculo de stop loss y take profit.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Elementos Clave de los Patrones de Venta</h3>
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/Chart-Patterns-1.png" alt="Elementos de patrones" class="pattern-image" style="max-width: 800px; margin: 1rem auto; display: block;">
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Formación del patrón:</strong> Estructura reconocible en el gráfico de precios.</p>
+                        <p><strong>Volumen:</strong> Aumento en volumen suele confirmar la ruptura.</p>
+                    </div>
+                    <div>
+                        <p><strong>Línea de neckline/soporte:</strong> Nivel clave que confirma el patrón al romperse.</p>
+                        <p><strong>Objetivo de precio:</strong> Proyección basada en la altura del patrón.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para explorar los patrones específicos?</h3>
+                <p style="margin-bottom: 1.5rem;">Aprende a identificar y operar los patrones de venta más efectivos.</p>
+                <a href="#" class="btn nav-link" data-page="patterns">Ver Patrones de Venta</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Patrones de Venta -->
+    <section id="patterns" class="page">
+        <div class="container">
+            <h2 class="section-title">Patrones de Venta en Trading</h2>
+            
+            <div class="card">
+                <h3>Patrones de Reversión Bajista</h3>
+                <p>Estos patrones aparecen al final de tendencias alcistas y señalan un posible cambio a tendencia bajista.</p>
+                
+                <div class="pattern-details">
+                    <h3>1. Cabeza y Hombros (Head and Shoulders)</h3>
+                    <img src="https://www.investopedia.com/thmb/4PcwVxX5Q8e_5qJXzGX9W9Q9XjI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Head-and-Shoulders-Neckline-final-bcfb0e8a0a1c4eccb4a7a8e5d5b5f5a5.png" alt="Head and Shoulders" class="pattern-image">
+                    <p>Formación compuesta por tres picos: hombro izquierdo, cabeza (el más alto) y hombro derecho, con una línea de neckline que conecta los mínimos.</p>
+                    
+                    <div class="pattern-steps">
+                        <h4>Cómo operar:</h4>
+                        <ol>
+                            <li>Esperar la ruptura del neckline después del hombro derecho</li>
+                            <li>Entrar en corto con stop loss por encima del hombro derecho</li>
+                            <li>Objetivo de precio: distancia desde cabeza a neckline proyectada hacia abajo</li>
+                        </ol>
+                    </div>
+                    
+                    <p><strong>Fiabilidad:</strong> Alta, especialmente en timeframes mayores (4h, diario)</p>
+                </div>
+                
+                <div class="pattern-details">
+                    <h3>2. Doble Techo (Double Top)</h3>
+                    <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Double-Top-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Double Top" class="pattern-image">
+                    <p>Dos picos aproximadamente al mismo nivel con un valle intermedio, mostrando rechazo en una zona de resistencia.</p>
+                    
+                    <div class="pattern-steps">
+                        <h4>Cómo operar:</h4>
+                        <ol>
+                            <li>Confirmar cuando el precio rompe el soporte (línea de neckline)</li>
+                            <li>Entrar en corto con stop loss por encima del segundo pico</li>
+                            <li>Objetivo: distancia entre picos y neckline proyectada hacia abajo</li>
+                        </ol>
+                    </div>
+                    
+                    <p><strong>Variante:</strong> Triple techo (menos común pero más fuerte)</p>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Patrones de Continuación Bajista</h3>
+                <p>Estas formaciones aparecen durante tendencias bajistas y señalan que la caída probablemente continuará.</p>
+                
+                <div class="pattern-details">
+                    <h3>1. Bandera Bajista (Bear Flag)</h3>
+                    <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Bear-Flag-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Bear Flag" class="pattern-image">
+                    <p>Pequeña consolidación con tendencia alcista dentro de una tendencia bajista mayor, formando un mástil (caída inicial) y bandera (consolidación).</p>
+                    
+                    <div class="pattern-steps">
+                        <h4>Cómo operar:</h4>
+                        <ol>
+                            <li>Esperar ruptura del soporte de la bandera</li>
+                            <li>Entrar en corto con stop loss por encima de la bandera</li>
+                            <li>Objetivo: altura del mástil proyectada desde punto de ruptura</li>
+                        </ol>
+                    </div>
+                    
+                    <p><strong>Confirmación:</strong> Volumen alto en ruptura aumenta fiabilidad</p>
+                </div>
+                
+                <div class="pattern-details">
+                    <h3>2. Cuña Ascendente (Rising Wedge)</h3>
+                    <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Rising-Wedge-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Rising Wedge" class="pattern-image">
+                    <p>Formación con dos líneas convergentes inclinadas hacia arriba, donde los máximos y mínimos suben pero con convergencia.</p>
+                    
+                    <div class="pattern-steps">
+                        <h4>Cómo operar:</h4>
+                        <ol>
+                            <li>Esperar ruptura de la línea de soporte inferior</li>
+                            <li>Entrar en corto con stop loss por encima del último máximo</li>
+                            <li>Objetivo: altura inicial del patrón proyectada hacia abajo</li>
+                        </ol>
+                    </div>
+                    
+                    <p><strong>Psicología:</strong> Muestra pérdida de impulso alcista a pesar de precios más altos</p>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Comparativa de Patrones de Venta</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Patrón</th>
+                            <th>Tipo</th>
+                            <th>Fiabilidad</th>
+                            <th>Objetivo Típico</th>
+                            <th>Tiempo Formación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cabeza y Hombros</td>
+                            <td>Reversión</td>
+                            <td>Alta</td>
+                            <td>1:1 (altura patrón)</td>
+                            <td>Medio-largo plazo</td>
+                        </tr>
+                        <tr>
+                            <td>Doble Techo</td>
+                            <td>Reversión</td>
+                            <td>Media-Alta</td>
+                            <td>1:1</td>
+                            <td>Corto-medio plazo</td>
+                        </tr>
+                        <tr>
+                            <td>Bandera Bajista</td>
+                            <td>Continuación</td>
+                            <td>Alta</td>
+                            <td>1:1 (mástil)</td>
+                            <td>Corto plazo</td>
+                        </tr>
+                        <tr>
+                            <td>Cuña Ascendente</td>
+                            <td>Continuación/Reversión</td>
+                            <td>Media</td>
+                            <td>1:1</td>
+                            <td>Medio plazo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Análisis -->
+    <section id="analysis" class="page">
+        <div class="container">
+            <h2 class="section-title">Análisis de Patrones de Venta</h2>
+            
+            <div class="card">
+                <h3>Análisis Técnico de los Patrones de Venta</h3>
+                <p>El análisis efectivo de patrones de venta requiere considerar múltiples factores técnicos para aumentar la probabilidad de éxito.</p>
+                
+                <div class="grid" style="margin-top: 2rem;">
+                    <div class="card">
+                        <h4>1. Confirmación de Ruptura</h4>
+                        <p>Una ruptura válida debe cumplir:</p>
+                        <ul>
+                            <li>Cierre fuera del nivel clave (neckline, soporte)</li>
+                            <li>Volumen superior al promedio en la ruptura</li>
+                            <li>Velas de mayor tamaño que las recientes</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>2. Contexto del Mercado</h4>
+                        <p>Factores que aumentan fiabilidad:</p>
+                        <ul>
+                            <li>Patrón en dirección de tendencia mayor</li>
+                            <li>En zonas de sobrecompra (RSI alto)</li>
+                            <li>Coincidencia con niveles Fibonacci</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 2rem;">
+                    <h4>3. Gestión de Riesgo</h4>
+                    <div class="grid">
+                        <div>
+                            <p><strong>Stop Loss:</strong> Colocar por encima de:</p>
+                            <ul>
+                                <li>Último máximo del patrón</li>
+                                <li>Nivel de resistencia clave</li>
+                                <li>Media móvil relevante</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong>Take Profit:</strong> Objetivos comunes:</p>
+                            <ul>
+                                <li>1:1 proyección del patrón</li>
+                                <li>Soportes anteriores</li>
+                                <li>Niveles Fibonacci de extensión</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Casos de Estudio Reales</h3>
+                
+                <div class="pattern-details">
+                    <h4>Ejemplo 1: Cabeza y Hombros en BTC/USD (2021)</h4>
+                    <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="BTC Head and Shoulders" class="pattern-image">
+                    <p>Formación clásica en gráfico semanal que precedió a una caída del 50%.</p>
+                    <div class="pattern-steps">
+                        <ol>
+                            <li>Hombro izquierdo en abril 2021</li>
+                            <li>Cabeza en mayo 2021</li>
+                            <li>Hombro derecho en julio 2021</li>
+                            <li>Ruptura de neckline en agosto 2021</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="pattern-details" style="margin-top: 2rem;">
+                    <h4>Ejemplo 2: Bandera Bajista en NASDAQ (2022)</h4>
+                    <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="NASDAQ Bear Flag" class="pattern-image">
+                    <p>Continuación bajista durante tendencia bajista de 2022.</p>
+                    <div class="pattern-steps">
+                        <ol>
+                            <li>Mástil inicial (caída rápida)</li>
+                            <li>Consolidación en bandera (3 semanas)</li>
+                            <li>Ruptura con volumen alto</li>
+                            <li>Alcanzó objetivo 1:1</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>Aplica estos conocimientos con estrategias probadas</h3>
+                <p style="margin-bottom: 1.5rem;">Descubre cómo combinar patrones de venta con indicadores técnicos para mayor precisión.</p>
+                <a href="#" class="btn nav-link" data-page="strategies">Ver Estrategias</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Estrategias -->
+    <section id="strategies" class="page">
+        <div class="container">
+            <h2 class="section-title">Estrategias con Patrones de Venta</h2>
+            
+            <div class="card">
+                <h3>Estrategia 1: Reversión con Confirmación de Indicadores</h3>
+                <p>Combina patrones de reversión con indicadores técnicos para mayor precisión.</p>
+                
+                <div class="pattern-steps">
+                    <h4>Configuración:</h4>
+                    <ol>
+                        <li><strong>Patrón:</strong> Cabeza y hombros o doble techo</li>
+                        <li><strong>RSI:</strong> Por encima de 70 (sobrecompra) al formarse el segundo pico</li>
+                        <li><strong>MACD:</strong> Divergencia bajista entre picos</li>
+                        <li><strong>Media Móvil:</strong> Precio por debajo de MA200 en temporalidades altas</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejecución:</h4>
+                    <ol>
+                        <li>Entrar en corto al romper neckline con volumen</li>
+                        <li>Stop loss: 2-3% por encima del hombro derecho/segundo pico</li>
+                        <li>Take profit 1: 1:1 proyección del patrón (50% posición)</li>
+                        <li>Take profit 2: 1.5:1 proyección (30% posición)</li>
+                        <li>Take profit 3: 2:1 proyección (20% posición)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Estrategia 2: Continuación con Volumen</h3>
+                <p>Enfoque en patrones de continuación durante tendencias bajistas fuertes.</p>
+                
+                <div class="pattern-steps">
+                    <h4>Configuración:</h4>
+                    <ol>
+                        <li><strong>Patrón:</strong> Bandera bajista o cuña ascendente</li>
+                        <li><strong>Tendencia:</strong> Bajista clara en gráfico superior (ej. diario)</li>
+                        <li><strong>Volumen:</strong> Alto en mástil inicial, bajo en consolidación</li>
+                        <li><strong>OBV:</strong> Confirmación de distribución</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejecución:</h4>
+                    <ol>
+                        <li>Entrar en corto al romper soporte con volumen creciente</li>
+                        <li>Stop loss: por encima del máximo reciente de la consolidación</li>
+                        <li>Take profit: altura del mástil inicial proyectada</li>
+                        <li>Trailing stop después de alcanzar 1:1</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Optimización y Gestión de Riesgo</h3>
+                <div class="grid">
+                    <div>
+                        <h4>Mejores Mercados</h4>
+                        <ul>
+                            <li>Forex: EUR/USD, GBP/USD</li>
+                            <li>Índices: S&P500, NASDAQ</li>
+                            <li>Cripto: BTC, ETH en timeframes altos</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Timeframes Óptimos</h4>
+                        <ul>
+                            <li>4h y diario para mayor fiabilidad</li>
+                            <li>15m-1h para scalping con patrones pequeños</li>
+                            <li>Semanales para inversión</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Reglas de Oro</h4>
+                    <ol>
+                        <li>Nunca arriesgar más del 2% por operación</li>
+                        <li>Buscar al menos 3:1 relación riesgo:beneficio</li>
+                        <li>Evitar operar patrones cerca de noticias importantes</li>
+                        <li>Confirmar siempre con gráfico de timeframe superior</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para aplicar estas estrategias?</h3>
+                <p style="margin-bottom: 1.5rem;">Regístrate para recibir análisis semanales con patrones de venta identificados.</p>
+                <a href="#" class="btn pulse">Registrarse Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="nav-link" data-page="home">Inicio</a>
+            <a href="#" class="nav-link" data-page="introduction">Introducción</a>
+            <a href="#" class="nav-link" data-page="patterns">Patrones</a>
+            <a href="#" class="nav-link" data-page="analysis">Análisis</a>
+            <a href="#" class="nav-link" data-page="strategies">Estrategias</a>
+            <a href="#">Política de Privacidad</a>
+            <a href="#">Términos de Uso</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#"><span>📱</span></a>
+            <a href="#"><span>📧</span></a>
+            <a href="#"><span>💬</span></a>
+            <a href="#"><span>🐦</span></a>
+            <a href="#"><span>📹</span></a>
+        </div>
+        
+        <p class="copyright">© 2023 Master Trading. Todos los derechos reservados. El trading conlleva riesgos de pérdida.</p>
+    </footer>
+
+    <script>
+        // Navegación entre páginas
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                
+                // Oculta todas las páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active-page');
+                });
+                
+                // Muestra la página seleccionada
+                document.getElementById(pageId).classList.add('active-page');
+                
+                // Desplaza hacia arriba
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Efectos especiales
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const randomColor = `hsl(${Math.random() * 30 + 350}, 100%, 50%)`;
+                card.style.borderColor = randomColor;
+                card.style.boxShadow = `0 10px 30px ${randomColor}40`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(255, 71, 87, 0.1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+        
+        // Simulación de precios en tiempo real
+        function updatePriceTickers() {
+            const currencies = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USD', 'Gold'];
+            const priceElements = document.querySelectorAll('.price-ticker');
+            
+            priceElements.forEach(el => {
+                const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
+                const randomPrice = (Math.random() * 1.5 + 0.5).toFixed(4);
+                const randomChange = (Math.random() * 0.02 - 0.01).toFixed(4);
+                
+                el.innerHTML = `
+                    <span>${randomCurrency}</span>
+                    <span>${randomPrice}</span>
+                    <span style="color: ${randomChange >= 0 ? 'var(--primary)' : 'var(--accent)'}">
+                        ${randomChange >= 0 ? '+' : ''}${randomChange}%
+                    </span>
+                `;
+            });
+        }
+        
+        // Crear elementos de ticker si no existen
+        if (!document.querySelector('.price-ticker')) {
+            const tickerContainer = document.createElement('div');
+            tickerContainer.className = 'price-ticker';
+            tickerContainer.style.position = 'fixed';
+            tickerContainer.style.bottom = '0';
+            tickerContainer.style.left = '0';
+            tickerContainer.style.right = '0';
+            tickerContainer.style.background = 'rgba(0, 0, 0, 0.7)';
+            tickerContainer.style.padding = '0.5rem';
+            tickerContainer.style.display = 'flex';
+            tickerContainer.style.justifyContent = 'space-around';
+            tickerContainer.style.zIndex = '1000';
+            document.body.appendChild(tickerContainer);
+            
+            for (let i = 0; i < 5; i++) {
+                const ticker = document.createElement('div');
+                ticker.className = 'price-ticker-item';
+                ticker.style.display = 'flex';
+                ticker.style.gap = '1rem';
+                tickerContainer.appendChild(ticker);
+            }
+        }
+        
+        // Actualizar precios cada 3 segundos
+        setInterval(updatePriceTickers, 3000);
+        updatePriceTickers();
+    </script>
+</body>
+</html>

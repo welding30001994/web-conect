@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bull Master - Estrategias de Compra en Trading</title>
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --secondary: #27ae60;
+            --dark: #0a192f;
+            --light: #f8f9fa;
+            --accent: #1abc9c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: radial-gradient(circle at center, rgba(39, 174, 96, 0.1), transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(46, 204, 113, 0.6);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        section {
+            margin-bottom: 5rem;
+        }
+        
+        h2.section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(46, 204, 113, 0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .pattern-image {
+            width: 100%;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 2px solid rgba(46, 204, 113, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pattern-details {
+            margin-top: 3rem;
+        }
+        
+        .pattern-details h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .pattern-details ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .pattern-details li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .pattern-steps {
+            background: rgba(46, 204, 113, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        
+        .pattern-steps h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .pattern-steps ol {
+            padding-left: 1.5rem;
+        }
+        
+        .pattern-steps li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(46, 204, 113, 0.2);
+        }
+        
+        .comparison-table th {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--primary);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+        
+        .fibonacci-levels {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .fib-level {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            background: rgba(46, 204, 113, 0.1);
+        }
+        
+        .fib-level .level {
+            width: 80px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .fib-level .description {
+            flex: 1;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Efectos futuristas */
+        .glow {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(46, 204, 113, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+            }
+        }
+        
+        /* Secciones ocultas */
+        .page {
+            display: none;
+        }
+        
+        .active-page {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            h2.section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>OXOMAX TRADING  </h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-page="introduction">Introducción</a></li>
+                <li><a href="#" class="nav-link" data-page="indicators">Indicadores</a></li>
+                <li><a href="#" class="nav-link" data-page="fibonacci">Fibonacci</a></li>
+                <li><a href="#" class="nav-link" data-page="strategies">Estrategias</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Página de Inicio -->
+    <section id="home" class="page active-page">
+        <div class="hero">
+            <h2 class="glow">Estrategias de Compra en Trading</h2>
+            <p>Aprende a identificar las mejores oportunidades de compra en los mercados financieros usando patrones gráficos, indicadores técnicos y retrocesos de Fibonacci.</p>
+            <a href="#" class="btn pulse nav-link" data-page="introduction">Comenzar Aprendizaje</a>
+        </div>
+
+        <div class="container">
+            <section>
+                <h2 class="section-title">Conceptos Clave de Trading de Compra</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">📈</div>
+                        <h3>Reversión Alcista</h3>
+                        <p>Patrones que indican un posible cambio de tendencia bajista a alcista, señalando oportunidades para entrar en largo.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔼</div>
+                        <h3>Continuación Alcista</h3>
+                        <p>Formaciones que sugieren que la tendencia alcista actual continuará, ofreciendo puntos para añadir a posiciones largas.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h3>Confirmación de Volumen</h3>
+                        <p>El volumen juega un papel clave en la validación de los patrones de compra, confirmando la fortaleza de la señal.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Patrones de Compra Principales</h2>
+                <div class="grid">
+                    <div class="card">
+                        <img src="https://www.investopedia.com/thmb/4PcwVxX5Q8e_5qJXzGX9W9Q9XjI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Inverse-Head-and-Shoulders-Neckline-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Inverse Head and Shoulders" class="pattern-image">
+                        <h3>Cabeza y Hombros Invertido</h3>
+                        <p>Uno de los patrones de reversión alcista más confiables, que marca el agotamiento de una tendencia bajista.</p>
+                        <a href="#" class="btn nav-link" data-page="introduction">Ver Detalles</a>
+                    </div>
+                    <div class="card">
+                        <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Double-Bottom-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Double Bottom" class="pattern-image">
+                        <h3>Doble Suelo</h3>
+                        <p>Formación de dos valles similares que fallan en romper un nivel de soporte, indicando fortaleza.</p>
+                        <a href="#" class="btn nav-link" data-page="introduction">Ver Detalles</a>
+                    </div>
+                    <div class="card">
+                        <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Falling-Wedge-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Falling Wedge" class="pattern-image">
+                        <h3>Cuña Descendente</h3>
+                        <p>Patrón de continuación alcista en tendencias ascendentes o reversión en tendencias bajistas.</p>
+                        <a href="#" class="btn nav-link" data-page="introduction">Ver Detalles</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Página de Introducción -->
+    <section id="introduction" class="page">
+        <div class="container">
+            <h2 class="section-title">Introducción al Trading de Compra</h2>
+            
+            <div class="card">
+                <h3>¿Cuándo Comprar en Trading?</h3>
+                <p>Identificar el momento óptimo para comprar es crucial en trading. Estas son las situaciones ideales:</p>
+                
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Reversión de tendencia:</strong> Cuando un mercado bajista muestra signos de agotamiento y posible cambio a alcista.</p>
+                        <p><strong>Retroceso en tendencia alcista:</strong> Durante correcciones saludables dentro de una tendencia alcista establecida.</p>
+                    </div>
+                    <div>
+                        <p><strong>Breakout alcista:</strong> Ruptura de resistencias clave con volumen creciente.</p>
+                        <p><strong>Soporte histórico:</strong> Rebotes en zonas de soporte probadas anteriormente.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Psicología del Mercado en Patrones de Compra</h3>
+                <p>Los patrones de compra reflejan cambios en la psicología del mercado:</p>
+                <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="Psicología del mercado" class="pattern-image" style="max-width: 800px; margin: 1rem auto; display: block;">
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Agotamiento de vendedores:</strong> Los bajistas pierden fuerza y los alcistas toman control.</p>
+                        <p><strong>Acumulación:</strong> Grandes participantes acumulan posiciones a precios favorables.</p>
+                    </div>
+                    <div>
+                        <p><strong>Cambio de sentimiento:</strong> Transición de pesimismo a optimismo en el mercado.</p>
+                        <p><strong>Mayor demanda:</strong> Más compradores que vendedores en el mercado.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Características de Buenas Oportunidades de Compra</h3>
+                <div class="pattern-steps">
+                    <ol>
+                        <li><strong>Confirmación de volumen:</strong> Aumento de volumen en la dirección alcista</li>
+                        <li><strong>Convergencia de señales:</strong> Múltiples indicadores apoyan la compra</li>
+                        <li><strong>Relación riesgo/beneficio favorable:</strong> Al menos 2:1</li>
+                        <li><strong>Contexto de mercado favorable:</strong> Tendencia mayor alcista o corrección excesiva</li>
+                        <li><strong>Fundamentos coincidentes:</strong> Noticias o datos económicos positivos</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para aprender sobre los mejores indicadores para compras?</h3>
+                <p style="margin-bottom: 1.5rem;">Descubre los indicadores técnicos más efectivos para identificar oportunidades de compra.</p>
+                <a href="#" class="btn nav-link" data-page="indicators">Ver Indicadores</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Indicadores -->
+    <section id="indicators" class="page">
+        <div class="container">
+            <h2 class="section-title">Indicadores para Trading de Compra</h2>
+            
+            <div class="card">
+                <h3>Indicadores Clave para Identificar Compras</h3>
+                <p>Estos indicadores técnicos son especialmente útiles para detectar oportunidades de compra:</p>
+                
+                <div class="grid" style="margin-top: 2rem;">
+                    <div class="card">
+                        <h4>1. Media Móvil (MA)</h4>
+                        <p><strong>Uso:</strong> Cruce de medias (50/200) o rebotes en medias clave.</p>
+                        <p><strong>Configuración recomendada:</strong> MA50 (corto plazo), MA200 (largo plazo).</p>
+                        <p><strong>Señal de compra:</strong> Precio sobre MA y MA corta sobre MA larga.</p>
+                    </div>
+                    <div class="card">
+                        <h4>2. RSI (Relative Strength Index)</h4>
+                        <p><strong>Uso:</strong> Identificar sobreventa y divergencias alcistas.</p>
+                        <p><strong>Configuración:</strong> 14 periodos, niveles 30 (sobreventa) y 70 (sobrecompra).</p>
+                        <p><strong>Señal de compra:</strong> RSI < 30 con recuperación o divergencia alcista.</p>
+                    </div>
+                </div>
+                
+                <div class="grid" style="margin-top: 2rem;">
+                    <div class="card">
+                        <h4>3. MACD (Moving Average Convergence Divergence)</h4>
+                        <p><strong>Uso:</strong> Cruce de líneas y divergencias alcistas.</p>
+                        <p><strong>Configuración:</strong> 12,26,9 periodos (estándar).</p>
+                        <p><strong>Señal de compra:</strong> Cruce alcista en zona negativa o divergencia.</p>
+                    </div>
+                    <div class="card">
+                        <h4>4. Bandas de Bollinger</h4>
+                        <p><strong>Uso:</strong> Identificar rebotes desde banda inferior.</p>
+                        <p><strong>Configuración:</strong> 20 periodos, desviación estándar 2.</p>
+                        <p><strong>Señal de compra:</strong> Precio toca banda inferior con RSI bajo.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Combinación Óptima de Indicadores</h3>
+                <div class="pattern-steps">
+                    <h4>Estrategia de 3 Indicadores:</h4>
+                    <ol>
+                        <li><strong>Tendencia:</strong> Precio sobre MA200 (tendencia alcista mayor)</li>
+                        <li><strong>Momento:</strong> RSI saliendo de zona de sobreventa (<30)</li>
+                        <li><strong>Confirmación:</strong> MACD con cruce alcista reciente</li>
+                        <li><strong>Entrada:</strong> En retroceso a MA50 o banda inferior de Bollinger</li>
+                    </ol>
+                </div>
+                
+                <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="Combinación de indicadores" class="pattern-image" style="margin-top: 1.5rem;">
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Tabla Comparativa de Indicadores</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Indicador</th>
+                            <th>Mejor Uso</th>
+                            <th>Ventajas</th>
+                            <th>Limitaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Media Móvil</td>
+                            <td>Tendencia y soporte</td>
+                            <td>Sencillo, visual</td>
+                            <td>Retraso en señales</td>
+                        </tr>
+                        <tr>
+                            <td>RSI</td>
+                            <td>Sobreventa/divergencias</td>
+                            <td>Identifica extremos</td>
+                            <td>Puede dar señales prematuras</td>
+                        </tr>
+                        <tr>
+                            <td>MACD</td>
+                            <td>Momento y cruces</td>
+                            <td>Combina tendencia y momento</td>
+                            <td>Complejo para principiantes</td>
+                        </tr>
+                        <tr>
+                            <td>Bollinger</td>
+                            <td>Volatilidad y rebotes</td>
+                            <td>Adaptable a condiciones de mercado</td>
+                            <td>Falsas señales en tendencias fuertes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Fibonacci -->
+    <section id="fibonacci" class="page">
+        <div class="container">
+            <h2 class="section-title">Retrocesos de Fibonacci en Trading de Compra</h2>
+            
+            <div class="card">
+                <h3>Introducción a Fibonacci en Trading</h3>
+                <p>Los retrocesos de Fibonacci son herramientas poderosas para identificar niveles potenciales de soporte durante correcciones en mercados alcistas.</p>
+                
+                <img src="https://www.investopedia.com/thmb/9JQ7ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ9ZQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Fibonacci-Levels-final-5c8a8a8a46e0fb0001f5e5a5.png" alt="Fibonacci Levels" class="pattern-image">
+                
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Origen:</strong> Basado en la secuencia matemática de Fibonacci (0, 1, 1, 2, 3, 5, 8...).</p>
+                        <p><strong>Ratios clave:</strong> 23.6%, 38.2%, 50%, 61.8%, 78.6%.</p>
+                    </div>
+                    <div>
+                        <p><strong>Uso principal:</strong> Identificar zonas de soporte en correcciones.</p>
+                        <p><strong>Mercados:</strong> Funciona en Forex, acciones, índices, criptomonedas.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Cómo Dibujar Correctamente los Niveles Fibonacci</h3>
+                <div class="pattern-steps">
+                    <h4>Pasos para trazar retrocesos Fibonacci:</h4>
+                    <ol>
+                        <li>Identificar el máximo y mínimo reciente del movimiento alcista</li>
+                        <li>En plataforma de trading, seleccionar herramienta Fibonacci</li>
+                        <li>Dibujar desde el mínimo al máximo (para tendencia alcista)</li>
+                        <li>Los niveles se generarán automáticamente entre estos puntos</li>
+                        <li>Observar reacción del precio en niveles clave (38.2%, 50%, 61.8%)</li>
+                    </ol>
+                </div>
+                
+                <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="Cómo dibujar Fibonacci" class="pattern-image" style="margin-top: 1.5rem;">
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Niveles Clave de Fibonacci y su Significado</h3>
+                <div class="fibonacci-levels">
+                    <div class="fib-level">
+                        <span class="level">23.6%</span>
+                        <span class="description">Corrección superficial, mercado muy fuerte</span>
+                    </div>
+                    <div class="fib-level">
+                        <span class="level">38.2%</span>
+                        <span class="description">Corrección moderada, nivel común de rebote</span>
+                    </div>
+                    <div class="fib-level">
+                        <span class="level">50%</span>
+                        <span class="description">No es nivel Fibonacci puro pero psicológicamente importante</span>
+                    </div>
+                    <div class="fib-level">
+                        <span class="level">61.8%</span>
+                        <span class="description">Nivel dorado, máxima corrección antes de continuar tendencia</span>
+                    </div>
+                    <div class="fib-level">
+                        <span class="level">78.6%</span>
+                        <span class="description">Corrección profunda, posible cambio de tendencia si se rompe</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Estrategia de Compra con Fibonacci</h3>
+                <div class="pattern-steps">
+                    <h4>Entrada en retroceso Fibonacci:</h4>
+                    <ol>
+                        <li>Identificar tendencia alcista clara</li>
+                        <li>Dibujar retroceso Fibonacci desde último mínimo al máximo</li>
+                        <li>Buscar señales de compra en 38.2% o 61.8% con:
+                            <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Velas de reversión (martillo, envolvente alcista)</li>
+                                <li>RSI saliendo de sobreventa</li>
+                                <li>Volumen creciente</li>
+                            </ul>
+                        </li>
+                        <li>Stop loss por debajo del mínimo reciente o siguiente nivel Fibonacci</li>
+                        <li>Take profit en máximos anteriores o extensión Fibonacci 161.8%</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejemplo Práctico:</h4>
+                    <p>En el gráfico diario de AAPL, después de un rally alcista de $150 a $180, el precio corrige:</p>
+                    <ol>
+                        <li>Retroceso al 38.2% ($168.50) con vela martillo</li>
+                        <li>RSI en 35 saliendo de sobreventa</li>
+                        <li>Entrada en $169 con stop en $166 (por debajo de 50%)</li>
+                        <li>Objetivo en $185 (extensión 161.8%)</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Estrategias -->
+    <section id="strategies" class="page">
+        <div class="container">
+            <h2 class="section-title">Estrategias de Compra Combinadas</h2>
+            
+            <div class="card">
+                <h3>Estrategia 1: Fibonacci + Patrones de Velas</h3>
+                <p>Combina retrocesos Fibonacci con patrones de velas japonesas para entradas precisas.</p>
+                
+                <div class="pattern-steps">
+                    <h4>Configuración:</h4>
+                    <ol>
+                        <li>Tendencia alcista mayor (precio sobre MA200)</li>
+                        <li>Corrección a nivel Fibonacci clave (38.2% o 61.8%)</li>
+                        <li>Formación de patrón de vela de reversión:
+                            <ul style="padding-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Martillo</li>
+                                <li>Envuelvente alcista</li>
+                                <li>Piercing line</li>
+                            </ul>
+                        </li>
+                        <li>Confirmación con volumen creciente</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejecución:</h4>
+                    <ol>
+                        <li>Entrar al cierre de la vela de confirmación</li>
+                        <li>Stop loss: 1-2% por debajo del mínimo de la corrección</li>
+                        <li>Take profit 1: 61.8% extensión Fibonacci (50% posición)</li>
+                        <li>Take profit 2: Máximo anterior (30% posición)</li>
+                        <li>Take profit 3: 161.8% extensión (20% posición)</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Estrategia 2: RSI + MACD + Soportes</h3>
+                <p>Usa convergencia de indicadores con niveles de soporte para señales de alta probabilidad.</p>
+                
+                <div class="pattern-steps">
+                    <h4>Configuración:</h4>
+                    <ol>
+                        <li>RSI saliendo de sobreventa (<30) con divergencia alcista</li>
+                        <li>MACD con cruce alcista en territorio negativo</li>
+                        <li>Precio en soporte clave (Fibonacci, MA, pivot point)</li>
+                        <li>Volumen superior al promedio en dirección alcista</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejecución:</h4>
+                    <ol>
+                        <li>Entrar al cierre de la primera vela alcista fuerte después de la señal</li>
+                        <li>Stop loss: por debajo del soporte reciente</li>
+                        <li>Take profit: próximo nivel de resistencia o 2:1 relación riesgo/beneficio</li>
+                        <li>Trailing stop después de alcanzar 1:1 beneficio</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Optimización y Gestión de Riesgo</h3>
+                <div class="grid">
+                    <div>
+                        <h4>Mejores Mercados</h4>
+                        <ul>
+                            <li>Acciones con alta liquidez (Apple, Amazon)</li>
+                            <li>Índices principales (S&P500, NASDAQ)</li>
+                            <li>Forex mayores (EUR/USD, GBP/USD)</li>
+                            <li>Criptomonedas líderes (BTC, ETH) en timeframes altos</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Timeframes Óptimos</h4>
+                        <ul>
+                            <li>4h y diario para mayor fiabilidad</li>
+                            <li>1h para operaciones intradía</li>
+                            <li>Semanales para inversión a largo plazo</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Reglas de Oro para Compras</h4>
+                    <ol>
+                        <li>Nunca forzar una compra - esperar confirmación</li>
+                        <li>Buscar al menos 2:1 relación riesgo/beneficio</li>
+                        <li>Operar en dirección de la tendencia mayor</li>
+                        <li>Reducir tamaño de posición en mercados volátiles</li>
+                        <li>Evitar compras antes de noticias importantes</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para aplicar estas estrategias?</h3>
+                <p style="margin-bottom: 1.5rem;">Regístrate para recibir alertas de oportunidades de compra basadas en estos métodos.</p>
+                <a href="#" class="btn pulse">Registrarse Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="nav-link" data-page="home">Inicio</a>
+            <a href="#" class="nav-link" data-page="introduction">Introducción</a>
+            <a href="#" class="nav-link" data-page="indicators">Indicadores</a>
+            <a href="#" class="nav-link" data-page="fibonacci">Fibonacci</a>
+            <a href="#" class="nav-link" data-page="strategies">Estrategias</a>
+            <a href="#">Política de Privacidad</a>
+            <a href="#">Términos de Uso</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#"><span>📱</span></a>
+            <a href="#"><span>📧</span></a>
+            <a href="#"><span>💬</span></a>
+            <a href="#"><span>🐦</span></a>
+            <a href="#"><span>📹</span></a>
+        </div>
+        
+        <p class="copyright">© 2023 Bull Master. Todos los derechos reservados. El trading conlleva riesgos de pérdida.</p>
+    </footer>
+
+    <script>
+        // Navegación entre páginas
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                
+                // Oculta todas las páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active-page');
+                });
+                
+                // Muestra la página seleccionada
+                document.getElementById(pageId).classList.add('active-page');
+                
+                // Desplaza hacia arriba
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Efectos especiales
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const randomColor = `hsl(${Math.random() * 60 + 120}, 100%, 50%)`;
+                card.style.borderColor = randomColor;
+                card.style.boxShadow = `0 10px 30px ${randomColor}40`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(46, 204, 113, 0.1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+        
+        // Simulación de precios en tiempo real
+        function updatePriceTickers() {
+            const currencies = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USD', 'Gold'];
+            const priceElements = document.querySelectorAll('.price-ticker');
+            
+            priceElements.forEach(el => {
+                const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
+                const randomPrice = (Math.random() * 1.5 + 0.5).toFixed(4);
+                const randomChange = (Math.random() * 0.02 - 0.01).toFixed(4);
+                
+                el.innerHTML = `
+                    <span>${randomCurrency}</span>
+                    <span>${randomPrice}</span>
+                    <span style="color: ${randomChange >= 0 ? 'var(--primary)' : 'var(--accent)'}">
+                        ${randomChange >= 0 ? '+' : ''}${randomChange}%
+                    </span>
+                `;
+            });
+        }
+        
+        // Crear elementos de ticker si no existen
+        if (!document.querySelector('.price-ticker')) {
+            const tickerContainer = document.createElement('div');
+            tickerContainer.className = 'price-ticker';
+            tickerContainer.style.position = 'fixed';
+            tickerContainer.style.bottom = '0';
+            tickerContainer.style.left = '0';
+            tickerContainer.style.right = '0';
+            tickerContainer.style.background = 'rgba(0, 0, 0, 0.7)';
+            tickerContainer.style.padding = '0.5rem';
+            tickerContainer.style.display = 'flex';
+            tickerContainer.style.justifyContent = 'space-around';
+            tickerContainer.style.zIndex = '1000';
+            document.body.appendChild(tickerContainer);
+            
+            for (let i = 0; i < 5; i++) {
+                const ticker = document.createElement('div');
+                ticker.className = 'price-ticker-item';
+                ticker.style.display = 'flex';
+                ticker.style.gap = '1rem';
+                tickerContainer.appendChild(ticker);
+            }
+        }
+        
+        // Actualizar precios cada 3 segundos
+        setInterval(updatePriceTickers, 3000);
+        updatePriceTickers();
+    </script>
+</body>
+</html>

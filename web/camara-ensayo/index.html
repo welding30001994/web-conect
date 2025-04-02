@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cámara Web con Firebase</title>
+    <style>
+        :root {
+            --primary-color: #4285F4;
+            --secondary-color: #34A853;
+            --danger-color: #EA4335;
+            --dark-color: #202124;
+            --light-color: #f8f9fa;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-color);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        #video {
+            width: 100%;
+            display: block;
+            background: #000;
+            transform: scaleX(-1); /* Efecto espejo */
+        }
+        
+        #canvas {
+            display: none;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #startButton {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        #captureButton {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        #uploadButton {
+            background-color: #FBBC05;
+            color: var(--dark-color);
+        }
+        
+        #stopButton {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:disabled {
+            background-color: #5f6368;
+            color: #9aa0a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .gallery {
+            width: 100%;
+            max-width: 640px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .photo-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-item:hover {
+            transform: scale(1.03);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px;
+            font-size: 12px;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 640px;
+            text-align: center;
+        }
+        
+        .icon {
+            font-size: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            button {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📷 Cámara Web con Firebase</h1>
+        <p>Captura fotos y se guardarán automáticamente en la nube</p>
+    </header>
+    
+    <div class="camera-container">
+        <video id="video" width="640" height="480" autoplay></video>
+        <canvas id="canvas" width="640" height="480"></canvas>
+    </div>
+    
+    <div class="controls">
+        <button id="startButton">
+            <span class="icon">🎥</span> Iniciar Cámara
+        </button>
+        <button id="stopButton" disabled>
+            <span class="icon">⏹️</span> Detener
+        </button>
+        <button id="captureButton" disabled>
+            <span class="icon">📸</span> Capturar
+        </button>
+        <button id="uploadButton" disabled>
+            <span class="icon">☁️</span> Subir
+        </button>
+    </div>
+    
+    <div class="status" id="status">
+        Presiona "Iniciar Cámara" para comenzar
+    </div>
+    
+    <h2>Tus Fotos:</h2>
+    <div class="gallery" id="gallery"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
+    
+    <script>
+        // Configuración de Firebase con tus datos
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3MI1klgBSHs1h6QT4VPNoScCfCwMV_Ck",
+            authDomain: "usuario-b0384.firebaseapp.com",
+            databaseURL: "https://usuario-b0384-default-rtdb.firebaseio.com",
+            projectId: "usuario-b0384",
+            storageBucket: "usuario-b0384.firebasestorage.app",
+            messagingSenderId: "196266170863",
+            appId: "1:196266170863:web:4ea57f489df94aba94fe1a"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const database = firebase.database();
+
+        // Variables globales
+        let currentStream = null;
+        let currentPhoto = null;
+        let photos = [];
+
+        // Elementos del DOM
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const captureButton = document.getElementById('captureButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const statusDiv = document.getElementById('status');
+        const gallery = document.getElementById('gallery');
+
+        // Cargar fotos existentes al iniciar
+        loadExistingPhotos();
+
+        // Iniciar cámara
+        startButton.addEventListener('click', async () => {
+            try {
+                statusDiv.textContent = "Iniciando cámara...";
+                
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
+                    audio: false
+                });
+                
+                video.srcObject = stream;
+                currentStream = stream;
+                
+                startButton.disabled = true;
+                stopButton.disabled = false;
+                captureButton.disabled = false;
+                statusDiv.textContent = "Cámara activa. Presiona Capturar para tomar una foto.";
+            } catch (err) {
+                console.error("Error al acceder a la cámara: ", err);
+                statusDiv.textContent = "Error al acceder a la cámara: " + err.message;
+            }
+        });
+
+        // Detener cámara
+        stopButton.addEventListener('click', () => {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                currentStream = null;
+                
+                startButton.disabled = false;
+                stopButton.disabled = true;
+                captureButton.disabled = true;
+                uploadButton.disabled = true;
+                statusDiv.textContent = "Cámara detenida. Puedes iniciarla nuevamente.";
+            }
+        });
+
+        // Capturar foto
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            
+            // Ajustar para el efecto espejo
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Restablecer transformación
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            
+            currentPhoto = canvas.toDataURL('image/jpeg');
+            uploadButton.disabled = false;
+            statusDiv.textContent = "Foto capturada! Presiona Subir para guardarla en la nube.";
+            
+            // Mostrar vista previa inmediata
+            addPhotoToGallery(currentPhoto, "Nueva foto (no subida)");
+        });
+
+        // Subir a Firebase
+        uploadButton.addEventListener('click', async () => {
+            if (!currentPhoto) return;
+            
+            try {
+                statusDiv.textContent = "Subiendo imagen a Firebase...";
+                uploadButton.disabled = true;
+                
+                // Convertir base64 a blob
+                const blob = dataURLtoBlob(currentPhoto);
+                const timestamp = new Date().getTime();
+                const filename = `foto_${timestamp}.jpg`;
+                const storageRef = storage.ref().child(`photos/${filename}`);
+                
+                // Subir el archivo
+                const snapshot = await storageRef.put(blob);
+                const downloadURL = await snapshot.ref.getDownloadURL();
+                
+                // Guardar metadatos en Realtime Database
+                const photoData = {
+                    url: downloadURL,
+                    filename: filename,
+                    timestamp: timestamp,
+                    timestampReadable: new Date(timestamp).toLocaleString()
+                };
+                
+                await database.ref('photos').push(photoData);
+                
+                statusDiv.textContent = "¡Imagen subida correctamente!";
+                currentPhoto = null;
+                uploadButton.disabled = true;
+                
+                // Actualizar galería
+                addPhotoToGallery(downloadURL, photoData.timestampReadable);
+            } catch (error) {
+                console.error("Error al subir: ", error);
+                statusDiv.textContent = "Error al subir: " + error.message;
+                uploadButton.disabled = false;
+            }
+        });
+
+        // Cargar fotos existentes desde Firebase
+        async function loadExistingPhotos() {
+            try {
+                statusDiv.textContent = "Cargando fotos existentes...";
+                
+                // Obtener de Realtime Database
+                const snapshot = await database.ref('photos').once('value');
+                const photosData = snapshot.val();
+                
+                if (photosData) {
+                    gallery.innerHTML = '';
+                    photos = [];
+                    
+                    Object.keys(photosData).forEach(key => {
+                        const photo = photosData[key];
+                        photos.push(photo);
+                        addPhotoToGallery(photo.url, photo.timestampReadable);
+                    });
+                    
+                    statusDiv.textContent = `Cargadas ${photos.length} fotos existentes.`;
+                }
+            } catch (error) {
+                console.error("Error cargando fotos: ", error);
+                statusDiv.textContent = "Error cargando fotos existentes.";
+            }
+        }
+
+        // Añadir foto a la galería
+        function addPhotoToGallery(url, timestamp) {
+            const photoItem = document.createElement('div');
+            photoItem.className = 'photo-item';
+            photoItem.innerHTML = `
+                <img src="${url}" alt="Foto capturada">
+                <div class="photo-info">${timestamp}</div>
+            `;
+            gallery.prepend(photoItem);
+        }
+
+        // Función para convertir base64 a blob
+        function dataURLtoBlob(dataurl) {
+            const arr = dataurl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            
+            return new Blob([u8arr], { type: mime });
+        }
+
+        // Detener la cámara al salir
+        window.addEventListener('beforeunload', () => {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+</html>

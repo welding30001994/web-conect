@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoConnect - Llamadas de Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+            --danger: #ef233c;
+            --success: #4cc9f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--dark);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Pre-call Screen */
+        .pre-call-screen {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: slideUp 0.6s ease-out;
+            margin-bottom: 30px;
+        }
+
+        .pre-call-screen h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .pre-call-screen p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        /* Call Controls */
+        .call-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 20px;
+            top: -10px;
+            background: white;
+            padding: 0 10px;
+            color: var(--dark);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239, 35, 60, 0.3);
+        }
+
+        .btn-danger:hover {
+            background-color: #d90429;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 35, 60, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--dark);
+            border: 2px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Meeting Container */
+        #meeting-container {
+            width: 100%;
+            height: 70vh;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background-color: #ecf0f1;
+            display: none;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        #meeting-frame {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Active Call Controls */
+        .active-call-controls {
+            display: none;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .call-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .call-btn i {
+            font-size: 1.5rem;
+        }
+
+        .call-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .call-btn.end-call {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .call-btn.mute {
+            background-color: white;
+            color: var(--dark);
+        }
+
+        .call-btn.video {
+            background-color: white;
+            color: var(--dark);
+        }
+
+        .call-btn.screen-share {
+            background-color: white;
+            color: var(--dark);
+        }
+
+        /* Status Message */
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .status-message.success {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-message.error {
+            background-color: rgba(239, 35, 60, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .pre-call-screen {
+                padding: 20px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+            }
+            
+            .call-btn {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loader .dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            margin: 0 4px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loader .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loader .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+            } 40% { 
+                transform: scale(1);
+            }
+        }
+
+        /* Floating bubbles animation */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            animation: rise 15s infinite ease-in;
+        }
+
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 3s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background bubbles animation -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-video"></i>
+                <span>VideoConnect</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <!-- Pre-call screen -->
+        <div class="pre-call-screen">
+            <h2>Iniciar Videollamada</h2>
+            <p>Conéctate con amigos, familiares o colegas con nuestra plataforma de videollamadas de alta calidad.</p>
+            
+            <div class="call-controls">
+                <div class="input-group">
+                    <label for="name">Tu nombre</label>
+                    <input type="text" id="name" placeholder="Ingresa tu nombre" value="Usuario">
+                </div>
+                
+                <div class="input-group">
+                    <label for="meeting-id">ID de reunión</label>
+                    <input type="text" id="meeting-id" placeholder="Ingresa el ID de reunión o deja vacío para crear una nueva">
+                </div>
+                
+                <button id="start-call-btn" class="btn btn-primary">
+                    <i class="fas fa-video"></i> Iniciar llamada
+                </button>
+                
+                <div class="loader">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status message -->
+        <div id="status-message" class="status-message" style="display: none;"></div>
+        
+        <!-- Meeting container -->
+        <div id="meeting-container">
+            <div id="meeting-frame"></div>
+        </div>
+        
+        <!-- Active call controls -->
+        <div class="active-call-controls">
+            <div class="call-btn mute" title="Silenciar/Activar micrófono">
+                <i class="fas fa-microphone"></i>
+            </div>
+            <div class="call-btn video" title="Activar/Desactivar cámara">
+                <i class="fas fa-video"></i>
+            </div>
+            <div class="call-btn screen-share" title="Compartir pantalla">
+                <i class="fas fa-desktop"></i>
+            </div>
+            <div class="call-btn end-call" title="Finalizar llamada">
+                <i class="fas fa-phone-slash"></i>
+            </div>
+        </div>
+    </div>
+    <script>
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+      
+        script.addEventListener("load", function (event) {
+          const meeting = new VideoSDKMeeting();
+      
+          const config = {
+            name: "John Doe",
+            apiKey: "71f981ae-fb25-427c-a215-b15edbca59d9", // generated in step 1
+            meetingId: "milkyway", // enter your meeting id
+      
+            containerId: null,
+            redirectOnLeave: "https://www.videosdk.live/",
+      
+            micEnabled: true,
+            webcamEnabled: true,
+            participantCanToggleSelfWebcam: true,
+            participantCanToggleSelfMic: true,
+      
+            chatEnabled: true,
+            screenShareEnabled: true,
+            pollEnabled: true,
+            whiteboardEnabled: true,
+            raiseHandEnabled: true,
+      
+            recordingEnabled: true,
+            recordingWebhookUrl: "https://www.videosdk.live/callback",
+            recordingAWSDirPath: `/meeting-recordings/${meetingId}/`, // automatically save recording in this s3 path
+            autoStartRecording: true, // auto start recording on participant joined
+      
+            brandingEnabled: true,
+            brandLogoURL: "https://picsum.photos/200",
+            brandName: "Awesome startup",
+            poweredBy: true,
+      
+            participantCanLeave: true, // if false, leave button won't be visible
+      
+            // Live stream meeting to youtube
+            livestream: {
+              autoStart: true,
+              outputs: [
+                // {
+                //   url: "rtmp://x.rtmp.youtube.com/live2",
+                //   streamKey: "<STREAM KEY FROM YOUTUBE>",
+                // },
+              ],
+            },
+      
+            permissions: {
+              askToJoin: false, // Ask joined participants for entry in meeting
+              toggleParticipantMic: true, // Can toggle other participant's mic
+              toggleParticipantWebcam: true, // Can toggle other participant's webcam
+              toggleParticipantScreenshare: true, // Can toggle other participant's screen share
+              drawOnWhiteboard: true, // Can draw on whiteboard
+              toggleWhiteboard: true, // Can toggle whiteboard
+              toggleVirtualBackground:true // Can toggle virtual background
+              toggleRecording: true, // Can toggle meeting recording
+              removeParticipant: true, // Can remove participant
+              endMeeting: true, // Can end meeting
+            },
+      
+            joinScreen: {
+              visible: true, // Show the join screen ?
+              title: "Daily scrum", // Meeting title
+              meetingUrl: window.location.href, // Meeting joining url
+            },
+      
+            pin: {
+              allowed: true, // participant can pin any participant in meeting
+              layout: "SPOTLIGHT", // meeting layout - GRID | SPOTLIGHT | SIDEBAR
+            },
+      
+            leftScreen: {
+              // visible when redirect on leave not provieded
+              actionButton: {
+                // optional action button
+                label: "Video SDK Live", // action button label
+                href: "https://videosdk.live/", // action button href
+              },
+            },
+      
+            notificationSoundEnabled: true,
+      
+            maxResolution: "sd", // "hd" or "sd"
+          };
+      
+          meeting.init(config);
+        });
+      
+        script.src =
+          "https://sdk.videosdk.live/rtc-js-prebuilt/0.2.6/rtc-js-prebuilt.js";
+        document.getElementsByTagName("head")[0].appendChild(script);
+      </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Elements
+            const startCallBtn = document.getElementById('start-call-btn');
+            const meetingContainer = document.getElementById('meeting-container');
+            const preCallScreen = document.querySelector('.pre-call-screen');
+            const activeCallControls = document.querySelector('.active-call-controls');
+            const statusMessage = document.getElementById('status-message');
+            const loader = document.querySelector('.loader');
+            const nameInput = document.getElementById('name');
+            const meetingIdInput = document.getElementById('meeting-id');
+            
+            // Generate random meeting ID if empty
+            meetingIdInput.addEventListener('focus', function() {
+                if (!this.value) {
+                    this.value = generateMeetingId();
+                }
+            });
+            
+            // Start call button click handler
+            startCallBtn.addEventListener('click', function() {
+                const name = nameInput.value.trim() || 'Usuario';
+                const meetingId = meetingIdInput.value.trim() || generateMeetingId();
+                
+                if (!name) {
+                    showStatusMessage('Por favor ingresa tu nombre', 'error');
+                    return;
+                }
+                
+                // Show loading
+                startCallBtn.style.display = 'none';
+                loader.style.display = 'block';
+                
+                // Initialize VideoSDK meeting
+                initializeMeeting(name, meetingId);
+            });
+            
+            // Generate random meeting ID
+            function generateMeetingId() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0;
+                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+            
+            // Show status message
+            function showStatusMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                statusMessage.style.display = 'block';
+                
+                // Hide after 5 seconds
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Initialize VideoSDK meeting
+            function initializeMeeting(name, meetingId) {
+                // Check if VideoSDK script is already loaded
+                if (window.VideoSDKMeeting) {
+                    createMeeting(name, meetingId);
+                    return;
+                }
+                
+                // Load VideoSDK script
+                const script = document.createElement('script');
+                script.src = 'https://sdk.videosdk.live/rtc-js-prebuilt/0.2.6/rtc-js-prebuilt.js';
+                
+                script.onload = function() {
+                    createMeeting(name, meetingId);
+                };
+                
+                script.onerror = function() {
+                    loader.style.display = 'none';
+                    startCallBtn.style.display = 'flex';
+                    showStatusMessage('Error al cargar el SDK de VideoSDK. Por favor intenta nuevamente.', 'error');
+                };
+                
+                document.body.appendChild(script);
+            }
+            
+            // Create VideoSDK meeting
+            function createMeeting(name, meetingId) {
+                try {
+                    const meeting = new VideoSDKMeeting();
+                    
+                    const config = {
+                        name: name,
+                        apiKey: "71f981ae-fb25-427c-a215-b15edbca59d9", // API key pública de ejemplo
+                        meetingId: meetingId,
+                        
+                        containerId: "meeting-frame",
+                        redirectOnLeave: window.location.href,
+                        
+                        micEnabled: true,
+                        webcamEnabled: true,
+                        participantCanToggleSelfWebcam: true,
+                        participantCanToggleSelfMic: true,
+                        
+                        chatEnabled: true,
+                        screenShareEnabled: true,
+                        pollEnabled: true,
+                        whiteboardEnabled: true,
+                        raiseHandEnabled: true,
+                        
+                        recordingEnabled: false,
+                        brandingEnabled: true,
+                        brandLogoURL: "https://cdn-icons-png.flaticon.com/512/2965/2965300.png",
+                        brandName: "VideoConnect",
+                        poweredBy: false,
+                        
+                        permissions: {
+                            askToJoin: false,
+                            toggleParticipantMic: true,
+                            toggleParticipantWebcam: true,
+                            toggleParticipantScreenshare: true,
+                            drawOnWhiteboard: true,
+                            toggleWhiteboard: true,
+                            toggleRecording: true,
+                            removeParticipant: true,
+                            endMeeting: true,
+                        },
+                        
+                        joinScreen: {
+                            visible: true,
+                            title: "VideoConnect Meeting",
+                            meetingUrl: window.location.href,
+                        },
+                        
+                        pin: {
+                            allowed: true,
+                            layout: "SPOTLIGHT",
+                        },
+                        
+                        leftScreen: {
+                            actionButton: {
+                                label: "Volver a VideoConnect",
+                                href: window.location.href,
+                            },
+                        },
+                        
+                        notificationSoundEnabled: true,
+                    };
+                    
+                    meeting.init(config);
+                    
+                    // Show meeting container
+                    loader.style.display = 'none';
+                    preCallScreen.style.display = 'none';
+                    meetingContainer.style.display = 'block';
+                    activeCallControls.style.display = 'flex';
+                    
+                    // Set up call controls
+                    setupCallControls();
+                    
+                } catch (error) {
+                    console.error('Error initializing meeting:', error);
+                    loader.style.display = 'none';
+                    startCallBtn.style.display = 'flex';
+                    showStatusMessage('Error al iniciar la reunión. Por favor intenta nuevamente.', 'error');
+                }
+            }
+            
+            // Setup call controls
+            function setupCallControls() {
+                const muteBtn = document.querySelector('.call-btn.mute');
+                const videoBtn = document.querySelector('.call-btn.video');
+                const screenShareBtn = document.querySelector('.call-btn.screen-share');
+                const endCallBtn = document.querySelector('.call-btn.end-call');
+                
+                let isMuted = false;
+                let isVideoOff = false;
+                let isScreenSharing = false;
+                
+                // Mute/unmute
+                muteBtn.addEventListener('click', function() {
+                    isMuted = !isMuted;
+                    if (isMuted) {
+                        this.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                        this.style.backgroundColor = 'var(--danger)';
+                        this.style.color = 'white';
+                    } else {
+                        this.innerHTML = '<i class="fas fa-microphone"></i>';
+                        this.style.backgroundColor = 'white';
+                        this.style.color = 'var(--dark)';
+                    }
+                    // Here you would actually toggle the mic with VideoSDK API
+                });
+                
+                // Video on/off
+                videoBtn.addEventListener('click', function() {
+                    isVideoOff = !isVideoOff;
+                    if (isVideoOff) {
+                        this.innerHTML = '<i class="fas fa-video-slash"></i>';
+                        this.style.backgroundColor = 'var(--danger)';
+                        this.style.color = 'white';
+                    } else {
+                        this.innerHTML = '<i class="fas fa-video"></i>';
+                        this.style.backgroundColor = 'white';
+                        this.style.color = 'var(--dark)';
+                    }
+                    // Here you would actually toggle the video with VideoSDK API
+                });
+                
+                // Screen share
+                screenShareBtn.addEventListener('click', function() {
+                    isScreenSharing = !isScreenSharing;
+                    if (isScreenSharing) {
+                        this.style.backgroundColor = 'var(--accent)';
+                        this.style.color = 'white';
+                    } else {
+                        this.style.backgroundColor = 'white';
+                        this.style.color = 'var(--dark)';
+                    }
+                    // Here you would actually toggle screen sharing with VideoSDK API
+                });
+                
+                // End call
+                endCallBtn.addEventListener('click', function() {
+                    // Here you would actually end the call with VideoSDK API
+                    meetingContainer.style.display = 'none';
+                    activeCallControls.style.display = 'none';
+                    preCallScreen.style.display = 'block';
+                    startCallBtn.style.display = 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

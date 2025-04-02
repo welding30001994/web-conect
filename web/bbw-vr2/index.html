@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasias BBW - Acceso Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e83e8c;
+            --secondary-color: #6c757d;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+            --accent-color: #ff6b9d;
+            --text-color: #212529;
+            --text-light: #f8f9fa;
+            --transition-speed: 0.3s;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://raw.githubusercontent.com/welding30001994/IMAGENES-CC/refs/heads/main/fushia-minimalist-wallpaper-free-photo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(232, 62, 140, 0.4) 100%);
+            z-index: -1;
+        }
+
+        /* Contenedor de Autenticación */
+        .auth-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            min-height: 80vh;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            margin: 2rem;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        /* Panel Decorativo */
+        .auth-decoration {
+            flex: 1;
+            background: url('https://source.unsplash.com/random/800x800/?bbw,glamour') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+            transition: all 0.5s ease;
+        }
+
+        .auth-decoration::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 50%);
+            z-index: 0;
+        }
+
+        .decoration-content {
+            position: relative;
+            z-index: 1;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.3s forwards;
+        }
+
+        .decoration-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .decoration-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .features-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .features-list i {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Formularios */
+        .auth-forms {
+            flex: 1;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            transition: all 0.5s ease;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: fadeInDown 0.8s 0.2s forwards;
+        }
+
+        .auth-logo a {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .auth-logo i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .auth-logo span {
+            color: var(--primary-color);
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: fadeInDown 0.8s 0.3s forwards;
+        }
+
+        .auth-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .auth-title p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .auth-form {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.4s forwards;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.2);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            transition: all var(--transition-speed) ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--primary-color);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-color);
+        }
+
+        .form-submit {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-submit:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(232, 62, 140, 0.4);
+        }
+
+        .form-submit:active {
+            transform: translateY(0);
+        }
+
+        .form-submit.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: loadingPulse 1.5s infinite;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 1rem;
+        }
+
+        .social-auth {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all var(--transition-speed) ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-btn.facebook {
+            background: #3b5998;
+        }
+
+        .social-btn.google {
+            background: #db4437;
+        }
+
+        .social-btn.twitter {
+            background: #1da1f2;
+        }
+
+        .auth-switch {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .auth-switch a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mensajes de estado */
+        .auth-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .auth-message.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+            display: block;
+        }
+
+        .auth-message.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+            display: block;
+        }
+
+        /* Formulario de Registro */
+        #registerForm {
+            display: none;
+        }
+
+        .name-fields {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .name-fields .form-group {
+            flex: 1;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            background: var(--error-color);
+            transition: all 0.3s ease;
+        }
+
+        .password-strength.weak .password-strength-bar {
+            width: 30%;
+            background: var(--error-color);
+        }
+
+        .password-strength.medium .password-strength-bar {
+            width: 60%;
+            background: #ffc107;
+        }
+
+        .password-strength.strong .password-strength-bar {
+            width: 100%;
+            background: var(--success-color);
+        }
+
+        .password-hints {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.5rem;
+        }
+
+        .terms-agreement {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+        }
+
+        .terms-agreement a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .terms-agreement a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes loadingPulse {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .auth-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .auth-decoration {
+                padding: 2rem;
+                min-height: 300px;
+            }
+
+            .decoration-content {
+                transform: none;
+                opacity: 1;
+                animation: none;
+            }
+
+            .auth-forms {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .auth-container {
+                margin: 1rem;
+                border-radius: 10px;
+            }
+
+            .auth-decoration {
+                display: none;
+            }
+
+            .auth-forms {
+                padding: 1.5rem;
+            }
+
+            .name-fields {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor de Autenticación -->
+    <div class="auth-container">
+        <!-- Panel Decorativo -->
+        <div class="auth-decoration">
+            <div class="decoration-content">
+                <h2>Únete a Nuestra Comunidad Exclusiva</h2>
+                <p>Descubre un mundo de contenido premium, conexiones significativas y experiencias personalizadas.</p>
+                <ul class="features-list">
+                    <li><i class="fas fa-check-circle"></i> Acceso a contenido exclusivo BBW</li>
+                    <li><i class="fas fa-check-circle"></i> Comunidad de personas con intereses similares</li>
+                    <li><i class="fas fa-check-circle"></i> Eventos y promociones especiales</li>
+                    <li><i class="fas fa-check-circle"></i> Perfil personalizado y preferencias</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Formularios -->
+        <div class="auth-forms">
+            <!-- Contenedor de Formularios -->
+            <div class="form-container">
+                <!-- Logo -->
+                <div class="auth-logo">
+                    <a href="#"><i class="fas fa-crown"></i>Fantasías<span>BBW</span></a>
+                </div>
+
+                <!-- Mensajes de Estado -->
+                <div id="authMessage" class="auth-message"></div>
+
+                <!-- Formulario de Inicio de Sesión -->
+                <form id="loginForm" class="auth-form">
+                    <div class="auth-title">
+                        <h2>Inicia Sesión</h2>
+                        <p>Ingresa a tu cuenta para acceder a contenido exclusivo</p>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" id="loginEmail" class="form-input" placeholder="Correo electrónico" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="Contraseña" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox"> Recordarme
+                        </label>
+                        <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="form-submit">Iniciar Sesión</button>
+
+                    <div class="auth-divider">o continúa con</div>
+
+                    <div class="social-auth">
+                        <button type="button" class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                    </div>
+
+                    <div class="auth-switch">
+                        ¿No tienes una cuenta? <a href="#" id="showRegister">Regístrate</a>
+                    </div>
+                </form>
+
+                <!-- Formulario de Registro -->
+                <form id="registerForm" class="auth-form">
+                    <div class="auth-title">
+                        <h2>Crea tu Cuenta</h2>
+                        <p>Únete a nuestra comunidad y desbloquea beneficios exclusivos</p>
+                    </div>
+
+                    <div class="name-fields">
+                        <div class="form-group">
+                            <input type="text" id="registerFirstName" class="form-input" placeholder="Nombre" required>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="registerLastName" class="form-input" placeholder="Apellido" required>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" id="registerEmail" class="form-input" placeholder="Correo electrónico" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="registerPassword" class="form-input" placeholder="Contraseña" required>
+                        <i class="fas fa-lock input-icon"></i>
+                        <div class="password-strength">
+                            <div class="password-strength-bar"></div>
+                        </div>
+                        <div class="password-hints">
+                            La contraseña debe tener al menos 8 caracteres, incluir números y caracteres especiales
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" id="registerConfirmPassword" class="form-input" placeholder="Confirmar contraseña" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+
+                    <div class="terms-agreement">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">Acepto los <a href="#">Términos de Servicio</a> y la <a href="#">Política de Privacidad</a></label>
+                    </div>
+
+                    <button type="submit" class="form-submit">Registrarse</button>
+
+                    <div class="auth-divider">o regístrate con</div>
+
+                    <div class="social-auth">
+                        <button type="button" class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button type="button" class="social-btn google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button type="button" class="social-btn twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                    </div>
+
+                    <div class="auth-switch">
+                        ¿Ya tienes una cuenta? <a href="#" id="showLogin">Inicia Sesión</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Configuración de Firebase (usa tu propia configuración)
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3MI1klgBSHs1h6QT4VPNoScCfCwMV_Ck",
+            authDomain: "usuario-b0384.firebaseapp.com",
+            projectId: "usuario-b0384",
+            storageBucket: "usuario-b0384.appspot.com",
+            messagingSenderId: "196266170863",
+            appId: "1:196266170863:web:4ea57f489df94aba94fe1a"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Mostrar/ocultar formularios
+        document.getElementById('showRegister').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        });
+
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        });
+
+        // Validación de fuerza de contraseña
+        document.getElementById('registerPassword').addEventListener('input', function() {
+            const password = this.value;
+            const strengthBar = document.querySelector('.password-strength');
+            const strengthBarInner = document.querySelector('.password-strength-bar');
+            
+            // Reset classes
+            strengthBar.className = 'password-strength';
+            
+            if (password.length === 0) {
+                strengthBarInner.style.width = '0';
+                return;
+            }
+            
+            // Calcular fuerza
+            let strength = 0;
+            
+            // Longitud mínima
+            if (password.length >= 8) strength += 1;
+            
+            // Contiene números
+            if (/\d/.test(password)) strength += 1;
+            
+            // Contiene caracteres especiales
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1;
+            
+            // Contiene mayúsculas y minúsculas
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 1;
+            
+            // Actualizar barra
+            if (strength <= 1) {
+                strengthBar.classList.add('weak');
+            } else if (strength <= 3) {
+                strengthBar.classList.add('medium');
+            } else {
+                strengthBar.classList.add('strong');
+            }
+        });
+
+        // Mostrar mensaje
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('authMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = 'auth-message ' + type;
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => {
+                    messageDiv.className = 'auth-message';
+                    messageDiv.style.opacity = '1';
+                }, 500);
+            }, 5000);
+        }
+
+        // Registro de usuario
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const firstName = document.getElementById('registerFirstName').value;
+            const lastName = document.getElementById('registerLastName').value;
+            
+            // Validar contraseñas coincidentes
+            if (password !== confirmPassword) {
+                showMessage('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            // Validar términos
+            if (!document.getElementById('agreeTerms').checked) {
+                showMessage('Debes aceptar los términos y condiciones', 'error');
+                return;
+            }
+            
+            // Mostrar estado de carga
+            const submitBtn = e.target.querySelector('.form-submit');
+            submitBtn.textContent = 'Creando cuenta...';
+            submitBtn.classList.add('loading');
+            
+            // Registrar usuario en Firebase
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Usuario registrado
+                    const user = userCredential.user;
+                    
+                    // Guardar información adicional en Firestore
+                    return db.collection('users').doc(user.uid).set({
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    showMessage('¡Cuenta creada con éxito! Redirigiendo...', 'success');
+                    submitBtn.textContent = 'Registrarse';
+                    submitBtn.classList.remove('loading');
+                    
+                    // Redirigir después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'perfil.html';
+                    }, 2000);
+                })
+                .catch((error) => {
+                    let errorMessage = 'Error al crear la cuenta';
+                    
+                    switch(error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage = 'Este correo ya está registrado';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'Correo electrónico no válido';
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage = 'La contraseña es demasiado débil';
+                            break;
+                    }
+                    
+                    showMessage(errorMessage, 'error');
+                    submitBtn.textContent = 'Registrarse';
+                    submitBtn.classList.remove('loading');
+                });
+        });
+
+        // Inicio de sesión
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Mostrar estado de carga
+            const submitBtn = e.target.querySelector('.form-submit');
+            submitBtn.textContent = 'Iniciando sesión...';
+            submitBtn.classList.add('loading');
+            
+            // Iniciar sesión con Firebase
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Actualizar último inicio de sesión
+                    const user = userCredential.user;
+                    return db.collection('users').doc(user.uid).update({
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    showMessage('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
+                    submitBtn.textContent = 'Iniciar Sesión';
+                    submitBtn.classList.remove('loading');
+                    
+                    // Redirigir después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'perfil.html';
+                    }, 2000);
+                })
+                .catch((error) => {
+                    let errorMessage = 'Error al iniciar sesión';
+                    
+                    switch(error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage = 'Usuario no encontrado';
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = 'Contraseña incorrecta';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'Correo electrónico no válido';
+                            break;
+                        case 'auth/user-disabled':
+                            errorMessage = 'Cuenta deshabilitada';
+                            break;
+                    }
+                    
+                    showMessage(errorMessage, 'error');
+                    submitBtn.textContent = 'Iniciar Sesión';
+                    submitBtn.classList.remove('loading');
+                });
+        });
+
+        // Autenticación con redes sociales (ejemplo con Google)
+        document.querySelector('.social-btn.google').addEventListener('click', () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    // Verificar si es un nuevo usuario
+                    if (result.additionalUserInfo.isNewUser) {
+                        // Guardar información del usuario en Firestore
+                        const user = result.user;
+                        return db.collection('users').doc(user.uid).set({
+                            firstName: user.displayName.split(' ')[0],
+                            lastName: user.displayName.split(' ')[1] || '',
+                            email: user.email,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                            provider: 'google'
+                        });
+                    } else {
+                        // Actualizar último inicio de sesión
+                        return db.collection('users').doc(result.user.uid).update({
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                })
+                .then(() => {
+                    showMessage('¡Inicio de sesión con Google exitoso! Redirigiendo...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'perfil.html';
+                    }, 2000);
+                })
+                .catch((error) => {
+                    showMessage('Error al iniciar sesión con Google', 'error');
+                    console.error(error);
+                });
+        });
+
+        // Observador de autenticación
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Usuario autenticado, puedes redirigir si es necesario
+                // window.location.href = 'perfil.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ichimoku Master - Estrategias de Venta con Ichimoku</title>
+    <style>
+        :root {
+            --primary: #ff4757;
+            --secondary: #ff6b81;
+            --dark: #1a1a2e;
+            --light: #f1f2f6;
+            --accent: #ff9ff3;
+            --cloud: rgba(255, 107, 129, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 71, 87, 0.2);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: radial-gradient(circle at center, rgba(255, 107, 129, 0.1), transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.6);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        section {
+            margin-bottom: 5rem;
+        }
+        
+        h2.section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 71, 87, 0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .card p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .pattern-image {
+            width: 100%;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ichimoku-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 1rem auto;
+            display: block;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+        }
+        
+        .pattern-details {
+            margin-top: 3rem;
+        }
+        
+        .pattern-details h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .pattern-details ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .pattern-details li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .pattern-steps {
+            background: rgba(255, 71, 87, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+        
+        .pattern-steps h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .pattern-steps ol {
+            padding-left: 1.5rem;
+        }
+        
+        .pattern-steps li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 71, 87, 0.2);
+        }
+        
+        .comparison-table th {
+            background-color: rgba(255, 107, 129, 0.2);
+            color: var(--primary);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: rgba(255, 71, 87, 0.05);
+        }
+        
+        .ichimoku-components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .component-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .component-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icons a {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Efectos futuristas */
+        .glow {
+            text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 71, 87, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+            }
+        }
+        
+        /* Secciones ocultas */
+        .page {
+            display: none;
+        }
+        
+        .active-page {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            h2.section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>OXOMAX TRADING</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-page="sell">Conceptos de Venta</a></li>
+                <li><a href="#" class="nav-link" data-page="ichimoku">Ichimoku</a></li>
+                <li><a href="#" class="nav-link" data-page="strategies">Estrategias</a></li>
+                <li><a href="#" class="nav-link" data-page="analysis">Análisis</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Página de Inicio -->
+    <section id="home" class="page active-page">
+        <div class="hero">
+            <h2 class="glow">Estrategias de Venta con Ichimoku</h2>
+            <p>Domina el arte de identificar oportunidades de venta en los mercados financieros usando el poderoso sistema Ichimoku Kinko Hyo.</p>
+            <a href="#" class="btn pulse nav-link" data-page="sell">Comenzar Aprendizaje</a>
+        </div>
+
+        <div class="container">
+            <section>
+                <h2 class="section-title">¿Por qué usar Ichimoku para ventas?</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">📉</div>
+                        <h3>Señales Claras</h3>
+                        <p>El Ichimoku proporciona señales objetivas de venta basadas en la interacción de sus múltiples componentes.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">⏱️</div>
+                        <h3>Análisis en un Vistazo</h3>
+                        <p>Ofrece información completa sobre tendencia, soportes/resistencias y momento en un solo gráfico.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h3>Efectivo en Todos los Timeframes</h3>
+                        <p>Funciona igualmente bien en gráficos intradía como en análisis semanales o mensuales.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Señales Clave de Venta con Ichimoku</h2>
+                <div class="grid">
+                    <div class="card">
+                        <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Cloud-Trading-Strategy-1.png" alt="Precio bajo la nube" class="pattern-image">
+                        <h3>Precio bajo la Nube</h3>
+                        <p>Cuando el precio está bajo la nube Ichimoku, indica tendencia bajista y oportunidades de venta.</p>
+                        <a href="#" class="btn nav-link" data-page="ichimoku">Ver Detalles</a>
+                    </div>
+                    <div class="card">
+                        <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Kinko-Hyo-Tenkan-Sen-Kijun-Sen-Cross-1.png" alt="Cruce bajista Tenkan/Kijun" class="pattern-image">
+                        <h3>Cruce Bajista Tenkan/Kijun</h3>
+                        <p>El cruce bajista de estas líneas es una fuerte señal de venta en el sistema Ichimoku.</p>
+                        <a href="#" class="btn nav-link" data-page="ichimoku">Ver Detalles</a>
+                    </div>
+                    <div class="card">
+                        <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Kinko-Hyo-Chikou-Span-1.png" alt="Chikou Span bajista" class="pattern-image">
+                        <h3>Chikou Span Bajista</h3>
+                        <p>Cuando el Chikou Span está bajo el precio, confirma la presión vendedora.</p>
+                        <a href="#" class="btn nav-link" data-page="ichimoku">Ver Detalles</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <!-- Página de Conceptos de Venta -->
+    <section id="sell" class="page">
+        <div class="container">
+            <h2 class="section-title">Conceptos Clave de Trading de Venta</h2>
+            
+            <div class="card">
+                <h3>¿Cuándo Vender en Trading?</h3>
+                <p>Identificar el momento óptimo para vender es tan crucial como saber cuándo comprar. Estas son las situaciones ideales para considerar ventas:</p>
+                
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Reversión de tendencia:</strong> Cuando un mercado alcista muestra signos de agotamiento y posible cambio a bajista.</p>
+                        <p><strong>Pullback en tendencia bajista:</strong> Durante rallies correctivos dentro de una tendencia bajista establecida.</p>
+                    </div>
+                    <div>
+                        <p><strong>Breakdown bajista:</strong> Ruptura de soportes clave con volumen creciente.</p>
+                        <p><strong>Resistencia histórica:</strong> Rechazos en zonas de resistencia probadas anteriormente.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Psicología del Mercado en Operaciones de Venta</h3>
+                <p>Las ventas exitosas requieren entender la psicología del mercado:</p>
+                <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="Psicología del mercado bajista" class="pattern-image" style="max-width: 800px; margin: 1rem auto; display: block;">
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Agotamiento de compradores:</strong> Los alcistas pierden fuerza y los vendedores toman control.</p>
+                        <p><strong>Distribución:</strong> Grandes participantes liquidan posiciones a precios favorables.</p>
+                    </div>
+                    <div>
+                        <p><strong>Cambio de sentimiento:</strong> Transición de optimismo a pesimismo en el mercado.</p>
+                        <p><strong>Mayor oferta:</strong> Más vendedores que compradores en el mercado.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Características de Buenas Oportunidades de Venta</h3>
+                <div class="pattern-steps">
+                    <ol>
+                        <li><strong>Confirmación de volumen:</strong> Aumento de volumen en la dirección bajista</li>
+                        <li><strong>Convergencia de señales:</strong> Múltiples indicadores apoyan la venta</li>
+                        <li><strong>Relación riesgo/beneficio favorable:</strong> Al menos 2:1</li>
+                        <li><strong>Contexto de mercado favorable:</strong> Tendencia mayor bajista o rally excesivo</li>
+                        <li><strong>Fundamentos coincidentes:</strong> Noticias o datos económicos negativos</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para aprender sobre Ichimoku?</h3>
+                <p style="margin-bottom: 1.5rem;">Descubre cómo el sistema Ichimoku puede mejorar tus decisiones de venta.</p>
+                <a href="#" class="btn nav-link" data-page="ichimoku">Ver Ichimoku</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Ichimoku -->
+    <section id="ichimoku" class="page">
+        <div class="container">
+            <h2 class="section-title">El Sistema Ichimoku Kinko Hyo</h2>
+            
+            <div class="card">
+                <h3>¿Qué es el Ichimoku?</h3>
+                <p>El Ichimoku Kinko Hyo ("Gráfico de Equilibrio a Simple Vista") es un sistema de trading completo desarrollado en Japón que proporciona información sobre:</p>
+                
+                <div class="grid" style="margin-top: 1rem;">
+                    <div>
+                        <p><strong>Tendencia:</strong> Dirección del mercado</p>
+                        <p><strong>Soportes/Resistencias:</strong> Zonas clave de precio</p>
+                    </div>
+                    <div>
+                        <p><strong>Momento:</strong> Fuerza del movimiento</p>
+                        <p><strong>Señales:</strong> Puntos de entrada y salida</p>
+                    </div>
+                </div>
+                
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Kinko-Hyo-Components-1.png" alt="Componentes Ichimoku" class="ichimoku-image">
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Componentes del Ichimoku</h3>
+                
+                <div class="ichimoku-components">
+                    <div class="component-card">
+                        <h4>Tenkan-sen (Línea de Conversión)</h4>
+                        <p>Media de 9 periodos (alto+bajo)/2. Indica momentum a corto plazo.</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>Kijun-sen (Línea Base)</h4>
+                        <p>Media de 26 periodos (alto+bajo)/2. Soporte/resistencia y tendencia.</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>Senkou Span A (Lídera A)</h4>
+                        <p>Límite superior de la nube. (Tenkan+Kijun)/2 proyectado 26 periodos adelante.</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>Senkou Span B (Lídera B)</h4>
+                        <p>Límite inferior de la nube. Media de 52 periodos proyectada 26 periodos adelante.</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>Chikou Span (Línea Retrasada)</h4>
+                        <p>Precio de cierre proyectado 26 periodos atrás. Confirma tendencia.</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>Kumo (Nube)</h4>
+                        <p>Área entre Senkou A y B. Principal soporte/resistencia.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Señales de Venta con Ichimoku</h3>
+                
+                <div class="pattern-steps">
+                    <h4>1. Precio bajo la Nube</h4>
+                    <p>Cuando el precio está bajo la nube Ichimoku, indica tendencia bajista y oportunidades de venta.</p>
+                    <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Cloud-Trading-Strategy-1.png" alt="Precio bajo la nube" class="ichimoku-image">
+                    <ol style="margin-top: 1rem;">
+                        <li>La nube actúa como resistencia</li>
+                        <li>Rebotes en el límite inferior de la nube son oportunidades de venta</li>
+                        <li>La nube roja es más bajista que la verde</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 2rem;">
+                    <h4>2. Cruce Bajista Tenkan/Kijun</h4>
+                    <p>Cuando la Tenkan-sen cruza por debajo la Kijun-sen, es señal de venta.</p>
+                    <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Kinko-Hyo-Tenkan-Sen-Kijun-Sen-Cross-1.png" alt="Cruce bajista Tenkan/Kijun" class="ichimoku-image">
+                    <ol style="margin-top: 1rem;">
+                        <li>Mayor confiabilidad cuando ocurre bajo la nube</li>
+                        <li>La distancia entre líneas indica fuerza del momentum</li>
+                        <li>Confirmar con posición del Chikou Span</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 2rem;">
+                    <h4>3. Chikou Span Bajista</h4>
+                    <p>Cuando el Chikou Span está bajo el precio, confirma presión vendedora.</p>
+                    <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Kinko-Hyo-Chikou-Span-1.png" alt="Chikou Span bajista" class="ichimoku-image">
+                    <ol style="margin-top: 1rem;">
+                        <li>Chikou bajo el precio = confirmación bajista</li>
+                        <li>Chikou bajo la nube = señal más fuerte</li>
+                        <li>Evitar ventas cuando Chikou está sobre precio</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Configuración Óptima para Trading de Venta</h3>
+                <div class="grid">
+                    <div>
+                        <h4>Parámetros Estándar</h4>
+                        <ul>
+                            <li>Tenkan-sen: 9 periodos</li>
+                            <li>Kijun-sen: 26 periodos</li>
+                            <li>Senkou Span B: 52 periodos</li>
+                            <li>Desplazamiento: 26 periodos</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Ajustes para Ventas</h4>
+                        <ul>
+                            <li>Timeframes mayores (4h, diario) para mayor confiabilidad</li>
+                            <li>Nube roja (Senkou A < Senkou B)</li>
+                            <li>Precio bajo Kijun-sen</li>
+                            <li>Chikou Span bajo precio y nube</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Estrategias -->
+    <section id="strategies" class="page">
+        <div class="container">
+            <h2 class="section-title">Estrategias de Venta con Ichimoku</h2>
+            
+            <div class="card">
+                <h3>Estrategia 1: Venta en Rebote de Nube</h3>
+                <p>Vender cuando el precio se acerca a la nube Ichimoku en tendencia bajista.</p>
+                
+                <div class="pattern-steps">
+                    <h4>Configuración:</h4>
+                    <ol>
+                        <li>Tendencia bajista mayor (precio bajo nube)</li>
+                        <li>Nube roja (Senkou A < Senkou B)</li>
+                        <li>Pullback hacia el límite inferior de la nube</li>
+                        <li>Chikou Span bajo el precio</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejecución:</h4>
+                    <ol>
+                        <li>Entrar en venta al rechazo de la nube</li>
+                        <li>Stop loss: por encima del máximo reciente o Senkou A</li>
+                        <li>Take profit 1: Kijun-sen (50% posición)</li>
+                        <li>Take profit 2: Mínimo anterior (30% posición)</li>
+                        <li>Take profit 3: Extensión 161.8% Fibonacci (20% posición)</li>
+                    </ol>
+                </div>
+                
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Cloud-Trading-Strategy-1.png" alt="Estrategia rebote nube" class="ichimoku-image" style="margin-top: 1.5rem;">
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Estrategia 2: Cruce Bajista con Confirmación</h3>
+                <p>Vender en cruce bajista de Tenkan/Kijun con múltiples confirmaciones.</p>
+                
+                <div class="pattern-steps">
+                    <h4>Configuración:</h4>
+                    <ol>
+                        <li>Cruce bajista Tenkan-sen bajo Kijun-sen</li>
+                        <li>Precio bajo la nube</li>
+                        <li>Chikou Span bajo el precio</li>
+                        <li>Nube roja o cambiando a roja</li>
+                        <li>Volumen creciente en dirección bajista</li>
+                    </ol>
+                </div>
+                
+                <div class="pattern-steps" style="margin-top: 1.5rem;">
+                    <h4>Ejecución:</h4>
+                    <ol>
+                        <li>Entrar al cierre de la vela del cruce</li>
+                        <li>Stop loss: por encima del máximo reciente o Kijun-sen</li>
+                        <li>Take profit: próximo soporte o 2:1 riesgo/beneficio</li>
+                        <li>Mover stop a break even al alcanzar 1:1 beneficio</li>
+                    </ol>
+                </div>
+                
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Kinko-Hyo-Tenkan-Sen-Kijun-Sen-Cross-1.png" alt="Estrategia cruce bajista" class="ichimoku-image" style="margin-top: 1.5rem;">
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Optimización para Diferentes Mercados</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Mercado</th>
+                            <th>Timeframe Recomendado</th>
+                            <th>Filtro Adicional</th>
+                            <th>Objetivo Típico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Forex</td>
+                            <td>4h - Diario</td>
+                            <td>RSI < 50</td>
+                            <td>1.5-2x riesgo</td>
+                        </tr>
+                        <tr>
+                            <td>Acciones</td>
+                            <td>Diario - Semanal</td>
+                            <td>Volumen alto en breakdown</td>
+                            <td>Soporte mayor</td>
+                        </tr>
+                        <tr>
+                            <td>Índices</td>
+                            <td>1h - 4h</td>
+                            <td>Correlación entre índices</td>
+                            <td>2x riesgo</td>
+                        </tr>
+                        <tr>
+                            <td>Criptomonedas</td>
+                            <td>4h - Diario</td>
+                            <td>Nube gruesa como resistencia</td>
+                            <td>1.5-3x riesgo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem; text-align: center;">
+                <h3>¿Listo para aplicar estas estrategias?</h3>
+                <p style="margin-bottom: 1.5rem;">Regístrate para recibir alertas de venta basadas en Ichimoku.</p>
+                <a href="#" class="btn pulse">Registrarse Ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Análisis -->
+    <section id="analysis" class="page">
+        <div class="container">
+            <h2 class="section-title">Análisis de Mercado con Ichimoku</h2>
+            
+            <div class="card">
+                <h3>Análisis Multi-Timeframe con Ichimoku</h3>
+                <p>El verdadero poder del Ichimoku se revela al analizar múltiples timeframes:</p>
+                
+                <div class="pattern-steps">
+                    <h4>Enfoque Top-Down:</h4>
+                    <ol>
+                        <li><strong>Semanal:</strong> Determinar tendencia mayor (precio sobre/bajo nube)</li>
+                        <li><strong>Diario:</strong> Identificar señales de entrada y soportes/resistencias clave</li>
+                        <li><strong>4h/1h:</strong> Afinar entradas y gestión de riesgo</li>
+                    </ol>
+                </div>
+                
+                <img src="https://www.forex.academy/wp-content/uploads/2020/06/Ichimoku-Multi-Timeframe-Analysis-1.png" alt="Análisis multi-timeframe" class="ichimoku-image" style="margin-top: 1.5rem;">
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Casos de Estudio Reales</h3>
+                
+                <div class="pattern-details">
+                    <h4>Ejemplo 1: EUR/USD - Reversión Bajista</h4>
+                    <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="EURUSD Ichimoku" class="ichimoku-image">
+                    <div class="pattern-steps" style="margin-top: 1rem;">
+                        <ol>
+                            <li>Precio bajo nube en gráfico diario</li>
+                            <li>Cruce bajista Tenkan/Kijun</li>
+                            <li>Chikou Span bajo precio</li>
+                            <li>Venta en pullback a nube con 3:1 beneficio</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="pattern-details" style="margin-top: 2rem;">
+                    <h4>Ejemplo 2: Bitcoin - Continuación Bajista</h4>
+                    <img src="https://www.tradingview.com/x/r5Jy4U1O/" alt="BTC Ichimoku" class="ichimoku-image">
+                    <div class="pattern-steps" style="margin-top: 1rem;">
+                        <ol>
+                            <li>Tendencia bajista en semanal</li>
+                            <li>Rebote a nube roja en diario</li>
+                            <li>Venta con stop sobre Kijun-sen</li>
+                            <li>Objetivo alcanzado en soporte Fibonacci</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 2rem;">
+                <h3>Errores Comunes al Usar Ichimoku para Ventas</h3>
+                <div class="grid">
+                    <div>
+                        <h4>1. Ignorar la Tendencia Mayor</h4>
+                        <p>Vender contra la tendencia mayor (precio sobre nube en timeframe superior) es arriesgado.</p>
+                    </div>
+                    <div>
+                        <h4>2. No Esperar Confirmación</h4>
+                        <p>Operar cruces Tenkan/Kijun sin confirmación de Chikou Span o nube.</p>
+                    </div>
+                    <div>
+                        <h4>3. Ignorar el Grosor de la Nube</h4>
+                        <p>Nubes delgadas ofrecen menos resistencia que nubes gruesas.</p>
+                    </div>
+                    <div>
+                        <h4>4. Mala Gestión de Riesgo</h4>
+                        <p>Stop losses demasiado ajustados que no consideran la volatilidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="nav-link" data-page="home">Inicio</a>
+            <a href="#" class="nav-link" data-page="sell">Conceptos de Venta</a>
+            <a href="#" class="nav-link" data-page="ichimoku">Ichimoku</a>
+            <a href="#" class="nav-link" data-page="strategies">Estrategias</a>
+            <a href="#" class="nav-link" data-page="analysis">Análisis</a>
+            <a href="#">Política de Privacidad</a>
+            <a href="#">Términos de Uso</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#"><span>📱</span></a>
+            <a href="#"><span>📧</span></a>
+            <a href="#"><span>💬</span></a>
+            <a href="#"><span>🐦</span></a>
+            <a href="#"><span>📹</span></a>
+        </div>
+        
+        <p class="copyright">© 2023 Ichimoku Master. Todos los derechos reservados. El trading conlleva riesgos de pérdida.</p>
+    </footer>
+
+    <script>
+        // Navegación entre páginas
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('data-page');
+                
+                // Oculta todas las páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active-page');
+                });
+                
+                // Muestra la página seleccionada
+                document.getElementById(pageId).classList.add('active-page');
+                
+                // Desplaza hacia arriba
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Efectos especiales
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const randomColor = `hsl(${Math.random() * 30 + 350}, 100%, 50%)`;
+                card.style.borderColor = randomColor;
+                card.style.boxShadow = `0 10px 30px ${randomColor}40`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(255, 71, 87, 0.1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+        
+        // Simulación de precios en tiempo real
+        function updatePriceTickers() {
+            const currencies = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'BTC/USD', 'Gold'];
+            const priceElements = document.querySelectorAll('.price-ticker');
+            
+            priceElements.forEach(el => {
+                const randomCurrency = currencies[Math.floor(Math.random() * currencies.length)];
+                const randomPrice = (Math.random() * 1.5 + 0.5).toFixed(4);
+                const randomChange = (Math.random() * 0.02 - 0.01).toFixed(4);
+                
+                el.innerHTML = `
+                    <span>${randomCurrency}</span>
+                    <span>${randomPrice}</span>
+                    <span style="color: ${randomChange >= 0 ? 'var(--primary)' : 'var(--accent)'}">
+                        ${randomChange >= 0 ? '+' : ''}${randomChange}%
+                    </span>
+                `;
+            });
+        }
+        
+        // Crear elementos de ticker si no existen
+        if (!document.querySelector('.price-ticker')) {
+            const tickerContainer = document.createElement('div');
+            tickerContainer.className = 'price-ticker';
+            tickerContainer.style.position = 'fixed';
+            tickerContainer.style.bottom = '0';
+            tickerContainer.style.left = '0';
+            tickerContainer.style.right = '0';
+            tickerContainer.style.background = 'rgba(0, 0, 0, 0.7)';
+            tickerContainer.style.padding = '0.5rem';
+            tickerContainer.style.display = 'flex';
+            tickerContainer.style.justifyContent = 'space-around';
+            tickerContainer.style.zIndex = '1000';
+            document.body.appendChild(tickerContainer);
+            
+            for (let i = 0; i < 5; i++) {
+                const ticker = document.createElement('div');
+                ticker.className = 'price-ticker-item';
+                ticker.style.display = 'flex';
+                ticker.style.gap = '1rem';
+                tickerContainer.appendChild(ticker);
+            }
+        }
+        
+        // Actualizar precios cada 3 segundos
+        setInterval(updatePriceTickers, 3000);
+        updatePriceTickers();
+    </script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videollamada WebRTC</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    input, button, select {
+      padding: 10px 15px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    
+    button {
+      background: #4285f4;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    button:hover {
+      background: #3367d6;
+    }
+    
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .video-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    video {
+      background: #222;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 8px;
+      transform: rotateY(180deg); /* Espejo para video local */
+    }
+    
+    #remoteVideo {
+      transform: none; /* No rotar video remoto */
+    }
+    
+    #status {
+      text-align: center;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    
+    .room-code {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin: 15px 0;
+      color: #4285f4;
+    }
+    
+    .device-selectors {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      input, button, select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Videollamada WebRTC</h1>
+    
+    <div id="roomCodeDisplay" class="room-code"></div>
+    
+    <div class="device-selectors">
+      <select id="videoSource"></select>
+      <select id="audioSource"></select>
+    </div>
+    
+    <div class="controls">
+      <button id="createRoomBtn">Crear Nueva Sala</button>
+      <input type="text" id="roomIdInput" placeholder="O ingresa código de sala">
+      <button id="joinRoomBtn">Unirse a Sala</button>
+      <button id="startBtn" disabled>Iniciar Cámara</button>
+      <button id="hangupBtn" disabled>Finalizar Llamada</button>
+    </div>
+    
+    <div class="video-container">
+      <video id="localVideo" autoplay playsinline muted></video>
+      <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+    
+    <div id="status">Estado: Desconectado</div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    // Configuración
+    const socket = io('https://webrtc-signal-server-v2.onrender.com'); // Servidor mejorado
+    const localVideo = document.getElementById('localVideo');
+    const remoteVideo = document.getElementById('remoteVideo');
+    const createRoomBtn = document.getElementById('createRoomBtn');
+    const joinRoomBtn = document.getElementById('joinRoomBtn');
+    const startBtn = document.getElementById('startBtn');
+    const hangupBtn = document.getElementById('hangupBtn');
+    const roomIdInput = document.getElementById('roomIdInput');
+    const statusDiv = document.getElementById('status');
+    const roomCodeDisplay = document.getElementById('roomCodeDisplay');
+    const videoSourceSelect = document.getElementById('videoSource');
+    const audioSourceSelect = document.getElementById('audioSource');
+
+    let localStream;
+    let remoteStream;
+    let peerConnection;
+    let roomId;
+    let isRoomCreator = false;
+
+    // Configuración mejorada de ICE (STUN/TURN)
+    const configuration = {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' },
+        { 
+          urls: 'turn:global.turn.server:3478',
+          username: 'user',
+          credential: 'pass'
+        }
+      ],
+      iceTransportPolicy: 'all'
+    };
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', async () => {
+      await populateDeviceSelectors();
+      setupEventListeners();
+    });
+
+    // Llenar selectores de dispositivos
+    async function populateDeviceSelectors() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        const audioDevices = devices.filter(device => device.kind === 'audioinput');
+
+        videoSourceSelect.innerHTML = videoDevices.map(device => 
+          `<option value="${device.deviceId}">${device.label || 'Cámara ' + (videoDevices.indexOf(device) + 1)}</option>`
+        ).join('');
+
+        audioSourceSelect.innerHTML = audioDevices.map(device => 
+          `<option value="${device.deviceId}">${device.label || 'Micrófono ' + (audioDevices.indexOf(device) + 1)}</option>`
+        ).join('');
+      } catch (error) {
+        console.error('Error al listar dispositivos:', error);
+      }
+    }
+
+    // Configurar event listeners
+    function setupEventListeners() {
+      createRoomBtn.addEventListener('click', createNewRoom);
+      joinRoomBtn.addEventListener('click', joinExistingRoom);
+      startBtn.addEventListener('click', startCall);
+      hangupBtn.addEventListener('click', hangUp);
+    }
+
+    // Crear nueva sala
+    function createNewRoom() {
+      roomId = generateRoomCode();
+      roomCodeDisplay.textContent = `Código de sala: ${roomId}`;
+      roomIdInput.value = roomId;
+      isRoomCreator = true;
+      statusDiv.textContent = 'Sala creada. Comparte el código.';
+      socket.emit('join-room', roomId);
+      startBtn.disabled = false;
+      createRoomBtn.disabled = true;
+      joinRoomBtn.disabled = true;
+    }
+
+    // Unirse a sala existente
+    function joinExistingRoom() {
+      roomId = roomIdInput.value.trim();
+      if (!roomId) {
+        alert('Por favor ingresa un código de sala');
+        return;
+      }
+      
+      roomCodeDisplay.textContent = `Conectado a sala: ${roomId}`;
+      isRoomCreator = false;
+      statusDiv.textContent = `Uniéndose a sala: ${roomId}`;
+      socket.emit('join-room', roomId);
+      startBtn.disabled = false;
+      createRoomBtn.disabled = true;
+      joinRoomBtn.disabled = true;
+    }
+
+    // Generar código de sala aleatorio
+    function generateRoomCode() {
+      return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    // Iniciar la llamada
+    async function startCall() {
+      try {
+        statusDiv.textContent = 'Configurando dispositivos...';
+        
+        const videoSource = videoSourceSelect.value;
+        const audioSource = audioSourceSelect.value;
+        
+        const constraints = {
+          video: {
+            deviceId: videoSource ? { exact: videoSource } : undefined,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            frameRate: { ideal: 30 }
+          },
+          audio: {
+            deviceId: audioSource ? { exact: audioSource } : undefined,
+            echoCancellation: true,
+            noiseSuppression: true
+          }
+        };
+
+        localStream = await navigator.mediaDevices.getUserMedia(constraints);
+        localVideo.srcObject = localStream;
+        
+        createPeerConnection();
+        
+        // Añadir todos los tracks locales al peer connection
+        localStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, localStream);
+        });
+        
+        statusDiv.textContent = 'Dispositivos listos. Esperando conexión...';
+        startBtn.disabled = true;
+        hangupBtn.disabled = false;
+      } catch (error) {
+        console.error('Error al acceder a dispositivos:', error);
+        statusDiv.textContent = 'Error al acceder a dispositivos: ' + error.message;
+      }
+    }
+
+    // Crear conexión peer-to-peer mejorada
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection(configuration);
+      
+      // Cuando se recibe un track remoto
+      peerConnection.ontrack = event => {
+        if (!remoteVideo.srcObject) {
+          remoteVideo.srcObject = event.streams[0];
+          remoteStream = event.streams[0];
+          statusDiv.textContent = 'Conexión establecida!';
+        }
+      };
+      
+      // Manejo mejorado de ICE candidates
+      peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+          socket.emit('signal', {
+            roomId: roomId,
+            signal: {
+              type: 'candidate',
+              candidate: event.candidate
+            }
+          });
+        } else {
+          console.log('Todos los ICE candidates han sido enviados');
+        }
+      };
+      
+      // Detección de cambios en la conexión
+      peerConnection.oniceconnectionstatechange = () => {
+        if (peerConnection.iceConnectionState === 'disconnected' || 
+            peerConnection.iceConnectionState === 'failed') {
+          statusDiv.textContent = 'Conexión perdida. Intentando reconectar...';
+          setTimeout(() => {
+            if (peerConnection.iceConnectionState !== 'connected') {
+              hangUp();
+            }
+          }, 5000);
+        }
+      };
+    }
+
+    // Finalizar llamada
+    function hangUp() {
+      if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+      }
+      
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localVideo.srcObject = null;
+      }
+      
+      if (remoteStream) {
+        remoteStream.getTracks().forEach(track => track.stop());
+        remoteVideo.srcObject = null;
+      }
+      
+      statusDiv.textContent = 'Llamada finalizada';
+      startBtn.disabled = false;
+      hangupBtn.disabled = true;
+      createRoomBtn.disabled = false;
+      joinRoomBtn.disabled = false;
+      roomCodeDisplay.textContent = '';
+      
+      if (roomId) {
+        socket.emit('leave-room', roomId);
+        roomId = null;
+      }
+    }
+
+    // Manejar señales del servidor - Versión mejorada
+    socket.on('signal', async data => {
+      if (!peerConnection || data.roomId !== roomId) return;
+      
+      try {
+        const signal = data.signal;
+        
+        if (signal.type === 'offer') {
+          if (!peerConnection) createPeerConnection();
+          
+          await peerConnection.setRemoteDescription(new RTCSessionDescription(signal));
+          const answer = await peerConnection.createAnswer({
+            offerToReceiveAudio: true,
+            offerToReceiveVideo: true
+          });
+          
+          await peerConnection.setLocalDescription(answer);
+          
+          socket.emit('signal', {
+            roomId: roomId,
+            signal: {
+              type: 'answer',
+              sdp: peerConnection.localDescription
+            }
+          });
+        } 
+        else if (signal.type === 'answer') {
+          await peerConnection.setRemoteDescription(new RTCSessionDescription(signal));
+        } 
+        else if (signal.type === 'candidate') {
+          try {
+            await peerConnection.addIceCandidate(new RTCIceCandidate(signal.candidate));
+          } catch (e) {
+            console.error('Error adding ICE candidate:', e);
+          }
+        }
+      } catch (error) {
+        console.error('Error al procesar señal:', error);
+        statusDiv.textContent = 'Error en conexión: ' + error.message;
+      }
+    });
+
+    socket.on('user-connected', userId => {
+      statusDiv.textContent = `Usuario conectado: ${userId}`;
+      if (isRoomCreator && peerConnection) {
+        createOffer();
+      }
+    });
+
+    socket.on('user-disconnected', userId => {
+      statusDiv.textContent = `Usuario desconectado: ${userId}`;
+      if (remoteVideo.srcObject) {
+        remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+        remoteVideo.srcObject = null;
+      }
+    });
+
+    // Crear oferta mejorada
+    async function createOffer() {
+      try {
+        const offer = await peerConnection.createOffer({
+          offerToReceiveAudio: true,
+          offerToReceiveVideo: true
+        });
+        
+        await peerConnection.setLocalDescription(offer);
+        
+        socket.emit('signal', {
+          roomId: roomId,
+          signal: {
+            type: 'offer',
+            sdp: peerConnection.localDescription
+          }
+        });
+      } catch (error) {
+        console.error('Error al crear oferta:', error);
+      }
+    }
+
+    // Manejo de errores del socket
+    socket.on('connect_error', (error) => {
+      statusDiv.textContent = 'Error de conexión con el servidor: ' + error.message;
+    });
+
+    // Detectar cambios en dispositivos
+    navigator.mediaDevices.addEventListener('devicechange', populateDeviceSelectors);
+  </script>
+</body>
+</html>

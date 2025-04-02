@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarmenBBW - Contenido Exclusivo</title>
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primario: #FF3B5C;
+            --color-fondo: #1A1A1A;
+            --color-texto: #FFFFFF;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .perfil-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .perfil-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Contenido Principal */
+        .main-content {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .btn-mensaje {
+            background: var(--color-primario);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: transform 0.3s;
+        }
+
+        .btn-mensaje:hover {
+            transform: scale(1.05);
+        }
+
+        /* Grid de Multimedia */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .media-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .media-item::after {
+            content: "🔒";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+        }
+
+        /* Menú Inferior */
+        .bottom-menu {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #222;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 0.5rem 0;
+        }
+
+        .menu-item {
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="perfil-info">
+            <img src="URL_IMAGEN_PERFIL" class="perfil-img" alt="CarmenBBW">
+            <div>
+                <h2>CarmenBBW</h2>
+                <small>5 videos · 10 visitas</small>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <button class="btn-mensaje">
+            <i class="fas fa-envelope"></i> ENVIAR MENSAJE
+        </button>
+
+        <h3>VIDEOS Y FOTOS</h3>
+        <div class="media-grid">
+            <div class="media-item"></div>
+            <div class="media-item"></div>
+            <div class="media-item"></div>
+            <div class="media-item"></div>
+            <div class="media-item"></div>
+            <div class="media-item"></div>
+        </div>
+    </main>
+
+    <!-- Menú Inferior -->
+    <nav class="bottom-menu">
+        <div class="menu-item">
+            <i class="fas fa-wallet"></i>
+            <div>Pagos</div>
+        </div>
+        <div class="menu-item">
+            <i class="fas fa-video"></i>
+            <div>En Vivo</div>
+        </div>
+        <div class="menu-item">
+            <i class="fas fa-users"></i>
+            <div>Perfiles</div>
+        </div>
+        <div class="menu-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <div>Salir</div>
+        </div>
+    </nav>
+</body>
+</html>

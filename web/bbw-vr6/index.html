@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>fantasias bbw3</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasías BBW - Buscador de Modelos</title>
+    <style>
+        :root {
+            --primary-color: #8B008B; /* Morado oscuro principal */
+            --primary-light: #b030b0; /* Morado claro */
+            --secondary-color: #FF00FF; /* Fucsia */
+            --premium-color: #FF4500; /* Naranja premium */
+            --dark-bg: #1e1e1e; /* Fondo oscuro */
+            --light-bg: #2d2d2d; /* Fondo claro */
+            --text-light: #fff; /* Texto blanco */
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header con logo */
+        .main-header {
+            background-color: var(--primary-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: var(--secondary-color);
+        }
+
+        /* Barra de búsqueda */
+        .search-bar {
+            background-color: var(--primary-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border-radius: 25px;
+            border: none;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Filtros */
+        .filters {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+            background-color: var(--primary-color);
+        }
+
+        .filter-btn {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .filter-btn.active {
+            background-color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        /* Grid de modelos */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .model-card {
+            background: var(--light-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(139, 0, 139, 0.4);
+            border-color: var(--secondary-color);
+        }
+
+        .model-cover {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .model-info {
+            padding: 12px;
+        }
+
+        .model-name {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-light);
+        }
+
+        .verified-badge {
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        .model-price {
+            color: var(--secondary-color);
+            font-size: 14px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .model-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        .model-stat {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 30px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header con logo -->
+    <header class="main-header">
+        <a href="#" class="logo">
+            <i class="fas fa-star logo-icon"></i>
+            <span>Fantasías BBW</span>
+        </a>
+        <div>
+            <a href="#" style="color: white; text-decoration: none;">
+                <i class="fas fa-door-open"></i> Volver
+            </a>
+        </div>
+    </header>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar modelos BBW...">
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters">
+        <button class="filter-btn active">Todos</button>
+        <button class="filter-btn">En vivo</button>
+        <button class="filter-btn">Nuevos</button>
+        <button class="filter-btn">Populares</button>
+        <button class="filter-btn">$0-$10</button>
+        <button class="filter-btn">$10-$20</button>
+        <button class="filter-btn">Verificadas</button>
+    </div>
+
+    <!-- Grid de modelos -->
+    <div class="models-grid">
+        <!-- Modelo 1 -->
+        <div class="model-card" onclick="window.location.href='modelo-sofia.html'">
+            <img src="https://via.placeholder.com/400x600/8B008B/FFFFFF?text=Sofia_BBW" alt="Sofia BBW" class="model-cover">
+            <div class="model-info">
+                <div class="model-name">
+                    Sofia_BBW <i class="fas fa-certificate verified-badge"></i>
+                </div>
+                <div class="model-price">$9.99/mes</div>
+                <div class="model-stats">
+                    <div class="model-stat"><i class="fas fa-users"></i> 5.2K</div>
+                    <div class="model-stat"><i class="fas fa-video"></i> 128</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modelo 2 -->
+        <div class="model-card" onclick="window.location.href='modelo-carmen.html'">
+            <img src="https://via.placeholder.com/400x600/8B008B/FFFFFF?text=Carmen_Curvy" alt="Carmen Curvy" class="model-cover">
+            <div class="model-info">
+                <div class="model-name">
+                    Carmen_Curvy
+                </div>
+                <div class="model-price">$12.99/mes</div>
+                <div class="model-stats">
+                    <div class="model-stat"><i class="fas fa-users"></i> 3.8K</div>
+                    <div class="model-stat"><i class="fas fa-video"></i> 86</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modelo 3 -->
+        <div class="model-card" onclick="window.location.href='modelo-diana.html'">
+            <img src="https://via.placeholder.com/400x600/8B008B/FFFFFF?text=Diana_Voluptuous" alt="Diana Voluptuous" class="model-cover">
+            <div class="model-info">
+                <div class="model-name">
+                    Diana_Voluptuous <i class="fas fa-certificate verified-badge"></i>
+                </div>
+                <div class="model-price">$14.99/mes</div>
+                <div class="model-stats">
+                    <div class="model-stat"><i class="fas fa-users"></i> 7.1K</div>
+                    <div class="model-stat"><i class="fas fa-video"></i> 215</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modelo 4 -->
+        <div class="model-card" onclick="window.location.href='modelo-juliana.html'">
+            <img src="https://via.placeholder.com/400x600/8B008B/FFFFFF?text=Juliana_Plus" alt="Juliana Plus" class="model-cover">
+            <div class="model-info">
+                <div class="model-name">
+                    Juliana_Plus
+                </div>
+                <div class="model-price">$7.99/mes</div>
+                <div class="model-stats">
+                    <div class="model-stat"><i class="fas fa-users"></i> 2.3K</div>
+                    <div class="model-stat"><i class="fas fa-video"></i> 64</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        © 2023 Fantasías BBW - Todos los derechos reservados
+    </footer>
+
+    <script>
+        // Función de búsqueda
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            document.querySelectorAll('.model-card').forEach(card => {
+                const modelName = card.querySelector('.model-name').textContent.toLowerCase();
+                card.style.display = modelName.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Filtros interactivos
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Aquí iría la lógica real de filtrado
+                console.log(`Filtrando por: ${this.textContent}`);
+            });
+        });
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>

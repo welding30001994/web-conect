@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videollamada WebRTC</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    input, button {
+      padding: 10px 15px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    
+    button {
+      background: #4285f4;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    button:hover {
+      background: #3367d6;
+    }
+    
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    .video-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    video {
+      background: #222;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 8px;
+      transform: rotateY(180deg); /* Espejo para video local */
+    }
+    
+    #remoteVideo {
+      transform: none; /* No rotar video remoto */
+    }
+    
+    #status {
+      text-align: center;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      input, button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Videollamada WebRTC</h1>
+    
+    <div class="controls">
+      <input type="text" id="roomId" placeholder="Nombre de sala" style="flex-grow: 1;">
+      <button id="joinBtn">Unirse a Sala</button>
+      <button id="startBtn" disabled>Iniciar Cámara</button>
+      <button id="hangupBtn" disabled>Finalizar Llamada</button>
+    </div>
+    
+    <div class="video-container">
+      <video id="localVideo" autoplay playsinline muted></video>
+      <video id="remoteVideo" autoplay playsinline></video>
+    </div>
+    
+    <div id="status">Desconectado</div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    // Configuración
+    const socket = io('https://webrtc-signal-server.onrender.com'); // Servidor público de señalización
+    const localVideo = document.getElementById('localVideo');
+    const remoteVideo = document.getElementById('remoteVideo');
+    const joinBtn = document.getElementById('joinBtn');
+    const startBtn = document.getElementById('startBtn');
+    const hangupBtn = document.getElementById('hangupBtn');
+    const roomIdInput = document.getElementById('roomId');
+    const statusDiv = document.getElementById('status');
+
+    let localStream;
+    let remoteStream;
+    let peerConnection;
+    let roomId;
+
+    // Configuración de ICE (STUN servers públicos)
+    const configuration = {
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' }
+      ]
+    };
+
+    // Event listeners
+    joinBtn.addEventListener('click', joinRoom);
+    startBtn.addEventListener('click', startCall);
+    hangupBtn.addEventListener('click', hangUp);
+
+    // Unirse a una sala
+    function joinRoom() {
+      roomId = roomIdInput.value.trim();
+      if (!roomId) {
+        alert('Por favor ingresa un nombre de sala');
+        return;
+      }
+      
+      statusDiv.textContent = `Uniéndose a sala: ${roomId}`;
+      socket.emit('join-room', roomId);
+      startBtn.disabled = false;
+      joinBtn.disabled = true;
+    }
+
+    // Iniciar la llamada
+    async function startCall() {
+      try {
+        statusDiv.textContent = 'Obteniendo acceso a cámara/micrófono...';
+        localStream = await navigator.mediaDevices.getUserMedia({ 
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }, 
+          audio: true 
+        });
+        
+        localVideo.srcObject = localStream;
+        createPeerConnection();
+        
+        // Añadir todos los tracks locales al peer connection
+        localStream.getTracks().forEach(track => {
+          peerConnection.addTrack(track, localStream);
+        });
+        
+        statusDiv.textContent = 'Listo para llamar';
+        startBtn.disabled = true;
+        hangupBtn.disabled = false;
+      } catch (error) {
+        console.error('Error al acceder a dispositivos:', error);
+        statusDiv.textContent = 'Error al acceder a cámara/micrófono';
+      }
+    }
+
+    // Crear conexión peer-to-peer
+    function createPeerConnection() {
+      peerConnection = new RTCPeerConnection(configuration);
+      
+      // Cuando se recibe un track remoto
+      peerConnection.ontrack = event => {
+        remoteVideo.srcObject = event.streams[0];
+        remoteStream = event.streams[0];
+        statusDiv.textContent = 'Conectado';
+      };
+      
+      // Cuando se genera un ICE candidate
+      peerConnection.onicecandidate = event => {
+        if (event.candidate) {
+          socket.emit('signal', {
+            roomId: roomId,
+            signal: {
+              type: 'candidate',
+              candidate: event.candidate
+            }
+          });
+        }
+      };
+      
+      // Cuando se necesita negociación
+      peerConnection.onnegotiationneeded = async () => {
+        try {
+          const offer = await peerConnection.createOffer();
+          await peerConnection.setLocalDescription(offer);
+          
+          socket.emit('signal', {
+            roomId: roomId,
+            signal: {
+              type: 'offer',
+              sdp: peerConnection.localDescription
+            }
+          });
+        } catch (error) {
+          console.error('Error en negociación:', error);
+        }
+      };
+    }
+
+    // Finalizar llamada
+    function hangUp() {
+      if (peerConnection) {
+        peerConnection.close();
+        peerConnection = null;
+      }
+      
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localVideo.srcObject = null;
+      }
+      
+      if (remoteStream) {
+        remoteStream.getTracks().forEach(track => track.stop());
+        remoteVideo.srcObject = null;
+      }
+      
+      statusDiv.textContent = 'Llamada finalizada';
+      startBtn.disabled = false;
+      hangupBtn.disabled = true;
+      joinBtn.disabled = false;
+    }
+
+    // Manejar señales del servidor
+    socket.on('signal', async data => {
+      if (!peerConnection) createPeerConnection();
+      
+      try {
+        const signal = data.signal;
+        
+        if (signal.type === 'offer') {
+          await peerConnection.setRemoteDescription(new RTCSessionDescription(signal));
+          const answer = await peerConnection.createAnswer();
+          await peerConnection.setLocalDescription(answer);
+          
+          socket.emit('signal', {
+            roomId: roomId,
+            signal: {
+              type: 'answer',
+              sdp: peerConnection.localDescription
+            }
+          });
+        } else if (signal.type === 'answer') {
+          await peerConnection.setRemoteDescription(new RTCSessionDescription(signal));
+        } else if (signal.type === 'candidate') {
+          await peerConnection.addIceCandidate(new RTCIceCandidate(signal.candidate));
+        }
+      } catch (error) {
+        console.error('Error al procesar señal:', error);
+      }
+    });
+
+    socket.on('user-connected', userId => {
+      statusDiv.textContent = `Usuario conectado: ${userId}`;
+    });
+
+    socket.on('user-disconnected', userId => {
+      statusDiv.textContent = `Usuario desconectado: ${userId}`;
+      if (peerConnection) {
+        hangUp();
+      }
+    });
+  </script>
+</body>
+</html>

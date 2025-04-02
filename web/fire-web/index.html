@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Llamada P2P Futurista | WebRTC + Firebase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f0ff;
+            --secondary: #7b2dff;
+            --dark: #0a0a1a;
+            --light: #e0e0ff;
+            --accent: #ff2d7b;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            margin: 20px 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .video-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .video-box {
+            position: relative;
+            width: 45%;
+            min-width: 300px;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(123, 45, 255, 0.3);
+            background: linear-gradient(145deg, #0f0f2a, #1a1a3a);
+        }
+        .video-box h3 {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background-color: #000;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: linear-gradient(145deg, #1a1a3a, #0f0f2a);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--secondary);
+            box-shadow: 0 0 20px rgba(123, 45, 255, 0.2);
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        input, button {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        input {
+            flex-grow: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: 1px solid var(--secondary);
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+        button {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            color: var(--dark);
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .call-button {
+            background: linear-gradient(45deg, #00c853, #00e676);
+        }
+        .end-call-button {
+            background: linear-gradient(45deg, #ff3d00, #ff6e40);
+        }
+        .status {
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .connecting {
+            background-color: rgba(255, 234, 0, 0.1);
+            color: #ffee00;
+            border: 1px solid #ffee00;
+        }
+        .connected {
+            background-color: rgba(0, 200, 83, 0.1);
+            color: #00c853;
+            border: 1px solid #00c853;
+        }
+        .disconnected {
+            background-color: rgba(255, 61, 0, 0.1);
+            color: #ff3d00;
+            border: 1px solid #ff3d00;
+        }
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(0, 240, 255, 0.9);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 LLAMADA P2P FUTURISTA</h1>
+    
+    <div class="container">
+        <div class="video-container">
+            <div class="video-box">
+                <h3>TÚ</h3>
+                <video id="localVideo" autoplay muted></video>
+            </div>
+            <div class="video-box">
+                <h3>REMOTO</h3>
+                <video id="remoteVideo" autoplay></video>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="input-group">
+                <input type="text" id="roomIdInput" placeholder="Ingresa ID de sala o genera uno">
+                <button id="generateIdButton">🔮 Generar ID</button>
+            </div>
+            
+            <div class="button-group">
+                <button id="startButton" class="call-button">📡 Iniciar Llamada</button>
+                <button id="joinButton" class="call-button">🛰 Unirse a Llamada</button>
+                <button id="endCallButton" class="end-call-button" disabled>☠ Terminar Llamada</button>
+            </div>
+            
+            <div id="status" class="status disconnected">Desconectado</div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.2/firebase-database-compat.js"></script>
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyD36q7sT_PDy4comaOThhfoMR4eeApI6Ys",
+            authDomain: "webrtc-camara-p2p.firebaseapp.com",
+            databaseURL: "https://webrtc-camara-p2p-default-rtdb.firebaseio.com",
+            projectId: "webrtc-camara-p2p",
+            storageBucket: "webrtc-camara-p2p.firebasestorage.app",
+            messagingSenderId: "612431889194",
+            appId: "1:612431889194:web:6e35c5ba20e9f1c97f1453",
+            measurementId: "G-T3BMQ5DCXJ"
+        };
+        
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Elementos del DOM
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const roomIdInput = document.getElementById('roomIdInput');
+        const generateIdButton = document.getElementById('generateIdButton');
+        const startButton = document.getElementById('startButton');
+        const joinButton = document.getElementById('joinButton');
+        const endCallButton = document.getElementById('endCallButton');
+        const statusDiv = document.getElementById('status');
+        
+        // Variables globales
+        let localStream;
+        let remoteStream;
+        let peerConnection;
+        let roomId;
+        let isCaller = false;
+        
+        // Generar ID aleatorio para sala
+        generateIdButton.addEventListener('click', () => {
+            roomIdInput.value = Math.random().toString(36).substring(2, 10).toUpperCase();
+        });
+        
+        // Iniciar llamada (crear sala)
+        startButton.addEventListener('click', async () => {
+            roomId = roomIdInput.value;
+            if (!roomId) {
+                alert('Por favor genera o ingresa un ID de sala');
+                return;
+            }
+            
+            isCaller = true;
+            updateStatus('Conectando...', 'connecting');
+            await setupLocalStream();
+            createPeerConnection();
+            await createOffer();
+            
+            startButton.disabled = true;
+            joinButton.disabled = true;
+            endCallButton.disabled = false;
+        });
+        
+        // Unirse a llamada existente
+        joinButton.addEventListener('click', async () => {
+            roomId = roomIdInput.value;
+            if (!roomId) {
+                alert('Por favor ingresa un ID de sala válido');
+                return;
+            }
+            
+            isCaller = false;
+            updateStatus('Conectando...', 'connecting');
+            await setupLocalStream();
+            createPeerConnection();
+            listenForOffer();
+            
+            startButton.disabled = true;
+            joinButton.disabled = true;
+            endCallButton.disabled = false;
+        });
+        
+        // Terminar llamada
+        endCallButton.addEventListener('click', () => {
+            endCall();
+        });
+        
+        // Configurar el stream local
+        async function setupLocalStream() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: true, 
+                    audio: true 
+                });
+                localVideo.srcObject = localStream;
+            } catch (error) {
+                console.error('Error al acceder a los dispositivos:', error);
+                alert('No se pudo acceder a la cámara/micrófono');
+                throw error;
+            }
+        }
+        
+        // Crear conexión peer-to-peer
+        function createPeerConnection() {
+            const configuration = {
+                iceServers: [
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+            };
+            
+            peerConnection = new RTCPeerConnection(configuration);
+            
+            // Manejar eventos ICE Candidate
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    sendIceCandidate(event.candidate);
+                }
+            };
+            
+            // Manejar stream remoto
+            peerConnection.ontrack = (event) => {
+                if (!remoteVideo.srcObject) {
+                    remoteStream = new MediaStream();
+                    remoteVideo.srcObject = remoteStream;
+                }
+                remoteStream.addTrack(event.track);
+                updateStatus('Conectado', 'connected');
+            };
+            
+            // Añadir stream local a la conexión
+            localStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, localStream);
+            });
+            
+            // Escuchar cambios en la conexión
+            peerConnection.onconnectionstatechange = () => {
+                if (peerConnection.connectionState === 'disconnected' || 
+                    peerConnection.connectionState === 'failed') {
+                    endCall();
+                }
+            };
+        }
+        
+        // Crear oferta (caller)
+        async function createOffer() {
+            try {
+                const offer = await peerConnection.createOffer();
+                await peerConnection.setLocalDescription(offer);
+                
+                // Enviar oferta a Firebase
+                database.ref(`rooms/${roomId}/offer`).set({
+                    type: offer.type,
+                    sdp: offer.sdp
+                });
+                
+                // Escuchar respuesta
+                listenForAnswer();
+            } catch (error) {
+                console.error('Error al crear oferta:', error);
+                endCall();
+            }
+        }
+        
+        // Escuchar oferta (callee)
+        function listenForOffer() {
+            database.ref(`rooms/${roomId}/offer`).on('value', async (snapshot) => {
+                const data = snapshot.val();
+                if (data && !peerConnection.currentRemoteDescription) {
+                    await peerConnection.setRemoteDescription(new RTCSessionDescription(data));
+                    const answer = await peerConnection.createAnswer();
+                    await peerConnection.setLocalDescription(answer);
+                    
+                    // Enviar respuesta a Firebase
+                    database.ref(`rooms/${roomId}/answer`).set({
+                        type: answer.type,
+                        sdp: answer.sdp
+                    });
+                }
+            });
+        }
+        
+        // Escuchar respuesta (caller)
+        function listenForAnswer() {
+            database.ref(`rooms/${roomId}/answer`).on('value', async (snapshot) => {
+                const data = snapshot.val();
+                if (data && !peerConnection.currentRemoteDescription) {
+                    await peerConnection.setRemoteDescription(new RTCSessionDescription(data));
+                }
+            });
+        }
+        
+        // Enviar ICE Candidate
+        function sendIceCandidate(candidate) {
+            database.ref(`rooms/${roomId}/candidates/${isCaller ? 'caller' : 'callee'}`).push({
+                candidate: candidate.candidate,
+                sdpMid: candidate.sdpMid,
+                sdpMLineIndex: candidate.sdpMLineIndex
+            });
+        }
+        
+        // Escuchar ICE Candidates
+        function listenForIceCandidates() {
+            const role = isCaller ? 'callee' : 'caller';
+            database.ref(`rooms/${roomId}/candidates/${role}`).on('child_added', (snapshot) => {
+                const candidate = new RTCIceCandidate(snapshot.val());
+                peerConnection.addIceCandidate(candidate);
+            });
+        }
+        
+        // Terminar llamada y limpiar
+        function endCall() {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localVideo.srcObject = null;
+            }
+            
+            if (remoteVideo.srcObject) {
+                remoteVideo.srcObject.getTracks().forEach(track => track.stop());
+                remoteVideo.srcObject = null;
+            }
+            
+            // Limpiar listeners de Firebase
+            if (roomId) {
+                database.ref(`rooms/${roomId}`).off();
+                if (isCaller) {
+                    database.ref(`rooms/${roomId}`).remove();
+                }
+            }
+            
+            updateStatus('Desconectado', 'disconnected');
+            startButton.disabled = false;
+            joinButton.disabled = false;
+            endCallButton.disabled = true;
+        }
+        
+        // Actualizar estado de la conexión
+        function updateStatus(message, statusClass) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${statusClass}`;
+            
+            if (statusClass === 'connected') {
+                statusDiv.classList.add('glow');
+            } else {
+                statusDiv.classList.remove('glow');
+            }
+        }
+        
+        // Inicializar listeners de ICE Candidates
+        listenForIceCandidates();
+    </script>
+</body>
+</html>

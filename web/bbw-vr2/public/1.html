@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil de Creador | Premium Connect</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://picsum.photos">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #800020;
+            --secondary: #5a0018;
+            --accent: #ff4081;
+            --accent-dark: #e03570;
+            --dark: #1a1a2e;
+            --darker: #12121a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* BARRA SUPERIOR */
+        .creator-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--darker);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .creator-bar .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+        
+        .creator-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .creator-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .creator-btn.secondary {
+            background: var(--dark);
+            border: 1px solid var(--gray);
+        }
+        
+        .creator-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 64, 129, 0.4);
+        }
+        
+        /* HEADER DEL PERFIL */
+        .profile-header {
+            background: var(--primary);
+            height: 220px;
+            position: relative;
+            border-radius: 0 0 20px 20px;
+            overflow: visible;
+            z-index: 1;
+            margin-top: 60px;
+        }
+        
+        .cover-photo {
+            width: 100%;
+            height: calc(100% - 30px);
+            background: 
+                linear-gradient(135deg, rgba(128, 0, 32, 0.85), rgba(90, 0, 24, 0.9)),
+                url('https://images.unsplash.com/photo-1519699047748-de8e457a634e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+        }
+        
+        .profile-circle {
+            position: absolute;
+            bottom: -50px;
+            left: 30px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            overflow: hidden;
+            background: var(--dark);
+            z-index: 3;
+            box-shadow: 
+                0 0 0 4px var(--primary),
+                0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .profile-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* CONTENEDOR PRINCIPAL */
+        .content-container {
+            padding: 70px 20px 100px;
+            position: relative;
+            z-index: 2;
+            min-height: calc(100vh - 220px - 60px);
+        }
+        
+        /* DASHBOARD DEL CREADOR */
+        .creator-dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stats-header {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0 30px;
+        }
+        
+        .stat-card {
+            background: rgba(26, 26, 46, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(128, 0, 32, 0.3);
+        }
+        
+        .stat-card h3 {
+            margin: 0 0 5px;
+            font-size: 0.9rem;
+            color: #ccc;
+            font-weight: normal;
+        }
+        
+        .stat-card p {
+            font-size: 1.8rem;
+            margin: 5px 0 0;
+            font-weight: bold;
+        }
+        
+        .stat-card span {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+        
+        .stat-card .positive {
+            color: var(--success);
+        }
+        
+        .stat-card .negative {
+            color: #ff4444;
+        }
+        
+        /* PESTAÑAS */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin: 25px 0 15px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: var(--gray);
+        }
+        
+        .tab.active {
+            color: var(--accent);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+            animation: tabUnderline 0.3s ease-out;
+        }
+
+        .tab .badge {
+            background: var(--accent);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+
+        @keyframes tabUnderline {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        
+        /* PANEL DE SUBIDA */
+        .upload-panel {
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .upload-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3);
+        }
+        
+        .upload-options {
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.3s;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .upload-options.active {
+            display: flex;
+        }
+        
+        .upload-options button {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .upload-options button:hover {
+            background: var(--accent);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* GRÁFICO DE GANANCIAS */
+        .earnings-chart {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            position: relative;
+            display: none;
+        }
+        
+        .earnings-chart.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        .time-filters {
+            margin-top: 15px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .time-filters button {
+            background: none;
+            color: var(--gray);
+            border: none;
+            padding: 5px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+        
+        .time-filters button.active {
+            color: var(--accent);
+            background: rgba(255, 64, 129, 0.2);
+        }
+        
+        /* GRID DE CONTENIDO */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0 40px;
+        }
+        
+        .content-card {
+            background: rgba(102, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .content-thumbnail {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .content-info {
+            padding: 12px;
+        }
+        
+        .content-title {
+            margin: 0 0 5px;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .content-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        
+        .content-price {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .content-actions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .content-card:hover .content-actions {
+            opacity: 1;
+        }
+        
+        .content-actions button {
+            background: rgba(0,0,0,0.7);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        
+        .content-actions button:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+        
+        /* MODAL DE SUBIDA */
+        .upload-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .upload-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .upload-container {
+            background: var(--darker);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .upload-container h2 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+        
+        .close-upload {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .drop-zone {
+            border: 2px dashed var(--gray);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .drop-zone:hover {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .drop-zone i {
+            font-size: 2.5rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ccc;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            color: white;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .btn-submit {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background: var(--accent-dark);
+        }
+        
+        .preview-container {
+            display: none;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 5px;
+        }
+        
+        /* FOOTER */
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            background: var(--darker);
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 10;
+            height: 60px;
+            box-sizing: border-box;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .footer-icon {
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            position: relative;
+        }
+        
+        .footer-icon.active {
+            color: var(--accent);
+        }
+        
+        .footer-icon:hover, .footer-icon:focus {
+            color: var(--accent);
+            transform: translateY(-3px);
+            outline: none;
+        }
+        
+        .footer-badge {
+            position: absolute;
+            top: -5px;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .profile-circle {
+                width: 80px;
+                height: 80px;
+                left: 20px;
+                bottom: -40px;
+            }
+            
+            .content-container {
+                padding: 60px 15px 90px;
+            }
+            
+            .creator-bar {
+                padding: 10px 15px;
+            }
+            
+            .creator-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .stat-card p {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-header {
+                height: 180px;
+            }
+            
+            .content-container {
+                padding: 50px 10px 80px;
+            }
+            
+            .stats-header {
+                grid-template-columns: 1fr;
+            }
+            
+            .creator-actions {
+                gap: 8px;
+            }
+            
+            .creator-btn span {
+                display: none;
+            }
+            
+            .creator-btn i {
+                margin: 0;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- BARRA SUPERIOR -->
+    <div class="creator-bar">
+        <div class="logo">PremiumConnect</div>
+        <div class="creator-actions">
+            <button class="creator-btn secondary">
+                <i class="fas fa-bell"></i>
+                <span>Notificaciones</span>
+            </button>
+            <button class="creator-btn">
+                <i class="fas fa-wallet"></i>
+                <span>Retirar $1,250</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- HEADER DEL PERFIL -->
+    <div class="profile-header">
+        <div class="cover-photo"></div>
+        <div class="profile-circle">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Perfil de Sofia Martinez" loading="lazy">
+        </div>
+    </div>
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="content-container">
+        <div class="creator-dashboard">
+            <!-- ESTADÍSTICAS -->
+            <div class="stats-header">
+                <div class="stat-card">
+                    <h3>Ganancias Este Mes</h3>
+                    <p>$2,850 <span class="positive">+12%</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Nuevos Seguidores</h3>
+                    <p>324 <span class="positive">+8%</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Interacción Media</h3>
+                    <p>4.7% <span class="positive">↑</span></p>
+                </div>
+                <div class="stat-card">
+                    <h3>Contenido Subido</h3>
+                    <p>46 <span>/ 100</span></p>
+                </div>
+            </div>
+            
+            <!-- PESTAÑAS -->
+            <div class="tabs">
+                <div class="tab active" data-tab="content">
+                    <i class="fas fa-photo-video"></i> Contenido <span class="badge">46</span>
+                </div>
+                <div class="tab" data-tab="analytics">
+                    <i class="fas fa-chart-line"></i> Analíticas
+                </div>
+                <div class="tab" data-tab="earnings">
+                    <i class="fas fa-coins"></i> Ganancias
+                </div>
+                <div class="tab" data-tab="messages">
+                    <i class="fas fa-envelope"></i> Mensajes
+                </div>
+            </div>
+            
+            <!-- PANEL DE SUBIDA -->
+            <div class="upload-panel">
+                <button class="upload-btn" id="uploadBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Subir Nuevo Contenido
+                </button>
+                <div class="upload-options" id="uploadOptions">
+                    <button data-type="photo">
+                        <i class="fas fa-image"></i> Foto
+                    </button>
+                    <button data-type="video">
+                        <i class="fas fa-video"></i> Video
+                    </button>
+                    <button data-type="ppv">
+                        <i class="fas fa-lock"></i> PPV
+                    </button>
+                    <button data-type="story">
+                        <i class="fas fa-history"></i> Story
+                    </button>
+                </div>
+            </div>
+            
+            <!-- GRÁFICO DE GANANCIAS (visible en pestaña Earnings) -->
+            <div class="earnings-chart" id="earningsChartContainer">
+                <h3>Tus Ganancias</h3>
+                <canvas id="earningsChart"></canvas>
+                <div class="time-filters">
+                    <button class="active" data-range="7">7 días</button>
+                    <button data-range="30">30 días</button>
+                    <button data-range="90">90 días</button>
+                    <button data-range="365">1 año</button>
+                </div>
+            </div>
+            
+            <!-- GRID DE CONTENIDO -->
+            <div class="content-grid" id="contentGrid">
+                <!-- El contenido se cargará dinámicamente via JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL DE SUBIDA -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="upload-container">
+            <button class="close-upload" id="closeUpload">&times;</button>
+            <h2 id="uploadTitle">Subir Nueva Foto</h2>
+            
+            <div class="drop-zone" id="dropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Arrastra y suelta tus archivos aquí</p>
+                <p>o haz clic para seleccionar</p>
+                <input type="file" id="fileInput" style="display: none;">
+            </div>
+            
+            <div class="preview-container" id="previewContainer">
+                <img src="" alt="Vista previa" class="preview-image" id="previewImage">
+            </div>
+            
+            <div class="form-group">
+                <label for="contentTitle">Título</label>
+                <input type="text" id="contentTitle" class="form-control" placeholder="Título atractivo...">
+            </div>
+            
+            <div class="form-group">
+                <label for="contentDescription">Descripción</label>
+                <textarea id="contentDescription" class="form-control" rows="3" placeholder="Describe tu contenido..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="contentPrice">Precio (USD)</label>
+                <input type="number" id="contentPrice" class="form-control" placeholder="0.00" min="0" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="isExclusive"> Contenido exclusivo para suscriptores premium
+                </label>
+            </div>
+            
+            <button class="btn-submit" id="submitContent">Publicar Contenido</button>
+        </div>
+    </div>
+    
+ 
+ <!-- FOOTER -->
+<div class="footer">
+    <button class="footer-icon active" aria-label="Perfil">
+        <i class="fas fa-user"></i>
+    </button>
+    <button class="footer-icon" aria-label="Perfiles">
+        <i class="fas fa-users"></i>
+    </button>
+    <button class="footer-icon" aria-label="Videocámara">
+        <i class="fas fa-video"></i>
+    </button>
+    <button class="footer-icon" aria-label="Mensajes">
+        <i class="fas fa-comments"></i>
+        <span class="footer-badge">3</span>
+    </button>
+    <button class="footer-icon" aria-label="Cerrar sesión">
+        <i class="fas fa-sign-out-alt"></i>
+    </button>
+</div>
+
+    <script>
+        // Estado de la aplicación
+        const appState = {
+            currentTab: 'content',
+            uploadType: 'photo',
+            earningsData: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Ganancias (USD)',
+                    data: [1200, 1900, 1500, 2200, 1800, 2500, 2850],
+                    backgroundColor: 'rgba(255, 64, 129, 0.2)',
+                    borderColor: 'rgba(255, 64, 129, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            contentData: [
+                {
+                    id: 1,
+                    type: 'photo',
+                    title: "Sesión Nocturna Exclusiva",
+                    thumbnail: "https://picsum.photos/400/300?random=101",
+                    price: 9.99,
+                    views: 1245,
+                    likes: 356,
+                    earnings: 420,
+                    date: "2023-07-15",
+                    isExclusive: true
+                },
+                {
+                    id: 2,
+                    type: 'video',
+                    title: "Rutina de Mañana Completa",
+                    thumbnail: "https://picsum.photos/400/300?random=102",
+                    price: 0,
+                    views: 2856,
+                    likes: 721,
+                    earnings: 150,
+                    date: "2023-07-12",
+                    isExclusive: false
+                },
+                {
+                    id: 3,
+                    type: 'ppv',
+                    title: "Entrenamiento con Pesas",
+                    thumbnail: "https://picsum.photos/400/300?random=103",
+                    price: 14.99,
+                    views: 856,
+                    likes: 210,
+                    earnings: 380,
+                    date: "2023-07-10",
+                    isExclusive: true
+                },
+                {
+                    id: 4,
+                    type: 'photo',
+                    title: "Behind the Scenes",
+                    thumbnail: "https://picsum.photos/400/300?random=104",
+                    price: 4.99,
+                    views: 987,
+                    likes: 432,
+                    earnings: 195,
+                    date: "2023-07-08",
+                    isExclusive: true
+                },
+                {
+                    id: 5,
+                    type: 'video',
+                    title: "Q&A Especial Seguidores",
+                    thumbnail: "https://picsum.photos/400/300?random=105",
+                    price: 0,
+                    views: 3421,
+                    likes: 876,
+                    earnings: 220,
+                    date: "2023-07-05",
+                    isExclusive: false
+                },
+                {
+                    id: 6,
+                    type: 'ppv',
+                    title: "Rutina Avanzada Cardio",
+                    thumbnail: "https://picsum.photos/400/300?random=106",
+                    price: 12.99,
+                    views: 654,
+                    likes: 198,
+                    earnings: 310,
+                    date: "2023-07-03",
+                    isExclusive: true
+                }
+            ],
+            earningsChart: null
+        };
+
+        // Elementos del DOM
+        const DOM = {
+            tabs: document.querySelectorAll('.tab'),
+            uploadBtn: document.getElementById('uploadBtn'),
+            uploadOptions: document.getElementById('uploadOptions'),
+            uploadModal: document.getElementById('uploadModal'),
+            closeUpload: document.getElementById('closeUpload'),
+            dropZone: document.getElementById('dropZone'),
+            fileInput: document.getElementById('fileInput'),
+            previewContainer: document.getElementById('previewContainer'),
+            previewImage: document.getElementById('previewImage'),
+            uploadTitle: document.getElementById('uploadTitle'),
+            contentTitle: document.getElementById('contentTitle'),
+            contentDescription: document.getElementById('contentDescription'),
+            contentPrice: document.getElementById('contentPrice'),
+            isExclusive: document.getElementById('isExclusive'),
+            submitContent: document.getElementById('submitContent'),
+            contentGrid: document.getElementById('contentGrid'),
+            earningsChartContainer: document.getElementById('earningsChartContainer'),
+            earningsChartCanvas: document.getElementById('earningsChart'),
+            timeFilters: document.querySelectorAll('.time-filters button')
+        };
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            renderContent();
+            setupEventListeners();
+            initEarningsChart();
+        });
+
+        // Renderizado de contenido
+        function renderContent() {
+            DOM.contentGrid.innerHTML = '';
+            
+            appState.contentData.forEach(item => {
+                const contentCard = document.createElement('div');
+                contentCard.className = 'content-card';
+                contentCard.dataset.id = item.id;
+                
+                contentCard.innerHTML = `
+                    <div class="content-actions">
+                        <button data-action="edit"><i class="fas fa-edit"></i></button>
+                        <button data-action="delete"><i class="fas fa-trash"></i></button>
+                        <button data-action="stats"><i class="fas fa-chart-bar"></i></button>
+                    </div>
+                    ${item.price > 0 ? `<div class="content-price">$${item.price}</div>` : ''}
+                    <img src="${item.thumbnail}" class="content-thumbnail" loading="lazy" alt="${item.title}">
+                    <div class="content-info">
+                        <h3 class="content-title">${item.title}</h3>
+                        <div class="content-stats">
+                            <span><i class="fas fa-eye"></i> ${item.views}</span>
+                            <span><i class="fas fa-heart"></i> ${item.likes}</span>
+                            <span><i class="fas fa-dollar-sign"></i> ${item.earnings}</span>
+                        </div>
+                    </div>
+                `;
+                
+                DOM.contentGrid.appendChild(contentCard);
+            });
+        }
+
+        // Configuración de event listeners
+        function setupEventListeners() {
+            // Cambio de pestañas
+            DOM.tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    DOM.tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    appState.currentTab = tab.dataset.tab;
+                    
+                    // Mostrar/ocultar secciones según la pestaña
+                    if (appState.currentTab === 'earnings') {
+                        DOM.earningsChartContainer.classList.add('active');
+                        DOM.contentGrid.style.display = 'none';
+                    } else {
+                        DOM.earningsChartContainer.classList.remove('active');
+                        DOM.contentGrid.style.display = 'grid';
+                    }
+                });
+            });
+
+            // Botón de subida
+            DOM.uploadBtn.addEventListener('click', () => {
+                DOM.uploadOptions.classList.toggle('active');
+            });
+
+            // Opciones de subida
+            document.querySelectorAll('#uploadOptions button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    appState.uploadType = btn.dataset.type;
+                    openUploadModal();
+                });
+            });
+
+            // Cerrar modal
+            DOM.closeUpload.addEventListener('click', closeUploadModal);
+
+            // Drag & drop
+            DOM.dropZone.addEventListener('click', () => DOM.fileInput.click());
+            DOM.fileInput.addEventListener('change', handleFileSelect);
+            
+            DOM.dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                DOM.dropZone.style.borderColor = 'var(--accent)';
+                DOM.dropZone.style.background = 'rgba(255,255,255,0.05)';
+            });
+            
+            DOM.dropZone.addEventListener('dragleave', () => {
+                DOM.dropZone.style.borderColor = 'var(--gray)';
+                DOM.dropZone.style.background = '';
+            });
+            
+            DOM.dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                DOM.dropZone.style.borderColor = 'var(--gray)';
+                DOM.dropZone.style.background = '';
+                
+                if (e.dataTransfer.files.length) {
+                    DOM.fileInput.files = e.dataTransfer.files;
+                    handleFileSelect({ target: DOM.fileInput });
+                }
+            });
+
+            // Enviar contenido
+            DOM.submitContent.addEventListener('click', submitContent);
+
+            // Filtros de tiempo para gráfico
+            DOM.timeFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    DOM.timeFilters.forEach(f => f.classList.remove('active'));
+                    filter.classList.add('active');
+                    updateChart(filter.dataset.range);
+                });
+            });
+        }
+
+        // Inicializar gráfico de ganancias
+        function initEarningsChart() {
+            const ctx = DOM.earningsChartCanvas.getContext('2d');
+            appState.earningsChart = new Chart(ctx, {
+                type: 'line',
+                data: appState.earningsData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            },
+                            ticks: {
+                                color: '#ccc'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255,255,255,0.1)'
+                            },
+                            ticks: {
+                                color: '#ccc'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Actualizar gráfico según rango de tiempo
+        function updateChart(range) {
+            // Simular diferentes datos según el rango seleccionado
+            const ranges = {
+                '7': [250, 320, 180, 410, 390, 280, 350],
+                '30': [1200, 1900, 1500, 2200, 1800, 2500, 2850],
+                '90': [3200, 4500, 3800, 4200, 5100, 4800, 5200, 5500, 5800],
+                '365': [12000, 13500, 14200, 15600, 16500, 17200, 18500]
+            };
+            
+            const labels = {
+                '7': ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                '30': ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+                '90': ['Mes 1', 'Mes 2', 'Mes 3'],
+                '365': ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            };
+            
+            appState.earningsChart.data.labels = labels[range];
+            appState.earningsChart.data.datasets[0].data = ranges[range];
+            appState.earningsChart.update();
+        }
+
+        // Manejar selección de archivo
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            if (file.type.match('image.*')) {
+                const reader = new FileReader();
+                
+                reader.onload = (e) => {
+                    DOM.previewImage.src = e.target.result;
+                    DOM.previewContainer.style.display = 'block';
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                alert('Por favor, selecciona un archivo de imagen o video válido');
+            }
+        }
+
+        // Abrir modal de subida
+        function openUploadModal() {
+            // Configurar título según tipo de contenido
+            const titles = {
+                'photo': 'Subir Nueva Foto',
+                'video': 'Subir Nuevo Video',
+                'ppv': 'Crear Contenido PPV',
+                'story': 'Crear Story'
+            };
+            
+            DOM.uploadTitle.textContent = titles[appState.uploadType];
+            
+            // Mostrar/ocultar campos según tipo
+            DOM.contentPrice.parentElement.style.display = 
+                (appState.uploadType === 'ppv') ? 'block' : 'none';
+            
+            DOM.uploadModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Cerrar modal de subida
+        function closeUploadModal() {
+            DOM.uploadModal.classList.remove('active');
+            document.body.style.overflow = '';
+            DOM.previewContainer.style.display = 'none';
+            DOM.fileInput.value = '';
+            DOM.contentTitle.value = '';
+            DOM.contentDescription.value = '';
+            DOM.contentPrice.value = '';
+            DOM.isExclusive.checked = false;
+        }
+
+        // Enviar contenido
+        function submitContent() {
+            const title = DOM.contentTitle.value.trim();
+            const description = DOM.contentDescription.value.trim();
+            const price = parseFloat(DOM.contentPrice.value) || 0;
+            const isExclusive = DOM.isExclusive.checked;
+            
+            if (!title) {
+                alert('Por favor, ingresa un título para tu contenido');
+                return;
+            }
+            
+            if (!DOM.previewImage.src && !DOM.previewImage.src.includes('data:')) {
+                alert('Por favor, selecciona un archivo para subir');
+                return;
+            }
+            
+            // Simular subida exitosa
+            const newContent = {
+                id: Date.now(),
+                type: appState.uploadType,
+                title: title,
+                thumbnail: DOM.previewImage.src || 'https://picsum.photos/400/300?random=' + Math.floor(Math.random() * 1000),
+                price: price,
+                views: 0,
+                likes: 0,
+                earnings: 0,
+                date: new Date().toISOString().split('T')[0],
+                isExclusive: isExclusive
+            };
+            
+            appState.contentData.unshift(newContent);
+            renderContent();
+            closeUploadModal();
+            
+            alert('¡Contenido publicado con éxito!');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OXOMAX TRADING - Expertos en Mercados Financieros</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff4d4d;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --glass-effect: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://raw.githubusercontent.com/welding30001994/IMAGENES-CC/refs/heads/main/fushia-minimalist-wallpaper-free-photo.jpg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            background: var(--glass-effect);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            border: 2px solid var(--glass-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo i {
+            font-size: 50px;
+            color: var(--text-light);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .menu-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            perspective: 1000px;
+        }
+        
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 900px;
+        }
+        
+        .menu-item {
+            position: relative;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--glass-effect);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .menu-item:hover::before {
+            opacity: 0.3;
+        }
+        
+        .menu-item a {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: var(--text-light);
+            z-index: 2;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .menu-item i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+        
+        .menu-item span {
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-item:hover span {
+            transform: scale(1.05);
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu {
+                grid-template-columns: 1fr;
+                width: 90%;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+            
+            .menu-item {
+                height: 70px;
+            }
+            
+            .menu-item i {
+                font-size: 20px;
+            }
+            
+            .menu-item span {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .logo i {
+                font-size: 30px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles-js"></div>
+    
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <h1>FANTASIAS BBW </h1>
+        <p class="tagline">No es solo un sueño... ¡Es tu realidad! Porque la verdadera magia está en abrazar tu cuerpo, tu sensualidad y tu derecho a desear y ser desead</p>
+    </div>
+    
+    <div class="menu-container">
+        <div class="menu">
+            <div class="menu-item">
+                <a href="public/basico.html">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>BASICO</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/pattern.html">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>PATTERN</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/buy.html">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>BUY</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/sell.html">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>SELL</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/descargas.html">
+                    <i class="fas fa-download"></i>
+                    <span>DESCARGAS</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/broker.html">
+                    <i class="fas fa-landmark"></i>
+                    <span>BROKERS</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/introduccion.html">
+                    <i class="fas fa-info-circle"></i>
+                    <span>INTRODUCCIÓN</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/forex.html">
+                    <i class="fas fa-globe"></i>
+                    <span>FOREX</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/cursos.html">
+                    <i class="fas fa-book"></i>
+                    <span>CURSOS</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/videos.html">
+                    <i class="fas fa-video"></i>
+                    <span>VIDEOS</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/señales.html">
+                    <i class="fas fa-bell"></i>
+                    <span>SEÑALES</span>
+                </a>
+            </div>
+            <div class="menu-item">
+                <a href="public/contacto.html">
+                    <i class="fas fa-envelope"></i>
+                    <span>CONTACTOS</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        © 2011 FANTASIAS BBW - Todos los derechos reservados
+    </div>
+    
+    <!-- Script for particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+    </script>
+</body>
+</html>

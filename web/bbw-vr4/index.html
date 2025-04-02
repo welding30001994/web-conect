@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>fantasiasbbw4</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasías BBW</title>
+    <style>
+        :root {
+            --primary-color: #8B008B;
+            --primary-light: #b030b0;
+            --secondary-color: #FF00FF;
+            --dark-bg: #1e1e1e;
+            --light-bg: #f0f2f5;
+            --text-dark: #333;
+            --text-light: #fff;
+            --card-bg: #fff;
+            --border-radius: 8px;
+            --box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        body.dark-mode .post-box,
+        body.dark-mode .post,
+        body.dark-mode .dropdown-menu,
+        body.dark-mode .chat-popup,
+        body.dark-mode .profile-header {
+            background-color: #2d2d2d;
+            color: var(--text-light);
+        }
+
+        body.dark-mode .post-input,
+        body.dark-mode .search,
+        body.dark-mode .chat-input {
+            background-color: #3d3d3d;
+            color: var(--text-light);
+            border-color: #444;
+        }
+
+        body.dark-mode .menu-item {
+            color: var(--text-light);
+        }
+
+        body.dark-mode .menu-item:hover {
+            background-color: #3d3d3d;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .search-container {
+            position: relative;
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 20px;
+        }
+
+        .search {
+            padding: 10px 15px 10px 40px;
+            border-radius: 20px;
+            border: none;
+            width: 100%;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-container {
+            position: relative;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .icon-container:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .live-badge {
+            background-color: #FF0000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Menú desplegable */
+        .menu-button {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 20px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 250px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: var(--light-bg);
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-top: 1px solid #eee;
+            margin-top: 5px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Contenido principal */
+        .main {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Estilos para publicaciones */
+        .post-box, .post {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .post-box {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .post-input {
+            width: calc(100% - 30px);
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(139, 0, 139, 0.2);
+        }
+
+        .post-button {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: var(--transition);
+            align-self: flex-end;
+        }
+
+        .post-button:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .post-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .media-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .media-button {
+            background: var(--light-bg);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-color);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .media-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        body.dark-mode .media-button {
+            background-color: #3d3d3d;
+            color: var(--secondary-color);
+        }
+
+        body.dark-mode .media-button:hover {
+            background-color: #4d4d4d;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .post-user {
+            font-weight: bold;
+            margin-right: 5px;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .post-user:hover {
+            text-decoration: underline;
+        }
+
+        .post-time {
+            color: #777;
+            font-size: 12px;
+        }
+
+        body.dark-mode .post-time {
+            color: #aaa;
+        }
+
+        .post-text {
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .post-media img, .post-media video {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            display: block;
+            margin: 10px 0;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .action {
+            display: flex;
+            align-items: center;
+            color: #65676b;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: var(--transition);
+            flex: 1;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .action:hover {
+            background-color: var(--light-bg);
+        }
+
+        body.dark-mode .action:hover {
+            background-color: #3d3d3d;
+        }
+
+        .action i {
+            margin-right: 5px;
+            font-size: 16px;
+        }
+
+        .action.liked {
+            color: var(--primary-color);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Previsualización de multimedia */
+        #media-preview {
+            position: relative;
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        #media-preview img, #media-preview video {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            margin-top: 5px;
+            display: block;
+        }
+
+        .cancel-media {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition);
+        }
+
+        .cancel-media:hover {
+            background-color: rgba(0,0,0,0.9);
+            transform: scale(1.1);
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 5px;
+            background-color: #f0f0f0;
+            margin-top: 5px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Chat emergente */
+        .chat-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            max-height: 70vh;
+            transition: var(--transition);
+        }
+
+        .chat-popup.active {
+            display: flex;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .chat-header {
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .chat-title {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-close {
+            cursor: pointer;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .chat-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            margin-bottom: 5px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s;
+            position: relative;
+        }
+
+        .received {
+            background-color: #f1f1f1;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        body.dark-mode .received {
+            background-color: #3d3d3d;
+        }
+
+        .sent {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #777;
+            margin-top: 3px;
+            text-align: right;
+        }
+
+        body.dark-mode .message-time {
+            color: #aaa;
+        }
+
+        .chat-input-container {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .chat-send {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .chat-send:hover {
+            background-color: var(--primary-light);
+            transform: scale(1.05);
+        }
+
+        .chat-send:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Notificación toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1100;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        /* Perfil de usuario */
+        .profile-header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .profile-header h2 {
+            margin: 10px 0;
+            color: var(--primary-color);
+        }
+
+        .back-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: var(--transition);
+        }
+
+        .back-button:hover {
+            background-color: var(--primary-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-wrap: wrap;
+                padding: 10px;
+            }
+            
+            .logo {
+                order: 1;
+                margin-bottom: 10px;
+            }
+            
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin: 10px 0;
+            }
+            
+            .header-icons {
+                order: 2;
+                margin-left: auto;
+            }
+            
+            .main {
+                padding: 10px;
+            }
+            
+            .chat-popup {
+                width: 90%;
+                right: 5%;
+                max-height: 60vh;
+            }
+
+            .profile-header {
+                padding: 15px;
+            }
+
+            .profile-header img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="https://via.placeholder.com/30" alt="Logo">
+            <span>Fantasías BBW</span>
+        </div>
+        
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search" placeholder="Buscar en Fantasías BBW..." id="search-input">
+        </div>
+        
+        <div class="header-icons">
+            <div class="icon-container" id="live-icon">
+                <i class="fas fa-video"></i>
+                <div class="notification-badge live-badge">24</div>
+            </div>
+            
+            <div class="icon-container" id="chat-icon">
+                <i class="fas fa-comment-dots"></i>
+                <div class="notification-badge">3</div>
+            </div>
+            
+            <div class="icon-container">
+                <button class="menu-button" id="menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <div class="menu-item">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Mi perfil</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Amigos</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Agregar contenido</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-video"></i>
+                        <span>Iniciar video</span>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </div>
+                    <div class="theme-toggle">
+                        <span><i class="fas fa-moon"></i> Modo oscuro</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar sesión</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main">
+        <div class="post-box">
+            <input type="text" id="post-input" class="post-input" placeholder="¿Qué estás pensando?">
+            
+            <div class="media-buttons">
+                <button id="photo-button" class="media-button">
+                    <i class="fas fa-camera"></i> Foto
+                </button>
+                <button id="video-button" class="media-button">
+                    <i class="fas fa-video"></i> Video
+                </button>
+                <button id="tag-button" class="media-button">
+                    <i class="fas fa-tag"></i> Etiquetar
+                </button>
+                <button id="feeling-button" class="media-button">
+                    <i class="fas fa-smile"></i> Estado
+                </button>
+            </div>
+            
+            <input type="file" id="media-input" accept="image/*, video/*" class="hidden">
+            <div id="media-preview"></div>
+            <div class="upload-progress hidden" id="upload-progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <button id="post-button" class="post-button" disabled>Publicar</button>
+        </div>
+        
+        <div id="profile-container"></div>
+        <div id="posts-container"></div>
+    </div>
+
+    <div class="chat-popup" id="chat-popup">
+        <div class="chat-header" id="chat-header">
+            <div class="chat-title">
+                <i class="fas fa-comments"></i>
+                <span>Chat</span>
+            </div>
+            <span class="chat-close" id="chat-close">&times;</span>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Escribe un mensaje...">
+            <button class="chat-send" id="chat-send" disabled><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Variables globales
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        let currentUser = {
+            name: "Usuario Actual",
+            avatar: "https://via.placeholder.com/40"
+        };
+
+        // Datos de ejemplo si no hay posts
+        if (posts.length === 0) {
+            posts = [
+                {
+                    id: 1,
+                    user: {
+                        name: "Ana BBW",
+                        avatar: "https://via.placeholder.com/150/8B008B/FFFFFF?text=A"
+                    },
+                    text: "¡Disfrutando de un día soleado! 🌞",
+                    media: {
+                        type: "image",
+                        url: "https://via.placeholder.com/600x400"
+                    },
+                    likes: 15,
+                    comments: [],
+                    timestamp: new Date(Date.now() - 3600000).toISOString()
+                },
+                {
+                    id: 2,
+                    user: {
+                        name: "Luisa Curvy",
+                        avatar: "https://via.placeholder.com/150/FF00FF/FFFFFF?text=L"
+                    },
+                    text: "Nuevo outfit para la primavera 💐",
+                    media: null,
+                    likes: 8,
+                    comments: [],
+                    timestamp: new Date(Date.now() - 7200000).toISOString()
+                },
+                {
+                    id: 3,
+                    user: {
+                        name: "Marta Plus",
+                        avatar: "https://via.placeholder.com/150/8B008B/FFFFFF?text=M"
+                    },
+                    text: "Compartiendo mi nueva sesión de fotos 📸",
+                    media: {
+                        type: "image",
+                        url: "https://via.placeholder.com/600x400/8B008B/FFFFFF?text=BBW"
+                    },
+                    likes: 23,
+                    comments: [],
+                    timestamp: new Date(Date.now() - 10800000).toISOString()
+                }
+            ];
+            savePosts();
+        }
+
+        // Elementos del DOM
+        const themeToggle = document.getElementById('theme-toggle');
+        const postInput = document.getElementById('post-input');
+        const postButton = document.getElementById('post-button');
+        const postsContainer = document.getElementById('posts-container');
+        const profileContainer = document.getElementById('profile-container');
+        const photoButton = document.getElementById('photo-button');
+        const videoButton = document.getElementById('video-button');
+        const mediaInput = document.getElementById('media-input');
+        const mediaPreview = document.getElementById('media-preview');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('progress-bar');
+        const chatIcon = document.getElementById('chat-icon');
+        const chatPopup = document.getElementById('chat-popup');
+        const chatClose = document.getElementById('chat-close');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const chatHeader = document.getElementById('chat-header');
+        const toast = document.getElementById('toast');
+        const searchInput = document.getElementById('search-input');
+        const liveIcon = document.getElementById('live-icon');
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                themeToggle.checked = true;
+            }
+            
+            loadPosts();
+            simulateNotifications();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Menú desplegable
+            const menuButton = document.getElementById('menu-button');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', () => {
+                dropdownMenu.classList.remove('active');
+            });
+
+            // Tema oscuro
+            themeToggle.addEventListener('change', toggleDarkMode);
+
+            // Publicaciones
+            postInput.addEventListener('input', togglePostButton);
+            postButton.addEventListener('click', createPost);
+            photoButton.addEventListener('click', () => {
+                mediaInput.accept = "image/*";
+                mediaInput.click();
+            });
+            videoButton.addEventListener('click', () => {
+                mediaInput.accept = "video/*";
+                mediaInput.click();
+            });
+            mediaInput.addEventListener('change', handleMediaUpload);
+
+            // Chat
+            chatIcon.addEventListener('click', toggleChat);
+            chatClose.addEventListener('click', toggleChat);
+            chatHeader.addEventListener('click', toggleChat);
+            chatInput.addEventListener('input', toggleSendButton);
+            chatSend.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Búsqueda
+            searchInput.addEventListener('input', debounce(searchPosts, 300));
+
+            // Live icon
+            liveIcon.addEventListener('click', () => {
+                showToast('🔴 24 mujeres en vivo ahora');
+            });
+
+            // Agregar contenido
+            document.querySelectorAll('.menu-item')[2].addEventListener('click', () => {
+                showToast('📷 Función "Agregar contenido" seleccionada');
+            });
+
+            // Iniciar video
+            document.querySelectorAll('.menu-item')[3].addEventListener('click', () => {
+                showToast('🎥 Preparando transmisión en vivo...');
+            });
+        }
+
+        // Alternar modo oscuro
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', darkMode);
+            
+            const icon = themeToggle.parentElement.querySelector('i');
+            if (darkMode) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        // Alternar visibilidad del chat
+        function toggleChat() {
+            chatPopup.classList.toggle('active');
+            
+            if (chatPopup.classList.contains('active')) {
+                document.querySelector('.notification-badge').style.display = 'none';
+            }
+        }
+
+        // Habilitar/deshabilitar botón de publicar
+        function togglePostButton() {
+            postButton.disabled = postInput.value.trim() === '' && !mediaInput.files[0];
+        }
+
+        // Habilitar/deshabilitar botón de enviar mensaje
+        function toggleSendButton() {
+            chatSend.disabled = chatInput.value.trim() === '';
+        }
+
+        // Manejar carga de multimedia
+        function handleMediaUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('El archivo es demasiado grande (máx. 5MB)');
+                return;
+            }
+
+            mediaPreview.innerHTML = "";
+            const cancelButton = document.createElement("button");
+            cancelButton.className = "cancel-media";
+            cancelButton.innerHTML = '<i class="fas fa-times"></i>';
+            cancelButton.onclick = cancelPreview;
+
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = document.createElement("img");
+                    img.src = event.target.result;
+                    img.alt = "Previsualización";
+                    mediaPreview.appendChild(img);
+                    mediaPreview.appendChild(cancelButton);
+                    togglePostButton();
+                };
+                reader.readAsDataURL(file);
+            } 
+            else if (file.type.startsWith("video/")) {
+                const videoURL = URL.createObjectURL(file);
+                const video = document.createElement("video");
+                video.controls = true;
+                video.innerHTML = `<source src="${videoURL}" type="${file.type}">Tu navegador no soporta videos.`;
+                mediaPreview.appendChild(video);
+                mediaPreview.appendChild(cancelButton);
+                togglePostButton();
+            }
+        }
+
+        // Cancelar previsualización
+        function cancelPreview() {
+            mediaPreview.innerHTML = "";
+            mediaInput.value = "";
+            uploadProgress.classList.add('hidden');
+            togglePostButton();
+        }
+
+        // Crear nueva publicación
+        function createPost() {
+            const postText = postInput.value.trim();
+            const file = mediaInput.files[0];
+
+            if (!postText && !file) return;
+
+            if (file) {
+                uploadProgress.classList.remove('hidden');
+                progressBar.style.width = '0%';
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    progressBar.style.width = `${Math.min(progress, 100)}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            finishPostCreation(postText, file);
+                        }, 300);
+                    }
+                }, 200);
+            } else {
+                finishPostCreation(postText);
+            }
+        }
+
+        // Finalizar creación de publicación
+        function finishPostCreation(postText, file) {
+            uploadProgress.classList.add('hidden');
+            
+            const newPost = {
+                id: Date.now(),
+                user: currentUser,
+                text: postText,
+                media: file ? {
+                    type: file.type.startsWith("image/") ? "image" : "video",
+                    url: file.type.startsWith("image/") ? URL.createObjectURL(file) : null,
+                    file: file.type.startsWith("video/") ? file : null
+                } : null,
+                likes: 0,
+                comments: [],
+                timestamp: new Date().toISOString()
+            };
+
+            posts.unshift(newPost);
+            savePosts();
+            renderPosts();
+            
+            postInput.value = "";
+            mediaInput.value = "";
+            mediaPreview.innerHTML = "";
+            postButton.disabled = true;
+            
+            showToast('Publicación creada con éxito');
+        }
+
+        // Cargar publicaciones
+        function loadPosts() {
+            renderPosts();
+        }
+
+        // Renderizar publicaciones
+        function renderPosts(postsToRender = posts, isProfile = false) {
+            if (!isProfile) {
+                postsContainer.innerHTML = "";
+                profileContainer.innerHTML = "";
+            }
+
+            const container = isProfile ? profileContainer : postsContainer;
+            
+            if (postsToRender.length === 0) {
+                container.innerHTML = '<div class="post"><div class="post-text">No se encontraron publicaciones</div></div>';
+                return;
+            }
+            
+            if (!isProfile) {
+                postsToRender.forEach(post => {
+                    renderPost(post, container);
+                });
+            } else {
+                // Para perfil, primero mostramos el header
+                const user = postsToRender[0].user;
+                profileContainer.innerHTML = `
+                    <div class="profile-header">
+                        <img src="${user.avatar}" alt="${user.name}">
+                        <h2>${user.name}</h2>
+                        <button class="back-button" onclick="backToHome()">← Volver al inicio</button>
+                    </div>
+                `;
+                
+                // Luego las publicaciones
+                const postsDiv = document.createElement('div');
+                postsToRender.forEach(post => {
+                    renderPost(post, postsDiv);
+                });
+                profileContainer.appendChild(postsDiv);
+                postsContainer.style.display = 'none';
+            }
+        }
+
+        // Renderizar una sola publicación
+        function renderPost(post, container) {
+            const postDate = new Date(post.timestamp);
+            const now = new Date();
+            const diffHours = Math.floor((now - postDate) / (1000 * 60 * 60));
+            let timeAgo;
+            
+            if (diffHours < 1) {
+                const diffMinutes = Math.floor((now - postDate) / (1000 * 60));
+                timeAgo = `${diffMinutes} min`;
+            } else if (diffHours < 24) {
+                timeAgo = `${diffHours} h`;
+            } else {
+                const diffDays = Math.floor(diffHours / 24);
+                timeAgo = `${diffDays} d`;
+            }
+            
+            let mediaHTML = "";
+            if (post.media) {
+                if (post.media.type === "image") {
+                    mediaHTML = `
+                        <div class="post-media">
+                            <img src="${post.media.url}" alt="Publicación" loading="lazy">
+                        </div>
+                    `;
+                } else if (post.media.type === "video") {
+                    const videoURL = post.media.url || URL.createObjectURL(post.media.file);
+                    mediaHTML = `
+                        <div class="post-media">
+                            <video controls>
+                                <source src="${videoURL}" type="${post.media.file?.type || 'video/mp4'}">
+                                Tu navegador no soporta videos.
+                            </video>
+                        </div>
+                    `;
+                }
+            }
+            
+            const postElement = document.createElement('div');
+            postElement.className = 'post';
+            postElement.dataset.id = post.id;
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <img class="post-avatar" src="${post.user.avatar}" alt="${post.user.name}">
+                    <div>
+                        <span class="post-user" onclick="viewProfile('${post.user.name}')">${post.user.name}</span>
+                        <span class="post-time">${timeAgo}</span>
+                    </div>
+                </div>
+                ${post.text ? `<div class="post-text">${post.text}</div>` : ''}
+                ${mediaHTML}
+                <div class="post-actions">
+                    <div class="action" onclick="toggleLike(this, ${post.id})">
+                        <i class="far fa-thumbs-up"></i> Me gusta (${post.likes})
+                    </div>
+                    <div class="action">
+                        <i class="far fa-comment"></i> Comentar
+                    </div>
+                    <div class="action">
+                        <i class="fas fa-share"></i> Compartir
+                    </div>
+                </div>
+            `;
+            
+            const likeButton = postElement.querySelector('.action');
+            if (post.likes > 0) {
+                likeButton.classList.add('liked');
+                likeButton.querySelector('i').classList.replace('far', 'fas');
+            }
+            
+            container.appendChild(postElement);
+        }
+
+        // Ver perfil de usuario
+        function viewProfile(username) {
+            const userPosts = posts.filter(post => post.user.name === username);
+            renderPosts(userPosts, true);
+        }
+
+        // Volver al inicio
+        function backToHome() {
+            profileContainer.innerHTML = "";
+            postsContainer.style.display = "block";
+            renderPosts();
+        }
+
+        // Alternar like
+        function toggleLike(button, postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const isLiked = button.classList.contains('liked');
+            const icon = button.querySelector('i');
+            
+            if (isLiked) {
+                button.classList.remove('liked');
+                icon.classList.replace('fas', 'far');
+                post.likes = Math.max(0, post.likes - 1);
+            } else {
+                button.classList.add('liked');
+                icon.classList.replace('far', 'fas');
+                post.likes += 1;
+                
+                button.classList.add('pulse');
+                setTimeout(() => {
+                    button.classList.remove('pulse');
+                }, 1000);
+            }
+            
+            savePosts();
+        }
+
+        // Enviar mensaje de chat
+        function sendMessage() {
+            const messageText = chatInput.value.trim();
+            if (messageText === '') return;
+
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message sent';
+            messageElement.innerHTML = `
+                ${messageText}
+                <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            `;
+            chatMessages.appendChild(messageElement);
+
+            chatInput.value = '';
+            chatSend.disabled = true;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            setTimeout(() => {
+                const responses = [
+                    "¡Interesante! ¿Qué más?",
+                    "¿En serio? Cuéntame más 😊",
+                    "Jajaja, qué gracioso 😄",
+                    "Me encanta eso ❤️",
+                    "¿Y luego qué pasó?",
+                    "Wow, eso es genial!"
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                
+                const responseElement = document.createElement('div');
+                responseElement.className = 'message received';
+                responseElement.innerHTML = `
+                    ${randomResponse}
+                    <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                `;
+                chatMessages.appendChild(responseElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                if (!chatPopup.classList.contains('active')) {
+                    const badge = document.querySelector('.notification-badge');
+                    badge.style.display = 'flex';
+                    const currentCount = parseInt(badge.textContent) || 0;
+                    badge.textContent = currentCount + 1;
+                    
+                    if (!document.hasFocus()) {
+                        showToast('💬 Nuevo mensaje recibido');
+                    }
+                }
+            }, 1000 + Math.random() * 2000);
+        }
+
+        // Buscar publicaciones
+        function searchPosts() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                renderPosts();
+                return;
+            }
+            
+            const filteredPosts = posts.filter(post => {
+                return (
+                    (post.text && post.text.toLowerCase().includes(searchTerm)) ||
+                    (post.user.name.toLowerCase().includes(searchTerm))
+                );
+            });
+            
+            renderPosts(filteredPosts);
+        }
+
+        // Mostrar notificación toast
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Simular notificaciones
+        function simulateNotifications() {
+            setInterval(() => {
+                const liveBadge = document.querySelector('.live-badge');
+                const randomCount = Math.floor(Math.random() * 10) + 20;
+                liveBadge.textContent = randomCount;
+                
+                if (Math.random() > 0.8 && !document.hasFocus()) {
+                    showToast(`🔴 ${randomCount} mujeres en vivo ahora`);
+                }
+            }, 10000);
+        }
+
+        // Guardar publicaciones en localStorage
+        function savePosts() {
+            localStorage.setItem('posts', JSON.stringify(posts));
+        }
+
+        // Función debounce para búsqueda
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+
+        // Hacer funciones accesibles globalmente
+        window.toggleLike = toggleLike;
+        window.showToast = showToast;
+        window.viewProfile = viewProfile;
+        window.backToHome = backToHome;
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
