@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FuturoPig - Registro Futurista de Cerdos</title>
+    <title>PigTrax - Sistema de Registro Porcino</title>
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4cb944;
+            --light: #f8f9fa;
             --dark: #2c3e50;
-            --success: #2ecc71;
-            --warning: #f39c12;
             --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --gray: #6c757d;
         }
         
         * {
@@ -24,8 +25,8 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: var(--light);
+            background: linear-gradient(135deg, #8bc6ec 0%, #9599e2 100%);
+            color: var(--dark);
             min-height: 100vh;
             padding: 20px;
         }
@@ -33,29 +34,30 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(44, 62, 80, 0.9);
+            background: white;
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
         
         header {
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
-            border-bottom: 2px solid var(--secondary);
+            border-bottom: 2px solid var(--primary);
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             color: var(--secondary);
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
         
         h2 {
             color: var(--secondary);
             margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
         }
         
         .grid {
@@ -64,17 +66,17 @@
             gap: 20px;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .grid {
                 grid-template-columns: 1fr;
             }
         }
         
         .form-section, .list-section {
-            background: rgba(52, 73, 94, 0.7);
+            background: var(--light);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .form-group {
@@ -85,14 +87,15 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: var(--secondary);
         }
         
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
-            border: none;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            background: var(--light);
+            background: white;
             color: var(--dark);
         }
         
@@ -106,12 +109,12 @@
         }
         
         .btn-primary {
-            background: var(--secondary);
+            background: var(--primary);
             color: white;
         }
         
         .btn-primary:hover {
-            background: #2980b9;
+            background: var(--secondary);
             transform: translateY(-2px);
         }
         
@@ -120,9 +123,17 @@
             color: white;
         }
         
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
         .btn-success {
             background: var(--success);
             color: white;
+        }
+        
+        .btn-success:hover {
+            background: #27ae60;
         }
         
         .btn-warning {
@@ -130,26 +141,30 @@
             color: white;
         }
         
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        
         .pig-card {
-            background: rgba(236, 240, 241, 0.1);
+            background: white;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary);
             transition: all 0.3s ease;
-            border-left: 5px solid var(--secondary);
         }
         
         .pig-card.sacado {
             opacity: 0.7;
-            border-left: 5px solid var(--danger);
-            background: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid var(--danger);
+            background: #ffeaea;
         }
         
         .pig-info {
-            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .pig-actions {
@@ -160,7 +175,7 @@
         .pig-number {
             font-size: 1.2rem;
             font-weight: bold;
-            color: var(--secondary);
+            color: var(--primary);
         }
         
         .pig-details {
@@ -168,26 +183,31 @@
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 10px;
             margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
         }
         
         .detail-item {
             font-size: 0.9rem;
         }
         
+        .detail-item strong {
+            color: var(--secondary);
+        }
+        
         .action-buttons {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
         .export-options {
             display: flex;
             gap: 10px;
             margin-top: 20px;
-        }
-        
-        .neon-text {
-            text-shadow: 0 0 5px var(--secondary), 0 0 10px var(--secondary), 0 0 15px var(--secondary);
+            flex-wrap: wrap;
         }
         
         .stats {
@@ -198,128 +218,275 @@
         }
         
         .stat-card {
-            background: rgba(52, 152, 219, 0.2);
+            background: white;
             padding: 15px;
             border-radius: 8px;
             text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
         
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
-            color: var(--secondary);
+            color: var(--primary);
         }
         
-        .futuristic-element {
-            position: relative;
-            overflow: hidden;
+        .video-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
         }
         
-        .futuristic-element::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
         }
         
-        @keyframes shine {
-            0% {
-                left: -50%;
-            }
-            100% {
-                left: 150%;
-            }
+        .video-item {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-item video {
+            width: 100%;
+            border-radius: 5px;
+        }
+        
+        .video-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-box input {
+            flex: 1;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .tab-container {
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="neon-text">FUTURO<span style="color: #e74c3c;">PIG</span></h1>
-            <p>Sistema de Gestión Porcina Futurista</p>
+            <h1>PigTrax - Registro Porcino</h1>
+            <p>Sistema de gestión para el registro y seguimiento de cerdos</p>
         </header>
         
-        <div class="grid">
-            <div class="form-section futuristic-element">
-                <h2>Registrar Nuevo Cerdo</h2>
-                <form id="pig-form">
-                    <div class="form-group">
-                        <label for="pigNumber">Número de Cerdo:</label>
-                        <input type="number" id="pigNumber" required min="1">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="earTag">Número de Arete:</label>
-                        <input type="text" id="earTag" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="liveWeight">Peso Vivo (kg):</label>
-                        <input type="number" id="liveWeight" step="0.1" required min="1">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="liveWeightLbs">Peso Vivo (lbs):</label>
-                        <input type="number" id="liveWeightLbs" step="0.1" readonly>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="ownerName">Nombre del Propietario:</label>
-                        <input type="text" id="ownerName" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="penNumber">Número de Chanchera:</label>
-                        <input type="number" id="penNumber" required min="1">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="deadWeight">Peso Muerto (kg):</label>
-                        <input type="number" id="deadWeight" step="0.1" min="0">
-                    </div>
-                    
-                    <button type="submit" class="btn-primary">Guardar Registro</button>
-                </form>
-                
-                <div class="action-buttons">
-                    <button id="clear-btn" class="btn-warning">Limpiar Formulario</button>
-                    <button id="save-project" class="btn-success">Guardar Proyecto</button>
-                </div>
-                
-                <div class="export-options">
-                    <button id="export-json" class="btn-primary">Exportar JSON</button>
-                    <button id="export-csv" class="btn-primary">Exportar CSV</button>
-                </div>
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="registro">Registro</div>
+                <div class="tab" data-tab="lista">Lista de Cerdos</div>
+                <div class="tab" data-tab="videos">Videos</div>
             </div>
             
-            <div class="list-section">
-                <h2>Registros de Cerdos</h2>
-                <div id="pigs-list"></div>
+            <div class="tab-content">
+                <!-- Pestaña de Registro -->
+                <div class="tab-pane active" id="registro">
+                    <div class="grid">
+                        <div class="form-section">
+                            <h2>Registrar Nuevo Cerdo</h2>
+                            <form id="pig-form">
+                                <div class="form-group">
+                                    <label for="pigNumber">Número de Cerdo:</label>
+                                    <input type="number" id="pigNumber" required min="1">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="earTag">Número de Arete:</label>
+                                    <input type="text" id="earTag" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="liveWeight">Peso Vivo (kg):</label>
+                                    <input type="number" id="liveWeight" step="0.1" required min="1">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="liveWeightLbs">Peso Vivo (lbs):</label>
+                                    <input type="number" id="liveWeightLbs" step="0.1" readonly>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="ownerName">Nombre del Propietario:</label>
+                                    <input type="text" id="ownerName" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="penNumber">Número de Chanchera:</label>
+                                    <input type="number" id="penNumber" required min="1">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="deadWeight">Peso Muerto (kg):</label>
+                                    <input type="number" id="deadWeight" step="0.1" min="0">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="notes">Notas:</label>
+                                    <textarea id="notes" rows="3"></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn-primary">Guardar Registro</button>
+                            </form>
+                            
+                            <div class="action-buttons">
+                                <button id="clear-btn" class="btn-warning">Limpiar Formulario</button>
+                                <button id="save-project" class="btn-success">Guardar Proyecto</button>
+                            </div>
+                            
+                            <div class="export-options">
+                                <button id="export-json" class="btn-primary">Exportar JSON</button>
+                                <button id="export-csv" class="btn-primary">Exportar CSV</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h2>Capturar Video para Identificación</h2>
+                            <div class="video-section">
+                                <p>Usa esta función para grabar videos que te ayuden a identificar visualmente a cada cerdo.</p>
+                                
+                                <div class="form-group">
+                                    <label for="video-pig-number">Seleccionar Cerdo para Grabar:</label>
+                                    <select id="video-pig-number">
+                                        <option value="">-- Seleccionar cerdo --</option>
+                                    </select>
+                                </div>
+                                
+                                <div id="video-container">
+                                    <video id="video-preview" autoplay muted playsinline></video>
+                                    <div class="video-actions">
+                                        <button id="start-camera" class="btn-primary">Activar Cámara</button>
+                                        <button id="start-record" class="btn-success" disabled>Grabar Video</button>
+                                        <button id="stop-record" class="btn-danger" disabled>Detener</button>
+                                    </div>
+                                </div>
+                                
+                                <div id="recorded-videos" class="video-container">
+                                    <!-- Los videos grabados aparecerán aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-label">Total Cerdos</div>
-                        <div class="stat-value" id="total-pigs">0</div>
+                <!-- Pestaña de Lista -->
+                <div class="tab-pane" id="lista">
+                    <div class="list-section">
+                        <h2>Registros de Cerdos</h2>
+                        
+                        <div class="search-box">
+                            <input type="text" id="search-input" placeholder="Buscar cerdos por número, arete o propietario...">
+                            <button id="filter-active" class="btn-primary">Solo Activos</button>
+                        </div>
+                        
+                        <div id="pigs-list"></div>
+                        
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Cerdos</div>
+                                <div class="stat-value" id="total-pigs">0</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-label">Cerdos Activos</div>
+                                <div class="stat-value" id="active-pigs">0</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-label">Promedio Peso Vivo</div>
+                                <div class="stat-value" id="avg-weight">0 kg</div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-label">Cerdos Activos</div>
-                        <div class="stat-value" id="active-pigs">0</div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-label">Promedio Peso</div>
-                        <div class="stat-value" id="avg-weight">0 kg</div>
+                </div>
+                
+                <!-- Pestaña de Videos -->
+                <div class="tab-pane" id="videos">
+                    <div class="list-section">
+                        <h2>Videos de Identificación</h2>
+                        
+                        <div class="search-box">
+                            <input type="text" id="video-search" placeholder="Buscar videos por número de cerdo...">
+                        </div>
+                        
+                        <div id="videos-list" class="video-container">
+                            <!-- Los videos guardados se mostrarán aquí -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="notification" class="notification"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -335,6 +502,25 @@
             const totalPigsSpan = document.getElementById('total-pigs');
             const activePigsSpan = document.getElementById('active-pigs');
             const avgWeightSpan = document.getElementById('avg-weight');
+            const searchInput = document.getElementById('search-input');
+            const notification = document.getElementById('notification');
+            const videoPigNumber = document.getElementById('video-pig-number');
+            const videoPreview = document.getElementById('video-preview');
+            const startCameraBtn = document.getElementById('start-camera');
+            const startRecordBtn = document.getElementById('start-record');
+            const stopRecordBtn = document.getElementById('stop-record');
+            const recordedVideos = document.getElementById('recorded-videos');
+            const videosList = document.getElementById('videos-list');
+            const videoSearch = document.getElementById('video-search');
+            const filterActiveBtn = document.getElementById('filter-active');
+            const tabs = document.querySelectorAll('.tab');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            
+            // Variables para la grabación de video
+            let mediaStream = null;
+            let mediaRecorder = null;
+            let recordedChunks = [];
+            let currentPigNumber = null;
             
             // Convertir kg a lbs
             liveWeightInput.addEventListener('input', function() {
@@ -342,10 +528,43 @@
                 liveWeightLbsInput.value = (kg * 2.20462).toFixed(2);
             });
             
+            // Mostrar notificación
+            function showNotification(message, type = 'success') {
+                notification.textContent = message;
+                notification.className = 'notification show';
+                notification.style.background = type === 'success' ? 'var(--success)' : 'var(--danger)';
+                
+                setTimeout(() => {
+                    notification.className = 'notification';
+                }, 3000);
+            }
+            
+            // Cambio de pestañas
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Desactivar todas las pestañas
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    // Activar la pestaña seleccionada
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Si es la pestaña de videos, cargar los videos
+                    if (tabId === 'videos') {
+                        loadVideosList();
+                    }
+                });
+            });
+            
             // Cargar datos al iniciar
-            let pigs = JSON.parse(localStorage.getItem('futuroPigData')) || [];
+            let pigs = JSON.parse(localStorage.getItem('pigData')) || [];
+            let pigVideos = JSON.parse(localStorage.getItem('pigVideos')) || [];
             renderPigsList();
             updateStats();
+            updatePigSelection();
             
             // Manejar envío del formulario
             pigForm.addEventListener('submit', function(e) {
@@ -358,6 +577,7 @@
                 const ownerName = document.getElementById('ownerName').value;
                 const penNumber = document.getElementById('penNumber').value;
                 const deadWeight = document.getElementById('deadWeight').value || 0;
+                const notes = document.getElementById('notes').value;
                 
                 // Verificar si ya existe un cerdo con este número
                 const existingIndex = pigs.findIndex(pig => pig.pigNumber === pigNumber);
@@ -370,6 +590,7 @@
                     ownerName,
                     penNumber,
                     deadWeight,
+                    notes,
                     status: 'active',
                     date: new Date().toLocaleDateString()
                 };
@@ -377,27 +598,46 @@
                 if (existingIndex !== -1) {
                     // Actualizar cerdo existente
                     pigs[existingIndex] = pigData;
+                    showNotification('Cerdo actualizado correctamente!');
                 } else {
                     // Agregar nuevo cerdo
                     pigs.push(pigData);
+                    showNotification('Cerdo registrado correctamente!');
                 }
                 
                 // Guardar y actualizar
                 saveData();
                 renderPigsList();
                 updateStats();
+                updatePigSelection();
                 pigForm.reset();
+            });
+            
+            // Búsqueda de cerdos
+            searchInput.addEventListener('input', function() {
+                renderPigsList(this.value.toLowerCase());
+            });
+            
+            // Filtrar cerdos activos
+            filterActiveBtn.addEventListener('click', function() {
+                renderPigsList('', true);
+            });
+            
+            // Búsqueda de videos
+            videoSearch.addEventListener('input', function() {
+                loadVideosList(this.value);
             });
             
             // Limpiar formulario
             clearBtn.addEventListener('click', function() {
                 pigForm.reset();
+                showNotification('Formulario limpiado');
             });
             
             // Guardar proyecto
             saveProjectBtn.addEventListener('click', function() {
                 saveData();
-                alert('Proyecto guardado correctamente!');
+                showNotification('Proyecto guardado correctamente!');
             });
             
             // Exportar JSON
@@ -405,34 +645,209 @@
                 const dataStr = JSON.stringify(pigs, null, 2);
                 const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
                 
-                const exportFileDefaultName = 'futuropig_data.json';
+                const exportFileDefaultName = 'pig_data.json';
                 
                 const linkElement = document.createElement('a');
                 linkElement.setAttribute('href', dataUri);
                 linkElement.setAttribute('download', exportFileDefaultName);
                 linkElement.click();
+                
+                showNotification('Datos exportados en formato JSON');
             });
             
             // Exportar CSV
             exportCsvBtn.addEventListener('click', function() {
-                let csvContent = "Número,Arete,Peso Vivo(kg),Peso Vivo(lbs),Propietario,Chanchera,Peso Muerto(kg),Estado,Fecha\n";
+                let csvContent = "Número,Arete,Peso Vivo(kg),Peso Vivo(lbs),Propietario,Chanchera,Peso Muerto(kg),Estado,Fecha,Notas\n";
                 
                 pigs.forEach(pig => {
-                    csvContent += `"${pig.pigNumber}","${pig.earTag}","${pig.liveWeight}","${pig.liveWeightLbs}","${pig.ownerName}","${pig.penNumber}","${pig.deadWeight}","${pig.status}","${pig.date}"\n`;
+                    csvContent += `"${pig.pigNumber}","${pig.earTag}","${pig.liveWeight}","${pig.liveWeightLbs}","${pig.ownerName}","${pig.penNumber}","${pig.deadWeight}","${pig.status}","${pig.date}","${pig.notes}"\n`;
                 });
                 
                 const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
                 const link = document.createElement('a');
                 link.setAttribute('href', encodedUri);
-                link.setAttribute('download', 'futuropig_data.csv');
+                link.setAttribute('download', 'pig_data.csv');
                 document.body.appendChild(link);
                 
                 link.click();
                 document.body.removeChild(link);
+                
+                showNotification('Datos exportados en formato CSV');
             });
             
+            // Actualizar selección de cerdos para video
+            function updatePigSelection() {
+                videoPigNumber.innerHTML = '<option value="">-- Seleccionar cerdo --</option>';
+                
+                pigs.forEach(pig => {
+                    if (pig.status === 'active') {
+                        const option = document.createElement('option');
+                        option.value = pig.pigNumber;
+                        option.textContent = `Cerdo #${pig.pigNumber} (Arete: ${pig.earTag})`;
+                        videoPigNumber.appendChild(option);
+                    }
+                });
+            }
+            
+            // Iniciar cámara
+            startCameraBtn.addEventListener('click', async function() {
+                currentPigNumber = videoPigNumber.value;
+                
+                if (!currentPigNumber) {
+                    showNotification('Primero selecciona un cerdo', 'danger');
+                    return;
+                }
+                
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ 
+                        video: true, 
+                        audio: true 
+                    });
+                    
+                    videoPreview.srcObject = mediaStream;
+                    startRecordBtn.disabled = false;
+                    startCameraBtn.disabled = true;
+                    
+                    showNotification('Cámara activada. Ahora puedes grabar.');
+                } catch (error) {
+                    showNotification('Error al acceder a la cámara: ' + error.message, 'danger');
+                    console.error('Error accessing media devices:', error);
+                }
+            });
+            
+            // Iniciar grabación
+            startRecordBtn.addEventListener('click', function() {
+                if (!mediaStream) {
+                    showNotification('Primero activa la cámara', 'danger');
+                    return;
+                }
+                
+                recordedChunks = [];
+                
+                try {
+                    mediaRecorder = new MediaRecorder(mediaStream);
+                    
+                    mediaRecorder.ondataavailable = function(e) {
+                        if (e.data.size > 0) {
+                            recordedChunks.push(e.data);
+                        }
+                    };
+                    
+                    mediaRecorder.onstop = function() {
+                        const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+                        const videoUrl = URL.createObjectURL(blob);
+                        
+                        // Guardar el video
+                        const videoData = {
+                            pigNumber: currentPigNumber,
+                            videoUrl: videoUrl,
+                            date: new Date().toLocaleString()
+                        };
+                        
+                        pigVideos.push(videoData);
+                        localStorage.setItem('pigVideos', JSON.stringify(pigVideos));
+                        
+                        // Mostrar el video grabado
+                        const videoItem = document.createElement('div');
+                        videoItem.className = 'video-item';
+                        videoItem.innerHTML = `
+                            <video controls>
+                                <source src="${videoUrl}" type="video/mp4">
+                            </video>
+                            <p>Cerdo #${currentPigNumber} - ${videoData.date}</p>
+                            <button class="btn-danger delete-video">Eliminar</button>
+                        `;
+                        
+                        recordedVideos.appendChild(videoItem);
+                        
+                        // Agregar evento para eliminar video
+                        videoItem.querySelector('.delete-video').addEventListener('click', function() {
+                            const index = pigVideos.findIndex(v => v.videoUrl === videoUrl);
+                            if (index !== -1) {
+                                pigVideos.splice(index, 1);
+                                localStorage.setItem('pigVideos', JSON.stringify(pigVideos));
+                                videoItem.remove();
+                                showNotification('Video eliminado');
+                            }
+                        });
+                        
+                        showNotification('Video guardado correctamente');
+                    };
+                    
+                    mediaRecorder.start();
+                    startRecordBtn.disabled = true;
+                    stopRecordBtn.disabled = false;
+                    
+                    showNotification('Grabando video...');
+                } catch (error) {
+                    showNotification('Error al grabar: ' + error.message, 'danger');
+                    console.error('Error recording:', error);
+                }
+            });
+            
+            // Detener grabación
+            stopRecordBtn.addEventListener('click', function() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    startRecordBtn.disabled = false;
+                    stopRecordBtn.disabled = true;
+                    
+                    // Detener la cámara
+                    if (mediaStream) {
+                        mediaStream.getTracks().forEach(track => track.stop());
+                        mediaStream = null;
+                    }
+                    
+                    startCameraBtn.disabled = false;
+                }
+            });
+            
+            // Cargar lista de videos
+            function loadVideosList(filter = '') {
+                videosList.innerHTML = '';
+                
+                if (pigVideos.length === 0) {
+                    videosList.innerHTML = '<p>No hay videos grabados todavía.</p>';
+                    return;
+                }
+                
+                const filteredVideos = filter ? 
+                    pigVideos.filter(video => video.pigNumber.includes(filter)) : 
+                    pigVideos;
+                
+                if (filteredVideos.length === 0) {
+                    videosList.innerHTML = '<p>No se encontraron videos.</p>';
+                    return;
+                }
+                
+                filteredVideos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    videoItem.innerHTML = `
+                        <video controls>
+                            <source src="${video.videoUrl}" type="video/mp4">
+                        </video>
+                        <p>Cerdo #${video.pigNumber} - ${video.date}</p>
+                        <button class="btn-danger delete-video">Eliminar</button>
+                    `;
+                    
+                    videosList.appendChild(videoItem);
+                    
+                    // Agregar evento para eliminar video
+                    videoItem.querySelector('.delete-video').addEventListener('click', function() {
+                        const index = pigVideos.findIndex(v => v.videoUrl === video.videoUrl);
+                        if (index !== -1) {
+                            pigVideos.splice(index, 1);
+                            localStorage.setItem('pigVideos', JSON.stringify(pigVideos));
+                            videoItem.remove();
+                            showNotification('Video eliminado');
+                        }
+                    });
+                });
+            }
+            
             // Función para renderizar la lista de cerdos
-            function renderPigsList() {
+            function renderPigsList(filter = '', onlyActive = false) {
                 pigsList.innerHTML = '';
                 
                 if (pigs.length === 0) {
@@ -440,30 +855,47 @@
                     return;
                 }
                 
-                // Ordenar cerdos por número
-                pigs.sort((a, b) => a.pigNumber - b.pigNumber);
+                // Filtrar cerdos
+                let filteredPigs = pigs;
                 
-                pigs.forEach(pig => {
+                if (filter) {
+                    filteredPigs = pigs.filter(pig => 
+                        pig.pigNumber.toString().includes(filter) ||
+                        pig.earTag.toLowerCase().includes(filter) ||
+                        pig.ownerName.toLowerCase().includes(filter) ||
+                        pig.penNumber.toString().includes(filter)
+                    );
+                }
+                
+                if (onlyActive) {
+                    filteredPigs = filteredPigs.filter(pig => pig.status === 'active');
+                }
+                
+                // Ordenar cerdos por número
+                filteredPigs.sort((a, b) => a.pigNumber - b.pigNumber);
+                
+                filteredPigs.forEach(pig => {
                     const pigCard = document.createElement('div');
                     pigCard.className = `pig-card ${pig.status === 'sacado' ? 'sacado' : ''}`;
                     
                     pigCard.innerHTML = `
                         <div class="pig-info">
                             <div class="pig-number">Cerdo #${pig.pigNumber} (Arete: ${pig.earTag})</div>
-                            <div class="pig-details">
-                                <div class="detail-item"><strong>Propietario:</strong> ${pig.ownerName}</div>
-                                <div class="detail-item"><strong>Chanchera:</strong> ${pig.penNumber}</div>
-                                <div class="detail-item"><strong>Peso vivo:</strong> ${pig.liveWeight} kg (${pig.liveWeightLbs} lbs)</div>
-                                <div class="detail-item"><strong>Peso muerto:</strong> ${pig.deadWeight} kg</div>
-                                <div class="detail-item"><strong>Fecha:</strong> ${pig.date}</div>
-                                <div class="detail-item"><strong>Estado:</strong> ${pig.status === 'active' ? 'Activo' : 'Sacado'}</div>
+                            <div class="pig-actions">
+                                <button class="btn-warning edit-btn" data-id="${pig.pigNumber}">Editar</button>
+                                <button class="${pig.status === 'active' ? 'btn-danger' : 'btn-success'} status-btn" data-id="${pig.pigNumber}">
+                                    ${pig.status === 'active' ? 'Marcar Sacado' : 'Reactivar'}
+                                </button>
                             </div>
                         </div>
-                        <div class="pig-actions">
-                            <button class="btn-warning edit-btn" data-id="${pig.pigNumber}">Editar</button>
-                            <button class="${pig.status === 'active' ? 'btn-danger' : 'btn-success'} status-btn" data-id="${pig.pigNumber}">
-                                ${pig.status === 'active' ? 'Marcar Sacado' : 'Reactivar'}
-                            </button>
+                        <div class="pig-details">
+                            <div class="detail-item"><strong>Propietario:</strong> ${pig.ownerName}</div>
+                            <div class="detail-item"><strong>Chanchera:</strong> ${pig.penNumber}</div>
+                            <div class="detail-item"><strong>Peso vivo:</strong> ${pig.liveWeight} kg (${pig.liveWeightLbs} lbs)</div>
+                            <div class="detail-item"><strong>Peso muerto:</strong> ${pig.deadWeight} kg</div>
+                            <div class="detail-item"><strong>Fecha:</strong> ${pig.date}</div>
+                            <div class="detail-item"><strong>Estado:</strong> ${pig.status === 'active' ? 'Activo' : 'Sacado'}</div>
+                            ${pig.notes ? `<div class="detail-item"><strong>Notas:</strong> ${pig.notes}</div>` : ''}
                         </div>
                     `;
                     
@@ -498,9 +930,16 @@
                     document.getElementById('ownerName').value = pig.ownerName;
                     document.getElementById('penNumber').value = pig.penNumber;
                     document.getElementById('deadWeight').value = pig.deadWeight;
+                    document.getElementById('notes').value = pig.notes || '';
                     
-                    // Hacer scroll al formulario
-                    document.getElementById('pig-form').scrollIntoView({ behavior: 'smooth' });
+                    // Cambiar a la pestaña de registro
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabPanes.forEach(p => p.classList.remove('active'));
+                    
+                    document.querySelector('[data-tab="registro"]').classList.add('active');
+                    document.getElementById('registro').classList.add('active');
+                    
+                    showNotification(`Editando cerdo #${pigNumber}`);
                 }
             }
             
@@ -509,10 +948,14 @@
                 const pigIndex = pigs.findIndex(p => p.pigNumber === pigNumber);
                 
                 if (pigIndex !== -1) {
-                    pigs[pigIndex].status = pigs[pigIndex].status === 'active' ? 'sacado' : 'active';
+                    const newStatus = pigs[pigIndex].status === 'active' ? 'sacado' : 'active';
+                    pigs[pigIndex].status = newStatus;
                     saveData();
                     renderPigsList();
                     updateStats();
+                    updatePigSelection();
+                    
+                    showNotification(`Cerdo #${pigNumber} ${newStatus === 'sacado' ? 'marcado como sacado' : 'reactivado'}`);
                 }
             }
             
@@ -534,7 +977,7 @@
             
             // Función para guardar datos en localStorage
             function saveData() {
-                localStorage.setItem('futuroPigData', JSON.stringify(pigs));
+                localStorage.setItem('pigData', JSON.stringify(pigs));
             }
         });
     </script>
