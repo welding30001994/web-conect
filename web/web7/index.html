@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PigTech - Sistema Futurista de Registro Porcino</title>
+    <title>PigTech Pro - Sistema Avanzado de Registro Porcino</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -327,6 +327,60 @@
             margin-top: 15px;
         }
         
+        .camera-container {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        #video-preview {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: #000;
+            border-radius: 12px;
+        }
+        
+        .camera-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .camera-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .camera-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .record-btn {
+            background: var(--danger);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
         .search-box {
             margin-bottom: 25px;
             display: flex;
@@ -432,6 +486,42 @@
             }
         }
         
+        .recording-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--danger);
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: none;
+        }
+        
+        .recording-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--danger);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .camera-switch {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+        
         @media print {
             body {
                 background: white;
@@ -505,8 +595,8 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-piggy-bank"></i> PigTech</h1>
-            <p>Sistema Futurista de Registro Porcino</p>
+            <h1><i class="fas fa-piggy-bank"></i> PigTech Pro</h1>
+            <p>Sistema Avanzado de Registro Porcino con Cámara</p>
         </header>
         
         <div class="tab-container">
@@ -584,9 +674,9 @@
                         </div>
                         
                         <div class="form-section">
-                            <h2><i class="fas fa-video"></i> Capturar Video para Identificación</h2>
+                            <h2><i class="fas fa-camera"></i> Capturar Video para Identificación</h2>
                             <div class="video-section">
-                                <p>Usa esta función para grabar videos que te ayuden a identificar visualmente a cada cerdo.</p>
+                                <p>Usa la cámara trasera para grabar videos que te ayuden a identificar visualmente a cada cerdo.</p>
                                 
                                 <div class="form-group">
                                     <label for="video-pig-number"><i class="fas fa-piggy-bank"></i> Seleccionar Cerdo para Grabar:</label>
@@ -595,12 +685,25 @@
                                     </select>
                                 </div>
                                 
-                                <div id="video-container">
+                                <div class="camera-container">
                                     <video id="video-preview" autoplay muted playsinline></video>
-                                    <div class="video-actions">
-                                        <button id="start-camera" class="btn-primary"><i class="fas fa-camera"></i> Activar Cámara</button>
-                                        <button id="start-record" class="btn-success" disabled><i class="fas fa-record-vinyl"></i> Grabar Video</button>
-                                        <button id="stop-record" class="btn-danger" disabled><i class="fas fa-stop"></i> Detener</button>
+                                    <div class="recording-indicator">
+                                        <div class="recording-dot"></div>
+                                        <span>Grabando</span>
+                                    </div>
+                                    <button class="camera-switch btn-primary" id="switch-camera">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                    <div class="camera-controls">
+                                        <div class="camera-btn" id="start-camera">
+                                            <i class="fas fa-camera"></i>
+                                        </div>
+                                        <div class="camera-btn record-btn" id="start-record">
+                                            <i class="fas fa-record-vinyl"></i>
+                                        </div>
+                                        <div class="camera-btn" id="stop-record">
+                                            <i class="fas fa-stop"></i>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -692,6 +795,7 @@
             const startCameraBtn = document.getElementById('start-camera');
             const startRecordBtn = document.getElementById('start-record');
             const stopRecordBtn = document.getElementById('stop-record');
+            const switchCameraBtn = document.getElementById('switch-camera');
             const recordedVideos = document.getElementById('recorded-videos');
             const videosList = document.getElementById('videos-list');
             const videoSearch = document.getElementById('video-search');
@@ -699,12 +803,15 @@
             const tabs = document.querySelectorAll('.tab');
             const tabPanes = document.querySelectorAll('.tab-pane');
             const sacadoCheckbox = document.getElementById('sacado');
+            const recordingIndicator = document.querySelector('.recording-indicator');
             
             // Variables para la grabación de video
             let mediaStream = null;
             let mediaRecorder = null;
             let recordedChunks = [];
             let currentPigNumber = null;
+            let isRecording = false;
+            let useBackCamera = true;
             
             // Convertir kg a lbs
             liveWeightInput.addEventListener('input', function() {
@@ -874,6 +981,18 @@
                 window.print();
             });
             
+            // Cambiar entre cámaras
+            switchCameraBtn.addEventListener('click', function() {
+                useBackCamera = !useBackCamera;
+                if (mediaStream) {
+                    // Detener la cámara actual
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    // Iniciar con la nueva cámara
+                    startCamera();
+                }
+                showNotification(useBackCamera ? 'Cambiando a cámara trasera' : 'Cambiando a cámara frontal');
+            });
+            
             // Actualizar selección de cerdos para video
             function updatePigSelection() {
                 videoPigNumber.innerHTML = '<option value="">-- Seleccionar cerdo --</option>';
@@ -887,7 +1006,7 @@
             }
             
             // Iniciar cámara
-            startCameraBtn.addEventListener('click', async function() {
+            async function startCamera() {
                 currentPigNumber = videoPigNumber.value;
                 
                 if (!currentPigNumber) {
@@ -896,21 +1015,30 @@
                 }
                 
                 try {
-                    mediaStream = await navigator.mediaDevices.getUserMedia({ 
-                        video: true, 
+                    const constraints = {
+                        video: {
+                            facingMode: useBackCamera ? "environment" : "user",
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 }
+                        }, 
                         audio: true 
-                    });
+                    };
+                    
+                    mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
                     
                     videoPreview.srcObject = mediaStream;
-                    startRecordBtn.disabled = false;
-                    startCameraBtn.disabled = true;
+                    startRecordBtn.style.display = 'flex';
+                    startCameraBtn.style.display = 'none';
                     
-                    showNotification('Cámara activada. Ahora puedes grabar.');
+                    showNotification('Cámara ' + (useBackCamera ? 'trasera' : 'frontal') + ' activada');
                 } catch (error) {
                     showNotification('Error al acceder a la cámara: ' + error.message, 'error');
                     console.error('Error accessing media devices:', error);
                 }
-            });
+            }
+            
+            // Iniciar cámara al hacer clic
+            startCameraBtn.addEventListener('click', startCamera);
             
             // Iniciar grabación
             startRecordBtn.addEventListener('click', function() {
@@ -972,8 +1100,10 @@
                     };
                     
                     mediaRecorder.start();
-                    startRecordBtn.disabled = true;
-                    stopRecordBtn.disabled = false;
+                    isRecording = true;
+                    recordingIndicator.style.display = 'flex';
+                    startRecordBtn.style.display = 'none';
+                    stopRecordBtn.style.display = 'flex';
                     
                     showNotification('Grabando video...');
                 } catch (error) {
@@ -984,18 +1114,14 @@
             
             // Detener grabación
             stopRecordBtn.addEventListener('click', function() {
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                if (mediaRecorder && isRecording) {
                     mediaRecorder.stop();
-                    startRecordBtn.disabled = false;
-                    stopRecordBtn.disabled = true;
+                    isRecording = false;
+                    recordingIndicator.style.display = 'none';
+                    startRecordBtn.style.display = 'flex';
+                    stopRecordBtn.style.display = 'none';
                     
-                    // Detener la cámara
-                    if (mediaStream) {
-                        mediaStream.getTracks().forEach(track => track.stop());
-                        mediaStream = null;
-                    }
-                    
-                    startCameraBtn.disabled = false;
+                    showNotification('Grabación detenida. Video guardado.');
                 }
             });
             
