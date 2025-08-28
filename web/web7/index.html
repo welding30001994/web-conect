@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuturoPig - Registro Futurista de Cerdos</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(44, 62, 80, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .form-section, .list-section {
+            background: rgba(52, 73, 94, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .pig-card {
+            background: rgba(236, 240, 241, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--secondary);
+        }
+        
+        .pig-card.sacado {
+            opacity: 0.7;
+            border-left: 5px solid var(--danger);
+            background: rgba(231, 76, 60, 0.2);
+        }
+        
+        .pig-info {
+            flex: 1;
+        }
+        
+        .pig-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .pig-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .pig-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .detail-item {
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px var(--secondary), 0 0 10px var(--secondary), 0 0 15px var(--secondary);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(52, 152, 219, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .futuristic-element {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .futuristic-element::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="neon-text">FUTURO<span style="color: #e74c3c;">PIG</span></h1>
+            <p>Sistema de Gestión Porcina Futurista</p>
+        </header>
+        
+        <div class="grid">
+            <div class="form-section futuristic-element">
+                <h2>Registrar Nuevo Cerdo</h2>
+                <form id="pig-form">
+                    <div class="form-group">
+                        <label for="pigNumber">Número de Cerdo:</label>
+                        <input type="number" id="pigNumber" required min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="earTag">Número de Arete:</label>
+                        <input type="text" id="earTag" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="liveWeight">Peso Vivo (kg):</label>
+                        <input type="number" id="liveWeight" step="0.1" required min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="liveWeightLbs">Peso Vivo (lbs):</label>
+                        <input type="number" id="liveWeightLbs" step="0.1" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ownerName">Nombre del Propietario:</label>
+                        <input type="text" id="ownerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="penNumber">Número de Chanchera:</label>
+                        <input type="number" id="penNumber" required min="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deadWeight">Peso Muerto (kg):</label>
+                        <input type="number" id="deadWeight" step="0.1" min="0">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Guardar Registro</button>
+                </form>
+                
+                <div class="action-buttons">
+                    <button id="clear-btn" class="btn-warning">Limpiar Formulario</button>
+                    <button id="save-project" class="btn-success">Guardar Proyecto</button>
+                </div>
+                
+                <div class="export-options">
+                    <button id="export-json" class="btn-primary">Exportar JSON</button>
+                    <button id="export-csv" class="btn-primary">Exportar CSV</button>
+                </div>
+            </div>
+            
+            <div class="list-section">
+                <h2>Registros de Cerdos</h2>
+                <div id="pigs-list"></div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Cerdos</div>
+                        <div class="stat-value" id="total-pigs">0</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">Cerdos Activos</div>
+                        <div class="stat-value" id="active-pigs">0</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">Promedio Peso</div>
+                        <div class="stat-value" id="avg-weight">0 kg</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Referencias a elementos del DOM
+            const pigForm = document.getElementById('pig-form');
+            const pigsList = document.getElementById('pigs-list');
+            const liveWeightInput = document.getElementById('liveWeight');
+            const liveWeightLbsInput = document.getElementById('liveWeightLbs');
+            const clearBtn = document.getElementById('clear-btn');
+            const saveProjectBtn = document.getElementById('save-project');
+            const exportJsonBtn = document.getElementById('export-json');
+            const exportCsvBtn = document.getElementById('export-csv');
+            const totalPigsSpan = document.getElementById('total-pigs');
+            const activePigsSpan = document.getElementById('active-pigs');
+            const avgWeightSpan = document.getElementById('avg-weight');
+            
+            // Convertir kg a lbs
+            liveWeightInput.addEventListener('input', function() {
+                const kg = parseFloat(this.value) || 0;
+                liveWeightLbsInput.value = (kg * 2.20462).toFixed(2);
+            });
+            
+            // Cargar datos al iniciar
+            let pigs = JSON.parse(localStorage.getItem('futuroPigData')) || [];
+            renderPigsList();
+            updateStats();
+            
+            // Manejar envío del formulario
+            pigForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const pigNumber = document.getElementById('pigNumber').value;
+                const earTag = document.getElementById('earTag').value;
+                const liveWeight = document.getElementById('liveWeight').value;
+                const liveWeightLbs = document.getElementById('liveWeightLbs').value;
+                const ownerName = document.getElementById('ownerName').value;
+                const penNumber = document.getElementById('penNumber').value;
+                const deadWeight = document.getElementById('deadWeight').value || 0;
+                
+                // Verificar si ya existe un cerdo con este número
+                const existingIndex = pigs.findIndex(pig => pig.pigNumber === pigNumber);
+                
+                const pigData = {
+                    pigNumber,
+                    earTag,
+                    liveWeight,
+                    liveWeightLbs,
+                    ownerName,
+                    penNumber,
+                    deadWeight,
+                    status: 'active',
+                    date: new Date().toLocaleDateString()
+                };
+                
+                if (existingIndex !== -1) {
+                    // Actualizar cerdo existente
+                    pigs[existingIndex] = pigData;
+                } else {
+                    // Agregar nuevo cerdo
+                    pigs.push(pigData);
+                }
+                
+                // Guardar y actualizar
+                saveData();
+                renderPigsList();
+                updateStats();
+                pigForm.reset();
+            });
+            
+            // Limpiar formulario
+            clearBtn.addEventListener('click', function() {
+                pigForm.reset();
+            });
+            
+            // Guardar proyecto
+            saveProjectBtn.addEventListener('click', function() {
+                saveData();
+                alert('Proyecto guardado correctamente!');
+            });
+            
+            // Exportar JSON
+            exportJsonBtn.addEventListener('click', function() {
+                const dataStr = JSON.stringify(pigs, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = 'futuropig_data.json';
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+            });
+            
+            // Exportar CSV
+            exportCsvBtn.addEventListener('click', function() {
+                let csvContent = "Número,Arete,Peso Vivo(kg),Peso Vivo(lbs),Propietario,Chanchera,Peso Muerto(kg),Estado,Fecha\n";
+                
+                pigs.forEach(pig => {
+                    csvContent += `"${pig.pigNumber}","${pig.earTag}","${pig.liveWeight}","${pig.liveWeightLbs}","${pig.ownerName}","${pig.penNumber}","${pig.deadWeight}","${pig.status}","${pig.date}"\n`;
+                });
+                
+                const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
+                const link = document.createElement('a');
+                link.setAttribute('href', encodedUri);
+                link.setAttribute('download', 'futuropig_data.csv');
+                document.body.appendChild(link);
+                
+                link.click();
+                document.body.removeChild(link);
+            });
+            
+            // Función para renderizar la lista de cerdos
+            function renderPigsList() {
+                pigsList.innerHTML = '';
+                
+                if (pigs.length === 0) {
+                    pigsList.innerHTML = '<p>No hay cerdos registrados todavía.</p>';
+                    return;
+                }
+                
+                // Ordenar cerdos por número
+                pigs.sort((a, b) => a.pigNumber - b.pigNumber);
+                
+                pigs.forEach(pig => {
+                    const pigCard = document.createElement('div');
+                    pigCard.className = `pig-card ${pig.status === 'sacado' ? 'sacado' : ''}`;
+                    
+                    pigCard.innerHTML = `
+                        <div class="pig-info">
+                            <div class="pig-number">Cerdo #${pig.pigNumber} (Arete: ${pig.earTag})</div>
+                            <div class="pig-details">
+                                <div class="detail-item"><strong>Propietario:</strong> ${pig.ownerName}</div>
+                                <div class="detail-item"><strong>Chanchera:</strong> ${pig.penNumber}</div>
+                                <div class="detail-item"><strong>Peso vivo:</strong> ${pig.liveWeight} kg (${pig.liveWeightLbs} lbs)</div>
+                                <div class="detail-item"><strong>Peso muerto:</strong> ${pig.deadWeight} kg</div>
+                                <div class="detail-item"><strong>Fecha:</strong> ${pig.date}</div>
+                                <div class="detail-item"><strong>Estado:</strong> ${pig.status === 'active' ? 'Activo' : 'Sacado'}</div>
+                            </div>
+                        </div>
+                        <div class="pig-actions">
+                            <button class="btn-warning edit-btn" data-id="${pig.pigNumber}">Editar</button>
+                            <button class="${pig.status === 'active' ? 'btn-danger' : 'btn-success'} status-btn" data-id="${pig.pigNumber}">
+                                ${pig.status === 'active' ? 'Marcar Sacado' : 'Reactivar'}
+                            </button>
+                        </div>
+                    `;
+                    
+                    pigsList.appendChild(pigCard);
+                });
+                
+                // Agregar event listeners para los botones
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const pigNumber = this.getAttribute('data-id');
+                        editPig(pigNumber);
+                    });
+                });
+                
+                document.querySelectorAll('.status-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const pigNumber = this.getAttribute('data-id');
+                        togglePigStatus(pigNumber);
+                    });
+                });
+            }
+            
+            // Función para editar un cerdo
+            function editPig(pigNumber) {
+                const pig = pigs.find(p => p.pigNumber === pigNumber);
+                
+                if (pig) {
+                    document.getElementById('pigNumber').value = pig.pigNumber;
+                    document.getElementById('earTag').value = pig.earTag;
+                    document.getElementById('liveWeight').value = pig.liveWeight;
+                    document.getElementById('liveWeightLbs').value = pig.liveWeightLbs;
+                    document.getElementById('ownerName').value = pig.ownerName;
+                    document.getElementById('penNumber').value = pig.penNumber;
+                    document.getElementById('deadWeight').value = pig.deadWeight;
+                    
+                    // Hacer scroll al formulario
+                    document.getElementById('pig-form').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            
+            // Función para cambiar el estado del cerdo
+            function togglePigStatus(pigNumber) {
+                const pigIndex = pigs.findIndex(p => p.pigNumber === pigNumber);
+                
+                if (pigIndex !== -1) {
+                    pigs[pigIndex].status = pigs[pigIndex].status === 'active' ? 'sacado' : 'active';
+                    saveData();
+                    renderPigsList();
+                    updateStats();
+                }
+            }
+            
+            // Función para actualizar estadísticas
+            function updateStats() {
+                totalPigsSpan.textContent = pigs.length;
+                
+                const activePigs = pigs.filter(pig => pig.status === 'active');
+                activePigsSpan.textContent = activePigs.length;
+                
+                if (activePigs.length > 0) {
+                    const totalWeight = activePigs.reduce((sum, pig) => sum + parseFloat(pig.liveWeight), 0);
+                    const avgWeight = totalWeight / activePigs.length;
+                    avgWeightSpan.textContent = avgWeight.toFixed(2) + ' kg';
+                } else {
+                    avgWeightSpan.textContent = '0 kg';
+                }
+            }
+            
+            // Función para guardar datos en localStorage
+            function saveData() {
+                localStorage.setItem('futuroPigData', JSON.stringify(pigs));
+            }
+        });
+    </script>
+</body>
+</html>
